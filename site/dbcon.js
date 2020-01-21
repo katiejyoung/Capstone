@@ -8,4 +8,4 @@ var pool = mysql.createPool({
 });
 
 module.exports.pool = pool;
-//This is currently setup to connect to Kyle's db
+//This needs to be changed to the class server, I can't get my personal one to work
