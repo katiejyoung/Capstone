@@ -22,21 +22,6 @@ app.get('/',function(req,res){
     res.render('home');
 });
 
-
-app.get('/test',function(req,res,next){
-    var context = {};
-    var callbackCount = 0;
-    getTest(res, mysql, context, complete);
-    function complete()
-    {
-        callbackCount++;
-        if (callbackCount >= 1)
-        {
-            res.render('test',context);
-        }
-    }
-});
-
 app.use(function(req,res){
     res.status(404);
     res.render('404');
@@ -51,14 +36,3 @@ app.use(function(err, req, res, next){
 app.listen(app.get('port'), function(){
     console.log('Express started on http://flip3.engr.oregonstate.edu:' + app.get('port') + '; press Ctrl-C to terminate.');
 });
-
-function getTest(res, mysql, context, complete) {
-    mysql.pool.query("SELECT * FROM Test", function(error, results, fields){
-        if(error){
-            console.log(error);
-        }
-        context.name = results;
-        console.log(context.name);
-        complete();
-})
-}
