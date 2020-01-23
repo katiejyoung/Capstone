@@ -22,6 +22,18 @@ app.get('/',function(req,res){
     res.render('home');
 });
 
+app.get('/user',function(req,res,next){
+    res.render('user');
+});
+
+app.get('/editUser',function(req,res,next){
+    res.render('editUser');
+});
+
+app.get('/createUser',function(req,res,next){
+    res.render('createUser');
+});
+
 app.use(function(req,res){
     res.status(404);
     res.render('404');
