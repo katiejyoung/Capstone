@@ -23,10 +23,14 @@ app.get('/',function(req,res){
 });
 
 app.get('/user',function(req,res,next){
+    var context = {};
+    var callbackCount = 0;
     res.render('user');
 });
 
 app.get('/user/:id', function(req,res,next) {
+    var context = {};
+    var callbackCount = 0;
     res.render('user');
 });
 
@@ -35,6 +39,8 @@ app.put('/user/:id', function(req,res,next) {
 });
 
 app.post('/user/:id', function(req,res,next) {
+    var context = {};
+    var callbackCount = 0;
     res.render('user');
 });
 
@@ -43,10 +49,14 @@ app.delete('/user/:id', function(req,res,next) {
 });
 
 app.get('/editUser',function(req,res,next){
+    var context = {};
+    var callbackCount = 0;
     res.render('editUser');
 });
 
 app.get('/editUser:id',function(req,res,next){
+    var context = {};
+    var callbackCount = 0;
     res.render('editUser');
 });
 
@@ -55,10 +65,14 @@ app.put('/editUser:id',function(req,res,next){
 });
 
 app.post('/editUser:id',function(req,res,next){
+    var context = {};
+    var callbackCount = 0;
     res.render('editUser');
 });
 
 app.get('/createUser',function(req,res,next){
+    var context = {};
+    var callbackCount = 0;
     res.render('createUser');
 });
 
