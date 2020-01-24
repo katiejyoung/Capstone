@@ -1,25 +1,62 @@
 <div class="home">
-    <form class="sign-up" action="#" method="post">
-        <label for="first">First Name: </label>
+    <form class="sign-up" method="post">
+        <label for="first">*First Name: </label>
         <input type="text" name="first" id="first">
         <br><br>
-        <label for="last">Last Name: </label>
+        <label for="last">*Last Name: </label>
         <input type="text" name="last" id="last">
         <br><br>
-        <label for="user_name">Username: </label>
-        <input type="text" name="username" id="user_name">
+        <label for="username">*Username: </label>
+        <input type="text" name="username" id="username">
         <br><br>
-        <label for="email">Username: </label>
-        <input type="text" name="username" id="user_name">
-        <br><br>
-        <label for="password">Email: </label>
+        <label for="email">*Email: </label>
         <input type="text" name="email" id="email">
         <br><br>
+        <label for="password">*Password: </label>
+        <input type="text" name="password" id="password">
+        <br><br>
         <div class="center-button">
-            <button id="button" type="button">Sign Up!</button>
+            <button onclick="createAccount()" id="button" type="button">Sign Up!</button>
         </div>  
     </form>
+    <div id="required-field" style="display: none;">
+        <p>*Error: Missing required field.</p>
+    </div>
+    <div id="invalid-email" style="display: none;">
+        <p>*Error: Incorrect email format</p>
+    </div>
 </div>
 <div class="secret-logo">
     <img src="images/top-secret-white.png" width="350" height="350" alt="Top Secret">
 </div>
+
+
+<script language="JavaScript">
+    
+    function createAccount() {
+        let fName = document.getElementById('first').value;
+        let lName = document.getElementById('last').value;
+        let uName = document.getElementById('username').value;
+        let email = document.getElementById('email').value;
+        let pword = document.getElementById('password').value;
+        var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+        if (fName != '' && lName != '' && uName != '' && email != '' && pword != '') {
+            //Output user info for now
+            //Will send data to database and redirect
+            console.log(fName);
+            console.log(lName);
+            console.log(uName);
+            console.log(email);
+            console.log(pword);
+        }
+        else {
+            document.getElementById('required-field').style.display="inline";
+        }
+
+        //Validate email format
+        if (!email.match(mailformat)) {
+            document.getElementById('invalid-email').style.display="inline";
+        }
+    };
+</script>

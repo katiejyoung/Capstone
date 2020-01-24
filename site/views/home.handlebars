@@ -1,17 +1,35 @@
 <div class="home">
     <form class="sign-in" action="#" method="post">
-        <label for="user_name">Username: </label>
-        <input type="text" name="username" id="user_name">
+        <label for="username">Username: </label>
+        <input type="text" name="username" id="username">
         <br><br>
         <label for="password">Password: </label>
         <input type="text" name="password" id="password">
         <br>
         <p>New User? <a href="/createUser" style="text-decoration: none;">Click here.</a></p>
         <div class="center-button">
-            <button id="button" type="button">Sign In</button>
+            <button onclick="validateAccount()" id="button" type="button">Sign In</button>
         </div>  
     </form>
 </div>
 <div class="secret-logo">
     <img src="images/top-secret-white.png" width="350" height="350" alt="Top Secret">
 </div>
+
+<script language="JavaScript">
+    
+    function validateAccount() {
+        let uName = document.getElementById('username').value;
+        let pword = document.getElementById('password').value;
+
+        if (fName != '' && lName != '' && uName != '' && email != '' && pword != '') {
+            //Outputting user info for now
+            //Will validate input and redirect
+            console.log(uName);
+            console.log(pword);
+        }
+        else {
+            document.getElementById('required-field').style.display="inline";
+        }
+    };
+</script>

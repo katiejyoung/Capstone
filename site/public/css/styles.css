@@ -16,7 +16,7 @@
     margin:0 auto;
 }
 
-.sign-up, .sign-in, .center-button p, button {
+.sign-up, .sign-in, .center-button, #required-field, #invalid-email p, button {
     text-align:center;
 }
 
