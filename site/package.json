@@ -1,5 +1,5 @@
 {
-  "name": "secret-keeper",
+  "name": "SecretKeeper",
   "version": "1.0.0",
   "description": "Senior Capstone Project",
   "main": "home.handlebars",
