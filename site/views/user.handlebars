@@ -1,27 +1,32 @@
 <h1>User Page</h1>
 <body>
     <div id="nav">
-    <ul>
-        <li><a href="http://flip3.engr.oregonstate.edu:6060/editUser">Edit User Profile</a></li>
-    </ul>
+        <button onclick="location.href='/editUser/{{id}}'" type="button">Edit User Profile</button>
     </div>
 
 <br>
 <h2>Current Records</h2>
 <table id="recordTab" class="recordTable">
     <tr>
+        <th>Record Number</th>
         <th>Record Name</th>
         <th>Record Data</th>
         <th>Record URL</th>
     </tr>
-    
-    
-    <td>
-        <button onclick="" type="button">Delete</button>
-    </td>
-    <td>
-        <button onclick="" type="button">Update</button>
-    </td>
+    {{#each records}}
+        <tr>
+            <td>{{record_id}}</td>
+            <td>{{record_name}}</td>
+             <td>{{record_data}}</td>
+             <td>{{record_URL}}</td>
+           <td>
+                <button onclick="" type="button">Delete</button>
+            </td>
+            <td>
+                <button onclick="" type="button">Update</button>
+            </td>
+        </tr>
+    {{/each}}
 </table>
 
 

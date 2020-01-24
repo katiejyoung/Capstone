@@ -11,7 +11,7 @@ CREATE TABLE `user`(
 );
 
 CREATE TABLE `record`(
-	`id` int NOT NULL AUTO_INCREMENT,
+	`record_id` int NOT NULL AUTO_INCREMENT,
     `record_name` varchar(30) NOT NULL,
     `record_data` varchar(30) NOT NULL,
     `record_URL` varchar(30),
