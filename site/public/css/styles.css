@@ -1,21 +1,20 @@
 
-@@ -0,0 +1,27 @@
 .secret-keeper-header {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 350%;
-    margin-left: 20%;
+    padding-top: 5%;
+    text-align: center;
     color: #696969;
 }
 
 .login-home {
-    margin-left: 25%;
+    text-align: center;
 }
 
 .secret-logo {
     padding-top: 5%;
     position: absolute;
     right: 0px;
-    padding-right: 20%;
     padding-bottom: 5%;
 }
 
