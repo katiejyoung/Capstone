@@ -7,6 +7,7 @@ CREATE TABLE `user`(
     `user_name` varchar(30) NOT NULL,
     `user_password` varchar(30) NOT NULL,
     `user_email` varchar(30) NOT NULL,
+    'super_user' int,
     PRIMARY KEY (`id`)
 );
 
@@ -20,13 +21,13 @@ CREATE TABLE `record`(
     FOREIGN KEY (`user`) REFERENCES `user`(`id`) ON DELETE SET NULL,
 );
 
-INSERT INTO 'user'('user_name','user_password','user_email')
+INSERT INTO 'user'('user_name','user_password','user_email','super_user')
 VALUES
-('Admin', 'password', 'admin@fake.com'),
-('Kyle', '12345', 'kdixon@fake.com'),
-('Katie', 'secret', 'kyoung@fake.com'),
-('John', '1q2w3e', 'jdoe@fake.com'),
-('Jane', 'password1', 'jdoe@fake.com');
+('Admin', 'password', 'admin@fake.com', 1),
+('Kyle', '12345', 'kdixon@fake.com' , 0),
+('Katie', 'secret', 'kyoung@fake.com', 0),
+('John', '1q2w3e', 'jdoe@fake.com', 0),
+('Jane', 'password1', 'jdoe@fake.com', 0);
 
 INSERT INTO `records`(`record_name`, `record_data`, `record_URL`)
 VALUES
