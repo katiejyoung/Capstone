@@ -2,13 +2,22 @@
 .secret-keeper-header {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 350%;
-    padding-top: 5%;
+    padding-top: 1%;
     text-align: center;
     color: #696969;
 }
 
-.login-home {
-    text-align: center;
+.home {
+    margin:0 auto; 
+}
+
+.sign-up, .sign-in {
+    width:50%; 
+    margin:0 auto;
+}
+
+.sign-up, .sign-in, .center-button p, button {
+    text-align:center;
 }
 
 .secret-logo {
@@ -18,9 +27,17 @@
 }
 
 input {
-    border-radius: 5px;
+    vertical-align: -2px;
+    position: relative;
 }
 
 label {
+    padding-right: 10px;
+    width:40%;
+    text-align:right;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+input, label {
+    float:left;
 }
