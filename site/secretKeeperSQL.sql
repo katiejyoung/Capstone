@@ -3,7 +3,7 @@ CREATE TABLE `user`(
     `user_name` varchar(30) NOT NULL,
     `user_password` varchar(30) NOT NULL,
     `user_email` varchar(30) NOT NULL,
-    `super_user` int,
+    `user_super` int,
     PRIMARY KEY (`id`)
 );
 

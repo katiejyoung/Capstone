@@ -43,11 +43,12 @@ app.get('/createUser',function(req,res,next){
 app.get('/user/:id', function(req,res,next) {
     var context = {};
     var callbackCount = 0;
+    getUser(res, mysql, context, [req.params.id], complete);
     getRecords(res, mysql, context, [req.params.id], complete);
     function complete()
     {
         callbackCount++;
-        if (callbackCount >= 1)
+        if (callbackCount >= 2)
         {
             res.render('user',context);
         }
