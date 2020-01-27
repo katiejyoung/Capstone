@@ -13,11 +13,65 @@
 
 .sign-up, .sign-in {
     width:50%; 
-    margin:0 auto;
+    margin:0 auto; 
 }
 
 .sign-up, .sign-in, .center-button, #required-field, #invalid-email p, button {
     text-align:center;
+}
+
+.side-nav {
+    height: 100%;
+    width: 20%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+  }
+
+  .side-nav a {
+    padding-bottom: 5%;
+    text-decoration: none;
+    font-size: 25px;
+    color: #696969;
+    display: block;
+  }
+
+  .side-nav a:hover {
+    color: white;
+  }
+
+.recordTable {
+    width:50%; 
+    margin:0 auto;
+    text-align: center;
+}
+
+.recordTable td {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 20px;
+}
+
+#recordName {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+#header-nav {
+    padding-top: 5%;
+    color: white;
+}
+
+#records-nav {
+    padding-top: 10%;
+}
+
+#header-nav, #records-nav {
+    padding-left: 20%;
+    padding-right: 20%;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .secret-logo {
