@@ -15,12 +15,25 @@
 <div class="side-nav">
     <div id="header-nav"><h1>My Secrets</h1></div>
     <div id="records-nav">
-        {{!-- {{#each records}} --}}
-            <a href="#">Bank of America</a>
-            <a href="#">Gmail</a>
-            <a href="#">Facebook</a>
-            <a href="#">MyOSU</a>
-        {{!-- {{/each}} --}}
+        <table class="myRecords">
+            {{!-- {{#each records}} --}}
+                {{!-- <tr>
+                    <td id="record-select" onclick="displayRecord()">{{record.record_name}}</td>
+                </tr> --}}
+            <tr>
+                <td id="record-select" onclick="displayRecord()">Bank of America</td>
+            </tr>
+            <tr>
+                <td id="record-select" onclick="displayRecord()">Gmail</td>
+            </tr>
+            <tr>
+                <td id="record-select" onclick="displayRecord()">Facebook</td>
+            </tr>
+            <tr>
+                <td id="record-select" onclick="displayRecord()">MyOSU</td>
+            </tr>
+            {{!-- {{/each}} --}}
+        </table>
     </div>
 </div>
 
@@ -29,7 +42,7 @@
         {{!-- {{#each record_data}} --}}
             <tr>
                 <td id="recordName"><h2>++Record Name++</h2></td>
-                {{!-- <td>{{record.record_name}}</td> --}}
+                {{!-- <td id="recordName"><h2>{{record.record_name}}</h2></td> --}}
             </tr>
             <tr>
                 <td>++Record URL++</td>
@@ -45,6 +58,15 @@
         {{!-- {{/each}} --}}
     </table>
 </div>
+
+<script language="JavaScript">
+    
+    function displayRecord() {
+        let record = document.getElementById('record-select');
+
+        console.log(record.record_name);
+    };
+</script>
 
 
 {{!-- 

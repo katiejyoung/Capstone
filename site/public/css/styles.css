@@ -31,7 +31,7 @@
     overflow-x: hidden;
   }
 
-  .side-nav a {
+  .side-nav td {
     padding-bottom: 5%;
     text-decoration: none;
     font-size: 25px;
@@ -39,7 +39,7 @@
     display: block;
   }
 
-  .side-nav a:hover {
+  .side-nav td:hover {
     color: white;
   }
 
