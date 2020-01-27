@@ -35,62 +35,54 @@
             {{!-- {{/each}} --}}
         </table>
     </div>
-    <div id="add-nav"><button id="add-new-record" onclick="newRecord()" type="button">Add a Record</button></div>
+    <div id="add-nav"><button id="add-record-button" onclick="newRecord()" type="button">Add a Record</button></div>
 </div>
 
-<div class="record-content" id="record">
-    <table id="recordTab" class="recordTable">
-        {{!-- {{#each record_data}} --}}
-            <tr>
-                <td id="recordName"><h2>++Record Name++</h2></td>
-                {{!-- <td id="recordName"><h2>{{record.record_name}}</h2></td> --}}
-            </tr>
-            <tr>
-                <td>++Record URL++</td>
-                {{!-- <td>{{record.record_URL}}</td> --}}
-            </tr>
-            <tr>
-                <td>++Record Password++</td>
-                {{!-- <td>{{record.record_password}}</td> --}}
-            </tr>
-            <tr>
-                <td><button id="button" onclick="" type="button">Edit Record</button></td>
-            </tr>
-        {{!-- {{/each}} --}}
-    </table>
+<div id="record">
+    <div class="record-content" >
+        <table id="recordTab" class="recordTable">
+            {{!-- {{#each record_data}} --}}
+                <tr>
+                    <td id="recordName"><h2>Record Name</h2></td>
+                    {{!-- <td id="recordName"><h2>{{record.record_name}}</h2></td> --}}
+                </tr>
+                <tr>
+                    <td>Record URL</td>
+                    {{!-- <td>{{record.record_URL}}</td> --}}
+                </tr>
+                <tr>
+                    <td>Record Password</td>
+                    {{!-- Note: this should be encrypted in the secure site --}}
+                    {{!-- <td>{{record.record_password}}</td> --}}
+                </tr>
+                <tr>
+                    <td><button id="edit-record-button" onclick="" type="button">Edit Record</button></td>
+                </tr>
+            {{!-- {{/each}} --}}
+        </table>
+    </div>
 </div>
-
-{{!-- 
-<form id="addRecordForm" method="post">
-Record name:<br>
-  <input type="text" name="record_name">
-  <br>
-Record (password):<br>
-  <input type="text" name="record_data">
-  <br>
-Corresponding Website URL:<br>
-  <input type="text" name="record_URL">
-  <br>    
-  <input type="submit" id="addRecord" value="Submit">
-</form>  --}}
 
 <div class="addRecord" id="add-record" style="display: none;">
-    <form class="addRecordForm" method="post">
-        <label for="record_name">*Account Name: </label>
-        <input type="text" name="record_name" id="record_name">
-        <br><br>
-        <label for="record_password">*Password: </label>
-        <input type="text" name="record_password" id="record_password">
-        <br><br>
-        <label for="record_url">*URL: </label>
-        <input type="text" name="record_url" id="record_url">
-        <br><br>
-        <div class="center-button">
-            <button onclick="addRecord()" id="add-record-button" type="button">Add to Database</button>
-        </div>  
-    </form>
-    <div id="required-field" style="display: none;">
-        <p>*Error: Missing required field.</p>
+    <div class="add-record-form">
+        <h2>Add a New Record to the Vault</h2><br>
+        <form method="post">
+            <label for="record_name">*Account Name: </label>
+            <input type="text" name="record_name" id="record_name">
+            <br><br>
+            <label for="record_password">*Password: </label>
+            <input type="text" name="record_password" id="record_password">
+            <br><br>
+            <label for="record_url">*URL: </label>
+            <input type="text" name="record_url" id="record_url">
+            <br><br>
+            <div class="center-button">
+                <button onclick="addRecord()" id="submit-record-button" type="button">Add to Database</button>
+            </div>  
+        </form>
+        <div id="required-field" style="display: none;">
+            <p>*Error: Missing required field.</p>
+        </div>
     </div>
 </div>
 

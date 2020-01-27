@@ -44,12 +44,16 @@
 }
 
 .record-content {
+    padding-top: 3%;
     position: relative;
 }
 
-.addRecord {
+.add-record-form {
+    padding-top: 3%;
+    width: 50%;
     margin:0 auto;
     text-align: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .recordTable {
@@ -64,7 +68,6 @@
 }
 
 #recordName {
-    font-weight: bold;
     text-decoration: underline;
 }
 
@@ -84,9 +87,18 @@
     font-size: 20px;
 }
 
-#add-new-record {
+#add-record-button {
     border-radius: 5px;
     padding: 4%;
+    
+}
+
+#submit-record-button, #edit-record-button {
+    border-radius: 5px;
+    padding: 1%;
+    background-color: #696969;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 15px;
 }
 
 #header-nav, #records-nav, #add-nav {
