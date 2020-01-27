@@ -1,5 +1,7 @@
 CREATE TABLE `user`(
 	`id` int NOT NULL AUTO_INCREMENT,
+    `user_first` varchar(30) NOT NULL,
+    `user_last` varchar(30) NOT NULL,
     `user_name` varchar(30) NOT NULL,
     `user_password` varchar(30) NOT NULL,
     `user_email` varchar(30) NOT NULL,
@@ -19,11 +21,11 @@ CREATE TABLE `records`(
 
 INSERT INTO `user`(`user_name`,`user_password`,`user_email`,`super_user`)
 VALUES
-('Admin', 'password', 'admin@fake.com', 1),
-('Kyle', '12345', 'kdixon@fake.com' , 0),
-('Katie', 'secret', 'kyoung@fake.com', 0),
-('John', '1q2w3e', 'jdoe@fake.com', 0),
-('Jane', 'password1', 'jdoe@fake.com', 0);
+('Admin','Admin','Admin', 'password', 'admin@fake.com', 1),
+('Kyle','Dixon','Kyle', '12345', 'kdixon@fake.com' , 0),
+('Katie','Young','Katie', 'secret', 'kyoung@fake.com', 0),
+('John','Doe','John', '1q2w3e', 'jdoe@fake.com', 0),
+('Jane','Doe','Jane', 'password1', 'jdoe@fake.com', 0);
 
 INSERT INTO `records`(`record_name`, `record_data`, `record_URL`,`user`)
 VALUES

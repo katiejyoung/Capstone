@@ -100,7 +100,7 @@ app.get('/editUser:id',function(req,res,next){
 });
 
 app.put('/editUser:id',function(req,res,next){
-    mysql.pool.query("UPDATE user SET user_name=?, user_password=?, user_email=? WHERE id=?", [req.body.user_name, req.body.user_password, req.body.user_email, [req.params.id]],
+    mysql.pool.query("UPDATE user SET user_first=?,user_last=?, user_name=?, user_password=?, user_email=? WHERE id=?", [req.body.user_first,req.body.user_last,req.body.user_name, req.body.user_password, req.body.user_email, [req.params.id]],
     function(error, results, fields) {
         if (error) {
             res.write(JSON.stringify(error));
@@ -115,7 +115,7 @@ app.put('/editUser:id',function(req,res,next){
 app.post('/createUser',function(req,res,next){
     var context = {};
     mysql.pool.query(
-        'INSERT INTO user (user_name, user_password, user_email) VALUES (?,?,?)',
+        'INSERT INTO user (user_first, user_last, user_name, user_password, user_email) VALUES (?,?,?,?,?)',
         [req.body.user_name, req.body.user_password, req.body.user_email], function(err, rows, fields) {
             if (err) {
                 next(err);
