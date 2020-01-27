@@ -4,15 +4,19 @@
 <h2>Edit User</h2>
 <table id="userTab" class="userTable">
     <tr>
+        <th>User First</th>
+        <th>User Last</th>
         <th>User Name</th>
         <th>User Password</th>
         <th>User Email</th>
     </tr>
     {{#each user}}
         <tr>
+            <td>{{user_first}}</td>
+            <td>{{user_last}}</td>
             <td>{{user_name}}</td>
-             <td>{{user_password}}</td>
-             <td>{{user_email}}</td>
+            <td>{{user_password}}</td>
+            <td>{{user_email}}</td>
             <td>
                 <button onclick="" type="button">Update</button>
             </td>
