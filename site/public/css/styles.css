@@ -1,5 +1,4 @@
-
-.secret-keeper-header {
+.no-nav-header {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 350%;
     padding-top: 1%;
@@ -7,16 +6,13 @@
     color: #696969;
 }
 
-.home {
-    margin:0 auto; 
-}
-
-.sign-up, .sign-in {
+.no-nav-form {
     width:50%; 
-    margin:0 auto; 
+    margin:0 auto;
+    text-align:center;
 }
 
-.sign-up, .sign-in, .center-button, #required-field, #invalid-email p, button {
+#required-field, #invalid-email {
     text-align:center;
 }
 
@@ -56,41 +52,37 @@
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
-.recordTable {
+.record-table {
     width:50%; 
     margin:0 auto;
     text-align: center;
-}
-
-.recordTable td {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 20px;
 }
 
-#recordName {
+#record-name {
     text-decoration: underline;
 }
 
-#header-nav {
+#side-nav-header {
     padding-top: 5%;
     color: white;
 }
 
-#records-nav {
+#side-nav-table {
     padding-top: 10%;
 }
 
-#add-nav {
-    color: white;
+#side-nav-element {
     padding-top: 20%;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-size: 20px;
 }
 
-#add-record-button, #edit-record-button {
+#add-record-button {
     border-radius: 5px;
     padding: 4%;
-    
+    background-color: white;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 15px;
 }
 
 #submit-record-button, #edit-record-button {
@@ -101,7 +93,7 @@
     font-size: 15px;
 }
 
-#header-nav, #records-nav, #add-nav {
+#side-nav-header, #side-nav-table, #side-nav-element {
     padding-left: 20%;
     padding-right: 20%;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;

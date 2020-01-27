@@ -13,9 +13,9 @@
 <br> --}}
 
 <div class="side-nav">
-    <div id="header-nav"><h1>My Secrets</h1></div>
-    <div id="records-nav">
-        <table class="myRecords">
+    <div id="side-nav-header"><h1>My Secrets</h1></div>
+    <div id="side-nav-table">
+        <table>
             {{!-- {{#each records}} --}}
                 {{!-- <tr>
                     <td id="record-select" onclick="displayRecord()">{{record.record_name}}</td>
@@ -35,15 +35,15 @@
             {{!-- {{/each}} --}}
         </table>
     </div>
-    <div id="add-nav"><button id="add-record-button" onclick="newRecord()" type="button">Add a Record</button></div>
+    <div id="side-nav-element"><button id="add-record-button" onclick="newRecord()" type="button">Add a Record</button></div>
 </div>
 
-<div id="record">
+<div id="record-display">
     <div class="record-content" >
-        <table id="recordTab" class="recordTable">
+        <table class="record-table">
             {{!-- {{#each record.record_data}} --}}
                 <tr>
-                    <td id="recordName"><h2>Record Name</h2></td>
+                    <td id="record-name"><h2>Record Name</h2></td>
                     {{!-- <td id="recordName"><h2>{{record.record_name}}</h2></td> --}}
                 </tr>
                 <tr>
@@ -63,7 +63,7 @@
     </div>
 </div>
 
-<div class="addRecord" id="add-record" style="display: none;">
+<div id="add-record" style="display: none;">
     <div class="add-record-form">
         <h2>Add a New Record to the Vault</h2><br>
         <form method="post">
@@ -108,25 +108,28 @@
 
 <script language="JavaScript">
     function displayRecord() {
-        document.getElementById('record').style.display="inline";
+        //Display only existing record form
         document.getElementById('add-record').style.display="none";
         document.getElementById('edit-record').style.display="none";
         document.getElementById('required-field').style.display="none";
 
         let currentRecord = document.getElementById('record-select');
 
+        //Placeholder to query database and display data
         console.log(currentRecord.record_name);
+        document.getElementById('record-display').style.display="inline";
     };
 
     function newRecord() {
-        document.getElementById('record').style.display="none";
+        //Display only new-record form
+        document.getElementById('record-display').style.display="none";
         document.getElementById('edit-record').style.display="none";
         document.getElementById('add-record').style.display="inline";
         document.getElementById('required-field').style.display="none";
-
     };
 
     function addRecord() {
+        //Validate input and send to database
         let rname = document.getElementById('record_name').value;
         let rpassword = document.getElementById('record_password').value;
         let rurl = document.getElementById('record_url').value;
@@ -140,7 +143,8 @@
     }
 
     function editRecord() {
-        document.getElementById('record').style.display="none";
+        //Display only edit-record form
+        document.getElementById('record-display').style.display="none";
         document.getElementById('add-record').style.display="none";
         document.getElementById('edit-record').style.display="inline";
         document.getElementById('required-field').style.display="none";
