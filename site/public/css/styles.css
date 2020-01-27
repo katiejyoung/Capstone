@@ -31,17 +31,26 @@
     overflow-x: hidden;
   }
 
-  .side-nav td {
+.side-nav td {
     padding-bottom: 5%;
     text-decoration: none;
     font-size: 25px;
     color: #696969;
     display: block;
-  }
+}
 
-  .side-nav td:hover {
+.side-nav td:hover {
     color: white;
-  }
+}
+
+.record-content {
+    position: relative;
+}
+
+.addRecord {
+    margin:0 auto;
+    text-align: center;
+}
 
 .recordTable {
     width:50%; 
@@ -68,7 +77,19 @@
     padding-top: 10%;
 }
 
-#header-nav, #records-nav {
+#add-nav {
+    color: white;
+    padding-top: 20%;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 20px;
+}
+
+#add-new-record {
+    border-radius: 5px;
+    padding: 4%;
+}
+
+#header-nav, #records-nav, #add-nav {
     padding-left: 20%;
     padding-right: 20%;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;

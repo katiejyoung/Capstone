@@ -35,9 +35,10 @@
             {{!-- {{/each}} --}}
         </table>
     </div>
+    <div id="add-nav"><button id="add-new-record" onclick="newRecord()" type="button">Add a Record</button></div>
 </div>
 
-<div class="record-content">
+<div class="record-content" id="record">
     <table id="recordTab" class="recordTable">
         {{!-- {{#each record_data}} --}}
             <tr>
@@ -59,19 +60,7 @@
     </table>
 </div>
 
-<script language="JavaScript">
-    
-    function displayRecord() {
-        let record = document.getElementById('record-select');
-
-        console.log(record.record_name);
-    };
-</script>
-
-
 {{!-- 
-<br>
-<h2>Add Record</h2>
 <form id="addRecordForm" method="post">
 Record name:<br>
   <input type="text" name="record_name">
@@ -84,3 +73,56 @@ Corresponding Website URL:<br>
   <br>    
   <input type="submit" id="addRecord" value="Submit">
 </form>  --}}
+
+<div class="addRecord" id="add-record" style="display: none;">
+    <form class="addRecordForm" method="post">
+        <label for="record_name">*Account Name: </label>
+        <input type="text" name="record_name" id="record_name">
+        <br><br>
+        <label for="record_password">*Password: </label>
+        <input type="text" name="record_password" id="record_password">
+        <br><br>
+        <label for="record_url">*URL: </label>
+        <input type="text" name="record_url" id="record_url">
+        <br><br>
+        <div class="center-button">
+            <button onclick="addRecord()" id="add-record-button" type="button">Add to Database</button>
+        </div>  
+    </form>
+    <div id="required-field" style="display: none;">
+        <p>*Error: Missing required field.</p>
+    </div>
+</div>
+
+<script language="JavaScript">
+    function displayRecord() {
+        document.getElementById('record').style.display="inline";
+        document.getElementById('add-record').style.display="none";
+
+        let currentRecord = document.getElementById('record-select');
+
+        console.log(currentRecord.record_name);
+    };
+
+    function newRecord() {
+        document.getElementById('record').style.display="none";
+        document.getElementById('add-record').style.display="inline";
+
+    };
+
+    function addRecord() {
+        let rname = document.getElementById('record_name').value;
+        let rpassword = document.getElementById('record_password').value;
+        let rurl = document.getElementById('record_url').value;
+
+        if (rname != '' && rpassword != '' && rurl != '') {
+        //Add record to database
+        }
+        else {
+            document.getElementById('required-field').style.display="inline";
+        }
+    }
+</script>
+
+
+
