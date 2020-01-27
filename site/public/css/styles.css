@@ -48,7 +48,7 @@
     position: relative;
 }
 
-.add-record-form {
+.add-record-form, .edit-record-form {
     padding-top: 3%;
     width: 50%;
     margin:0 auto;
@@ -87,7 +87,7 @@
     font-size: 20px;
 }
 
-#add-record-button {
+#add-record-button, #edit-record-button {
     border-radius: 5px;
     padding: 4%;
     
