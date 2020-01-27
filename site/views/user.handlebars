@@ -41,7 +41,7 @@
 <div id="record">
     <div class="record-content" >
         <table id="recordTab" class="recordTable">
-            {{!-- {{#each record_data}} --}}
+            {{!-- {{#each record.record_data}} --}}
                 <tr>
                     <td id="recordName"><h2>Record Name</h2></td>
                     {{!-- <td id="recordName"><h2>{{record.record_name}}</h2></td> --}}
@@ -56,7 +56,7 @@
                     {{!-- <td>{{record.record_password}}</td> --}}
                 </tr>
                 <tr>
-                    <td><button id="edit-record-button" onclick="" type="button">Edit Record</button></td>
+                    <td><button id="edit-record-button" onclick="editRecord()" type="button">Edit Record</button></td>
                 </tr>
             {{!-- {{/each}} --}}
         </table>
@@ -86,10 +86,32 @@
     </div>
 </div>
 
+<div class="editRecord" id="edit-record" style="display: none;">
+    <div class="edit-record-form">
+        <h2>Edit Record</h2><br>
+        <form method="post">
+            <label for="record_name">*Account Name: </label>
+            <input type="text" name="record_name" id="record_name">
+            <br><br>
+            <label for="record_password">*Password: </label>
+            <input type="text" name="record_password" id="record_password">
+            <br><br>
+            <label for="record_url">*URL: </label>
+            <input type="text" name="record_url" id="record_url">
+            <br><br>
+            <div class="center-button">
+                <button onclick="addRecord()" id="submit-record-button" type="button">Update Database</button>
+            </div>  
+        </form>
+    </div>
+</div>
+
 <script language="JavaScript">
     function displayRecord() {
         document.getElementById('record').style.display="inline";
         document.getElementById('add-record').style.display="none";
+        document.getElementById('edit-record').style.display="none";
+        document.getElementById('required-field').style.display="none";
 
         let currentRecord = document.getElementById('record-select');
 
@@ -98,7 +120,9 @@
 
     function newRecord() {
         document.getElementById('record').style.display="none";
+        document.getElementById('edit-record').style.display="none";
         document.getElementById('add-record').style.display="inline";
+        document.getElementById('required-field').style.display="none";
 
     };
 
@@ -114,6 +138,14 @@
             document.getElementById('required-field').style.display="inline";
         }
     }
+
+    function editRecord() {
+        document.getElementById('record').style.display="none";
+        document.getElementById('add-record').style.display="none";
+        document.getElementById('edit-record').style.display="inline";
+        document.getElementById('required-field').style.display="none";
+    }
+
 </script>
 
 
