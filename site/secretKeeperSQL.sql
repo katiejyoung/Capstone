@@ -19,7 +19,7 @@ CREATE TABLE `records`(
     FOREIGN KEY (`user`) REFERENCES `user`(`id`) ON DELETE SET NULL
 );
 
-INSERT INTO `user`(`user_name`,`user_password`,`user_email`,`super_user`)
+INSERT INTO `user`(`user_first`,`user_last`,`user_name`,`user_password`,`user_email`,`user_super`)
 VALUES
 ('Admin','Admin','Admin', 'password', 'admin@fake.com', 1),
 ('Kyle','Dixon','Kyle', '12345', 'kdixon@fake.com' , 0),

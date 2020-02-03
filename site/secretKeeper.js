@@ -43,6 +43,7 @@ app.get('/createUser',function(req,res,next){
 app.get('/user/:id', function(req,res,next) {
     var context = {};
     var callbackCount = 0;
+    console.log([req.params.id]);
     getUser(res, mysql, context, [req.params.id], complete);
     getRecords(res, mysql, context, [req.params.id], complete);
     function complete()
@@ -148,7 +149,8 @@ function getRecords(res, mysql, context, id, complete)
             res.write(JSON.stringify(error));
             res.end();
         }
-        context.record=results[0];
+        context.records=results;
+        console.log(context.records);
         complete();
     });
 }
@@ -160,7 +162,8 @@ function getUser(res, mysql, context, id, complete)
             res.write(JSON.stringify(error));
             res.end();
         }
-        context.record=results[0];
+        context.user=results;
+        console.log(context.user);
         complete();
     });
 }

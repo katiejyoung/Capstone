@@ -1,38 +1,28 @@
-{{!-- <h1>User Page</h1>
+
 <body>
     <div id="nav" class="side-nav">
         <button onclick="location.href='/editUser/{{id}}'" type="button">Edit User Profile</button>
     </div>
-    
-    <!–– 
+     
     <script src="/js/checkUser.js"></script>
-    <div id="profile"></div>
+    <div id="profile" class="welcome"></div>
+    {{#each user}}
     <script>checkUser({{id}},{{user_super}});</script> 
-    -->
-
-<br> --}}
+    {{/each}}
+<br>
+    
+    
 
 <div class="side-nav">
     <div id="side-nav-header"><h1>My Secrets</h1></div>
     <div id="side-nav-table">
+        <script src="/js/displayRecord.js"></script>
         <table>
-            {{!-- {{#each records}} --}}
-                {{!-- <tr>
-                    <td id="record-select" onclick="displayRecord()">{{record.record_name}}</td>
-                </tr> --}}
-            <tr>
-                <td id="record-select" onclick="displayRecord()">Bank of America</td>
-            </tr>
-            <tr>
-                <td id="record-select" onclick="displayRecord()">Gmail</td>
-            </tr>
-            <tr>
-                <td id="record-select" onclick="displayRecord()">Facebook</td>
-            </tr>
-            <tr>
-                <td id="record-select" onclick="displayRecord()">MyOSU</td>
-            </tr>
-            {{!-- {{/each}} --}}
+            {{#each records}}
+                <tr>
+                    <td id="record-select" onclick=displayRecord('{{record_data}}','{{record_URL}}');>{{record_URL}}</td>
+                </tr>
+            {{/each}}
         </table>
     </div>
     <div id="side-nav-element"><button id="add-record-button" onclick="newRecord()" type="button">Add a Record</button></div>
@@ -41,24 +31,18 @@
 <div id="record-display">
     <div class="record-content" >
         <table class="record-table">
-            {{!-- {{#each record.record_data}} --}}
                 <tr>
                     <td id="record-name"><h2>Record Name</h2></td>
-                    {{!-- <td id="recordName"><h2>{{record.record_name}}</h2></td> --}}
                 </tr>
                 <tr>
-                    <td>Record URL</td>
-                    {{!-- <td>{{record.record_URL}}</td> --}}
+                    <td id="record-url">Record URL</td>
                 </tr>
                 <tr>
-                    <td>Record Password</td>
-                    {{!-- Note: this should be encrypted in the secure site --}}
-                    {{!-- <td>{{record.record_password}}</td> --}}
+                    <td id="record-pass">Record Password</td>
                 </tr>
                 <tr>
                     <td><button id="edit-record-button" onclick="editRecord()" type="button">Edit Record</button></td>
                 </tr>
-            {{!-- {{/each}} --}}
         </table>
     </div>
 </div>
@@ -107,6 +91,7 @@
 </div>
 
 <script language="JavaScript">
+    /*
     function displayRecord() {
         //Display only existing record form
         document.getElementById('add-record').style.display="none";
@@ -119,7 +104,7 @@
         console.log(currentRecord.record_name);
         document.getElementById('record-display').style.display="inline";
     };
-
+    */
     function newRecord() {
         //Display only new-record form
         document.getElementById('record-display').style.display="none";
