@@ -29,9 +29,9 @@ VALUES
 
 INSERT INTO `records`(`record_name`, `record_data`, `record_URL`,`user`)
 VALUES
-('Credit Card', '123456789', 'USBank.com',(SELECT id FROM user WHERE user_name='Kyle')),
-('Password', 'montana', 'Twitter.com',(SELECT id FROM user WHERE user_name='Kyle')),
-('Password', 'supersecret', 'USA.gov',(SELECT id FROM user WHERE user_name='Kyle')),
-('Credit Card', '987654321', 'OffShoreBank.com',(SELECT id FROM user WHERE user_name='Katie')),
-('Password', 'banana', 'oregonstate.edu',(SELECT id FROM user WHERE user_name='Katie')),
-('Password', 'secrets', 'xfinity.com',(SELECT id FROM user WHERE user_name='Katie'));
+('USBank', '123456789', 'USBank.com',(SELECT id FROM user WHERE user_name='Kyle')),
+('Twitter', 'montana', 'Twitter.com',(SELECT id FROM user WHERE user_name='Kyle')),
+('IRS', 'supersecret', 'USA.gov',(SELECT id FROM user WHERE user_name='Kyle')),
+('OffShoreBank', '987654321', 'OffShoreBank.com',(SELECT id FROM user WHERE user_name='Katie')),
+('OSU', 'banana', 'oregonstate.edu',(SELECT id FROM user WHERE user_name='Katie')),
+('Xfinity', 'secrets', 'xfinity.com',(SELECT id FROM user WHERE user_name='Katie'));

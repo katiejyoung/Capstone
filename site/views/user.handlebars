@@ -11,18 +11,15 @@
     {{/each}}
 <br>
     
-    
-
 <div class="side-nav">
     <div id="side-nav-header"><h1>My Secrets</h1></div>
     <div id="side-nav-table">
-        <script src="/js/displayRecord.js"></script>
         <table>
             {{#each records}}
                 <tr>
-                    <td id="record-select" onclick=displayRecord('{{record_data}}','{{record_URL}}');>{{record_URL}}</td>
+                    <td id="record-select" onclick=displayRecord('{{record_name}}','{{record_data}}','{{record_URL}}');>{{record_name}}</td>
                 </tr>
-            {{/each}}
+          {{/each}}
         </table>
     </div>
     <div id="side-nav-element"><button id="add-record-button" onclick="newRecord()" type="button">Add a Record</button></div>
@@ -41,7 +38,7 @@
                     <td id="record-pass">Record Password</td>
                 </tr>
                 <tr>
-                    <td><button id="edit-record-button" onclick="editRecord()" type="button">Edit Record</button></td>
+                    <td><button id="edit-record-button" onclick="editRecord(document.getElementById('record-name').innerHTML,document.getElementById('record-url').innerHTML,document.getElementById('record-pass').innerHTML)" type="button">Edit Record</button></td>
                 </tr>
         </table>
     </div>
@@ -75,36 +72,29 @@
         <h2>Edit Record</h2><br>
         <form method="post">
             <label for="record_name">*Account Name: </label>
-            <input type="text" name="record_name" id="record_name">
+            <input type="text" name="record_name" id="edit_record_name">
             <br><br>
             <label for="record_password">*Password: </label>
-            <input type="text" name="record_password" id="record_password">
+            <input type="text" name="record_password" id="edit_record_password">
             <br><br>
             <label for="record_url">*URL: </label>
-            <input type="text" name="record_url" id="record_url">
+            <input type="text" name="record_url" id="edit_record_url">
             <br><br>
             <div class="center-button">
-                <button onclick="addRecord()" id="submit-record-button" type="button">Update Database</button>
+                <button onclick="addRecord()" id="submit-edit-record-button" type="button">Update Database</button>
             </div>  
         </form>
     </div>
 </div>
 
 <script language="JavaScript">
-    /*
-    function displayRecord() {
-        //Display only existing record form
-        document.getElementById('add-record').style.display="none";
-        document.getElementById('edit-record').style.display="none";
-        document.getElementById('required-field').style.display="none";
-
-        let currentRecord = document.getElementById('record-select');
-
-        //Placeholder to query database and display data
-        console.log(currentRecord.record_name);
-        document.getElementById('record-display').style.display="inline";
+    
+    function displayRecord(name, data, URL) {
+        document.getElementById('record-name').innerHTML = name;
+        document.getElementById('record-url').innerHTML = URL;
+        document.getElementById('record-pass').innerHTML = data;
     };
-    */
+
     function newRecord() {
         //Display only new-record form
         document.getElementById('record-display').style.display="none";
@@ -127,12 +117,16 @@
         }
     }
 
-    function editRecord() {
+    function editRecord(name, URL, pass) {
         //Display only edit-record form
         document.getElementById('record-display').style.display="none";
         document.getElementById('add-record').style.display="none";
         document.getElementById('edit-record').style.display="inline";
         document.getElementById('required-field').style.display="none";
+        
+        document.getElementById('edit_record_name').value = name;
+        document.getElementById('edit_record_url').value = URL;
+        document.getElementById('edit_record_password').value = pass;
     }
 
 </script>
