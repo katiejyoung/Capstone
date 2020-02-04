@@ -68,6 +68,16 @@
     font-size: 20px;
 }
 
+.side-nav-default-display {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 200%;
+    padding-left: 5%;
+    text-align: center;
+    color: #696969;
+    text-align: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
 #record-name {
     text-decoration: underline;
 }

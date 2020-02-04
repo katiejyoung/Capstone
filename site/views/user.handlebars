@@ -17,27 +17,31 @@
                 <tr>
                     <td id="record-select" onclick=displayRecord('{{record_id}}','{{record_name}}','{{record_data}}','{{record_URL}}');>{{record_name}}</td>
                 </tr>
-          {{/each}}
+            {{/each}}
         </table>
     </div>
     <div id="side-nav-element"><button id="add-record-button" onclick="newRecord()" type="button">Add a Record</button></div>
 </div>
 
+<div id="side-nav-content-header">
+    <div class="side-nav-default-display"><h1>Welcome to the Valut</h1></div>
+</div>
+
 {{!-- Note: need to update in case of no record --}}
-<div id="record-display">
+<div id="record-display" style="display: none;">
     <div class="record-content" >
         <table class="record-table">
                 <tr>
-                    <td id="record-id">Record ID (Temp)</td>
+                    <td id="record-id">{{record-id}}</td>
                 </tr>
                 <tr>
-                    <td id="record-name">Record Name</td>
+                    <td id="record-name">{{record-name}}</td>
                 </tr>
                 <tr>
-                    <td id="record-URL">Record URL</td>
+                    <td id="record-URL">{{record-URL}}</td>
                 </tr>
                 <tr>
-                    <td id="record-pass">Record Password</td>
+                    <td id="record-pass">{{record-pass}}</td>
                 </tr>
                 <tr>
                     <td><button id="edit-record-button" onclick="editRecord(document.getElementById('record-id').innerHTML,document.getElementById('record-name').innerHTML,document.getElementById('record-URL').innerHTML,document.getElementById('record-pass').innerHTML)" type="button">Edit Record</button></td>
@@ -50,10 +54,10 @@
     <div class="add-record-form">
         <h2>Add a New Record to the Vault</h2><br>
         <form method="POST">
-             {{#each user}}
+             
             <label for="record_user">*User Number (Temp): </label>
             <input type="text" name="add_record_user" id="add_record_user" value={{id}}>
-            {{/each}}
+            
             <br><br>
             <label for="record_name">*Account Name: </label>
             <input type="text" name="add_record_name" id="add_record_name">
@@ -106,6 +110,12 @@
         document.getElementById('record-name').innerHTML = name;
         document.getElementById('record-URL').innerHTML = URL;
         document.getElementById('record-pass').innerHTML = data;
+
+        document.getElementById('record-display').style.display="inline";
+        document.getElementById('edit-record').style.display="none";
+        document.getElementById('add-record').style.display="none";
+        document.getElementById('required-field').style.display="none";
+        document.getElementById('side-nav-content-header').style.display="none";
     }
 
     function newRecord() {
@@ -114,6 +124,7 @@
         document.getElementById('edit-record').style.display="none";
         document.getElementById('add-record').style.display="inline";
         document.getElementById('required-field').style.display="none";
+        document.getElementById('side-nav-content-header').style.display="none";
     }
 
     function editRecord(id, name, URL, pass) {
@@ -122,6 +133,7 @@
         document.getElementById('add-record').style.display="none";
         document.getElementById('edit-record').style.display="inline";
         document.getElementById('required-field').style.display="none";
+        document.getElementById('side-nav-content-header').style.display="none";
         
         //Add in values from individual record table
         document.getElementById('edit_record_id').value = id;
