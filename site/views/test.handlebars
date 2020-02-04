@@ -1,0 +1,32 @@
+<h1 class="no-nav-header">Kyle's Test Page</h1>
+<div class="home">
+    <form id="form1">
+        <label for="password">Pre: </label>
+        <input type="text" name="password" id="pre">
+        <button type="submit">Encrypt</button>
+    </form>
+</div>
+<div class="home">
+    <form id="form2">
+        <label for="password">Post: </label>
+        <input type="text" name="password" id="post">
+        <button type="submit">Decrypt</button>
+    </form>
+</div>
+
+<h3>Output</h3>
+  <div id='output'></div>
+
+<script language="JavaScript">
+    function startEncrypt(event) {
+        event.preventDefault();
+        document.getElementById('output').innerHTML = [... document.getElementById('pre').value ].map(char => encrypt(char)).join('');
+    }
+    document.getElementById('form1').addEventListener('submit',startEncrypt);
+    
+    function startDecrypt(event) {
+        event.preventDefault();
+        document.getElementById('output').innerHTML = [... document.getElementById('post').value ].map(char => decrypt(char)).join('');
+    }
+    document.getElementById('form2').addEventListener('submit',startDecrypt);
+</script>

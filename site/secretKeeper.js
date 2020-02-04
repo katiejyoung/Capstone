@@ -22,6 +22,10 @@ app.get('/',function(req,res){
     res.render('home');
 });
 
+app.get('/test',function(req,res,next){
+    res.render('test');
+});
+
 app.get('/user',function(req,res,next){
     var context = {};
     var callbackCount = 0;
