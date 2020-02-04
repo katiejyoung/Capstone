@@ -3,9 +3,9 @@
     <div id="nav" class="side-nav">
         <button onclick="location.href='/editUser/{{id}}'" type="button">Edit User Profile</button>
     </div>
-    
+    <div id="banner" class="welcome"></div>
     {{#each user}}
-    <p id="profile" onload="checkUser('{{user_name}}',{{user_super}})"></p>    
+        <script>checkUser('{{user_name}}',{{user_super}});</script>    
     {{/each}}
 <br>
     
@@ -22,12 +22,10 @@
     </div>
     <div id="side-nav-element"><button id="add-record-button" onclick="newRecord()" type="button">Add a Record</button></div>
 </div>
-
 <div id="side-nav-content-header">
     <div class="side-nav-default-display"><h1>Welcome to the Valut</h1></div>
 </div>
 
-{{!-- Note: need to update in case of no record --}}
 <div id="record-display" style="display: none;">
     <div class="record-content" >
         <table class="record-table">
@@ -167,25 +165,6 @@
         })
     }
     
-    function checkUser(id, s){
-        var check;
-        if (id != 0) {
-            if (s == 1) {
-                check = "Administrative User";
-                console.log(check);
-                document.getElementById('profile').innerHTML = check;
-                return;
-            }
-            check = "Welcome "+id;
-            console.log(check);
-            document.getElementById('profile').innerHTML = check;
-            return;
-        }
-        check = "No Profile";
-        console.log(check);
-        document.getElementById('profile').innerHTML = check;
-        return;
-    }
 </script>
 
 
