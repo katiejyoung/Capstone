@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node secretKeeper.js"
   },
-  "author": "Isfandyar Abbas Rabbani && Katelyn Young && Kyle Dixon",
+  "author": " Katelyn Young && Kyle Dixon",
   "license": "",
   "dependencies": {
     "body-parser": "^1.13.3",
