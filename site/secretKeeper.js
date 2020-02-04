@@ -43,7 +43,6 @@ app.get('/createUser',function(req,res,next){
 app.get('/user/:id', function(req,res,next) {
     var context = {};
     var callbackCount = 0;
-    console.log([req.params.id]);
     getUser(res, mysql, context, [req.params.id], complete);
     getRecords(res, mysql, context, [req.params.id], complete);
     function complete()
@@ -57,33 +56,45 @@ app.get('/user/:id', function(req,res,next) {
 });
 
 app.put('/user/:id', function(req,res,next) {
-    mysql.pool.query("UPDATE records SET record_name=?, record_data=?, record_URL=? WHERE id=?", [req.body.record_name, req.body.record_data, req.body.record_URL, req.body.record_id],
+    mysql.pool.query("UPDATE records SET record_name=?, record_data=?, record_URL=? WHERE record_id=?", [req.body.edit_record_name, req.body.edit_record_data, req.body.edit_record_URL, req.body.edit_record_id],
     function(error, results, fields) {
         if (error) {
             res.write(JSON.stringify(error));
             res.end();
         }
         res.status(200);
-        res.end();
+        res.send();
+        res.redirect('/user/'+[req.params.id]);
     });
 });
 
 app.post('/user/:id', function(req,res,next) {
     var context = {};
     mysql.pool.query(
-        'INSERT INTO records (record_name, record_data, record_URL) VALUES (?,?,?)',
-        [req.body.record_name, req.body.record_data, req.body.record_URL], function(err, rows, fields) {
+        'INSERT INTO records (record_name, record_data, record_URL, user) VALUES (?,?,?,?)',
+        [req.body.add_record_name, req.body.add_record_password, req.body.add_record_URL,[req.params.id]], function(err, rows, fields) {
             if (err) {
                 next(err);
                 return;
             }
-            res.redirect('/user/:id');
+            res.redirect('/user/'+[req.params.id]);
         }
     )
 });
 
 app.delete('/user/:id', function(req,res,next) {
-    res.render('user');
+    console.log(req.body);
+    console.log(req.body.data1);
+    mysql.pool.query(
+        'DELETE FROM records WHERE record_id=?', req.body.data1, function(error, results, fields) {
+            if (error) {
+                res.write(JSON.stringify(error));
+                res.status(400);
+                res.end();
+            }
+            res.status(202).end();
+        }
+    )
 });
 
 app.get('/editUser:id',function(req,res,next){
@@ -111,7 +122,6 @@ app.put('/editUser:id',function(req,res,next){
         res.end();
     });
 });
-
 
 app.post('/createUser',function(req,res,next){
     var context = {};
