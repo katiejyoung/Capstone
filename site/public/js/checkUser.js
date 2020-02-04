@@ -1,16 +1,19 @@
 function checkUser(id, s){
     var check;
-    if (id != NULL) {
-        if (s = 1) {
-            check = "Administrative User"
+    if (id != 0) {
+        if (s == 1) {
+            check = "Administrative User";
+            console.log(check);
             document.getElementById("profile").innerHTML = check;
             return;
         }
-        check = "User"
+        check = "Welcome "+id;
+        console.log(check);
         document.getElementById("profile").innerHTML = check;
         return;
     }
-    check = "No Profile"
+    check = "No Profile";
+    console.log(check);
     document.getElementById("profile").innerHTML = check;
     return;
 }

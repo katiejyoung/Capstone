@@ -40,11 +40,11 @@ app.get('/createUser',function(req,res,next){
     res.render('createUser');
 });
 
-app.get('/user/:id', function(req,res,next) {
+app.get('/user/:user_name', function(req,res,next) {
     var context = {};
     var callbackCount = 0;
-    getUser(res, mysql, context, [req.params.id], complete);
-    getRecords(res, mysql, context, [req.params.id], complete);
+    getUser(res, mysql, context, [req.params.user_name], complete);
+    getRecords(res, mysql, context, [req.params.user_name], complete);
     function complete()
     {
         callbackCount++;
@@ -55,40 +55,51 @@ app.get('/user/:id', function(req,res,next) {
     }
 });
 
-app.put('/user/:id', function(req,res,next) {
-    mysql.pool.query("UPDATE records SET record_name=?, record_data=?, record_URL=? WHERE id=?", [req.body.record_name, req.body.record_data, req.body.record_URL, req.body.record_id],
+app.put('/user/:user_name', function(req,res,next) {
+    mysql.pool.query("UPDATE records SET record_name=?, record_data=?, record_URL=? WHERE record_id=?", [req.body.record_name, req.body.record_password, req.body.record_URL, req.body.record_id],
     function(error, results, fields) {
         if (error) {
             res.write(JSON.stringify(error));
             res.end();
         }
         res.status(200);
-        res.end();
+        res.send();
     });
 });
 
-app.post('/user/:id', function(req,res,next) {
+app.post('/user/:user_name', function(req,res,next) {
     var context = {};
     mysql.pool.query(
-        'INSERT INTO records (record_name, record_data, record_URL) VALUES (?,?,?)',
-        [req.body.record_name, req.body.record_data, req.body.record_URL], function(err, rows, fields) {
+        'INSERT INTO records (record_name, record_data, record_URL, user) VALUES (?,?,?,?)',
+        [req.body.add_record_name, req.body.add_record_password, req.body.add_record_URL,req.body.add_record_user], function(err, rows, fields) {
             if (err) {
                 next(err);
                 return;
             }
-            res.redirect('/user/:id');
+            res.redirect('/user/'+[req.params.user_name]);
         }
     )
 });
 
-app.delete('/user/:id', function(req,res,next) {
-    res.render('user');
+app.delete('/user/:user_name', function(req,res,next) {
+    console.log(req.body);
+    console.log(req.body.record_id);
+    mysql.pool.query(
+        'DELETE FROM records WHERE record_id=?', req.body.record_id, function(error, results, fields) {
+            if (error) {
+                res.write(JSON.stringify(error));
+                res.status(400);
+                res.end();
+            }
+            res.status(202).end();
+        }
+    )
 });
 
-app.get('/editUser:id',function(req,res,next){
+app.get('/editUser:user_name',function(req,res,next){
     var context = {};
     var callbackCount = 0;
-    getUser(res, mysql, context, [req.params.id], complete);
+    getUser(res, mysql, context, [req.params.user_name], complete);
     function complete()
     {
         callbackCount++;
@@ -99,8 +110,8 @@ app.get('/editUser:id',function(req,res,next){
     }
 });
 
-app.put('/editUser:id',function(req,res,next){
-    mysql.pool.query("UPDATE user SET user_first=?,user_last=?, user_name=?, user_password=?, user_email=? WHERE id=?", [req.body.user_first,req.body.user_last,req.body.user_name, req.body.user_password, req.body.user_email, [req.params.id]],
+app.put('/editUser:user_name',function(req,res,next){
+    mysql.pool.query("UPDATE user SET user_first=?, user_last=?, user_password=?, user_email=? WHERE user_name=?", [req.body.user_first,req.body.user_last, req.body.user_password, req.body.user_email, [req.body.user_name]],
     function(error, results, fields) {
         if (error) {
             res.write(JSON.stringify(error));
@@ -110,7 +121,6 @@ app.put('/editUser:id',function(req,res,next){
         res.end();
     });
 });
-
 
 app.post('/createUser',function(req,res,next){
     var context = {};
@@ -143,24 +153,26 @@ app.listen(app.get('port'), function(){
 
 function getRecords(res, mysql, context, id, complete)
 {
-    mysql.pool.query("SELECT * FROM records WHERE user=?", [id], function(error, results, fields) {
+    mysql.pool.query("SELECT * FROM records r INNER JOIN user u ON r.user = u.id WHERE u.user_name=?", id, function(error, results, fields) {
         if (error) {
             res.write(JSON.stringify(error));
             res.end();
         }
-        context.record=results[0];
+        context.records=results;
+        console.log(context.records);
         complete();
     });
 }
 
 function getUser(res, mysql, context, id, complete)
 {
-    mysql.pool.query("SELECT * FROM user WHERE id=?", [id], function(error, results, fields) {
+    mysql.pool.query("SELECT * FROM user WHERE user_name=?", id, function(error, results, fields) {
         if (error) {
             res.write(JSON.stringify(error));
             res.end();
         }
-        context.record=results[0];
+        context.user=results;
+        console.log(context.user);
         complete();
     });
 }
