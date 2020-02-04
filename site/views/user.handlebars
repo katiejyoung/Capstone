@@ -8,7 +8,7 @@
     <div id="profile" class="welcome"></div>
     <div id="user_id" name="get_user_id"></div>
     {{#each user}}
-    <script>checkUser({{id}},{{user_super}});</script>
+    <script>checkUser('{{user_name}}',{{user_super}});</script>
     {{/each}}
 <br>
     
@@ -52,6 +52,11 @@
     <div class="add-record-form">
         <h2>Add a New Record to the Vault</h2><br>
         <form method="POST">
+             {{#each user}}
+            <label for="record_user">*User Number (Temp): </label>
+            <input type="text" name="add_record_user" id="add_record_user" value={{id}}>
+            {{/each}}
+            <br><br>
             <label for="record_name">*Account Name: </label>
             <input type="text" name="add_record_name" id="add_record_name">
             <br><br>
@@ -93,7 +98,7 @@
             </div>  
         </form>
         {{#each user}}
-        <div> <button onclick="deleteRecord({{id}}, document.getElementById('edit_record_id').value)" type="button">Delete Record</button></div>
+        <div> <button onclick="deleteRecord('{{user_name}}', document.getElementById('edit_record_id').value)" type="button">Delete Record</button></div>
         {{/each}}
     </div>
 </div>
@@ -143,10 +148,10 @@
         document.getElementById('edit_record_password').value = pass;
     }
 
-    function deleteRecord(id, record_id){
-        console.log(id, record_id);
+    function deleteRecord(user_name, record_id){
+        console.log(user_name, record_id);
         $.ajax({
-            url: '/user/' + id,
+            url: '/user/' + user_name,
             data: {data1: record_id},
             type: 'DELETE',
             success: function(result){
