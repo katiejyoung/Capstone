@@ -7,7 +7,7 @@ function checkUser(id, s){
             document.getElementById("banner").innerHTML = check;
             return;
         }
-        check = "Welcome "+id;
+        check = "Welcome, "+id;
         console.log(check);
         document.getElementById("banner").innerHTML = check;
         return;
