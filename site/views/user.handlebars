@@ -3,12 +3,9 @@
     <div id="nav" class="side-nav">
         <button onclick="location.href='/editUser/{{id}}'" type="button">Edit User Profile</button>
     </div>
-     
-    <script src="/js/checkUser.js"></script>
-    <div id="profile" class="welcome"></div>
-    <div id="user_id" name="get_user_id"></div>
+    
     {{#each user}}
-    <script>checkUser('{{user_name}}',{{user_super}});</script>
+    <p id="profile" onload="checkUser('{{user_name}}',{{user_super}})"></p>    
     {{/each}}
 <br>
     
@@ -30,7 +27,7 @@
     <div class="record-content" >
         <table class="record-table">
                 <tr>
-                    <td id="record-id">Record ID</td>
+                    <td id="record-id">Record ID (Temp)</td>
                 </tr>
                 <tr>
                     <td id="record-name">Record Name</td>
@@ -68,7 +65,6 @@
             <br><br>
             <div class="center-button">
                 <input type="submit" id="addRecord" value="Submit">
-                <!--<button onclick="addRecord()" id="submit-record-button" type="button">Add to Database</button> -->
             </div>  
         </form>
         <div id="required-field" style="display: none;">
@@ -80,11 +76,8 @@
 <div class="editRecord" id="edit-record" style="display: none;">
     <div class="edit-record-form">
         <h2>Edit Record</h2><br>
-        <form method="PUT">
-            <label for="record_id">*Record Number: </label>
-            <input type="text" name="edit_record_id" id="edit_record_id">
-            <br><br>
-            <label for="record_name">*Account Name: </label>
+        <form method="post">
+            <label for="record_name">*Record Name: </label>
             <input type="text" name="edit_record_name" id="edit_record_name">
             <br><br>
             <label for="record_password">*Password: </label>
@@ -92,12 +85,13 @@
             <br><br>
             <label for="record_url">*URL: </label>
             <input type="text" name="edit_record_URL" id="edit_record_URL">
+            <br><br>  
+            <label for="record_id">*Record Number (Temp): </label>
+            <input type="text" name="edit_record_id" id="edit_record_id">
             <br><br>
-            <div class="center-button">
-                <input type="submit" id="editRecord" value="Edit">
-            </div>  
         </form>
         {{#each user}}
+        <div> <button onClick="updateRecord('{{user_name}}', document.getElementById('edit_record_name').value,document.getElementById('edit_record_password').value,document.getElementById('edit_record_URL').value,document.getElementById('edit_record_id').value)" type="button">Save Change</button></div>
         <div> <button onclick="deleteRecord('{{user_name}}', document.getElementById('edit_record_id').value)" type="button">Delete Record</button></div>
         {{/each}}
     </div>
@@ -121,19 +115,6 @@
         document.getElementById('required-field').style.display="none";
     }
 
-    function addRecord() {
-        //Validate input and send to database
-        let rname = document.getElementById('add_record_name').value;
-        let rpassword = document.getElementById('add_record_password').value;
-        let rurl = document.getElementById('add_record_URL').value;
-        if (rname != '' && rpassword != '' && rurl != '') {
-            mysql.pool.query('INSERT INTO records (record_name, record_data, record_URL, user) VALUES (?,?,?,?)', {rname, rpassword, rurl});   
-        }
-        else {
-            document.getElementById('required-field').style.display="inline";
-        }
-    }
-
     function editRecord(id, name, URL, pass) {
         //Display only edit-record form
         document.getElementById('record-display').style.display="none";
@@ -152,12 +133,45 @@
         console.log(user_name, record_id);
         $.ajax({
             url: '/user/' + user_name,
-            data: {data1: record_id},
+            data: {record_id: record_id},
             type: 'DELETE',
             success: function(result){
                 window.location.reload(true);
             }
         })
+    }
+    
+    function updateRecord(user_name, record_name, record_password, record_URL, record_id)
+    {
+        console.log(record_id, record_name, record_URL, record_password);
+        $.ajax({
+            url: '/user/' + user_name,
+            data: {record_id: record_id, record_name: record_name, record_URL: record_URL, record_password: record_password},
+            type: 'PUT',
+            success: function(result) {
+                window.location.reload(true);
+            }
+        })
+    }
+    
+    function checkUser(id, s){
+        var check;
+        if (id != 0) {
+            if (s == 1) {
+                check = "Administrative User";
+                console.log(check);
+                document.getElementById('profile').innerHTML = check;
+                return;
+            }
+            check = "Welcome "+id;
+            console.log(check);
+            document.getElementById('profile').innerHTML = check;
+            return;
+        }
+        check = "No Profile";
+        console.log(check);
+        document.getElementById('profile').innerHTML = check;
+        return;
     }
 </script>
 

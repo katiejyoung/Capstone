@@ -56,7 +56,7 @@ app.get('/user/:user_name', function(req,res,next) {
 });
 
 app.put('/user/:user_name', function(req,res,next) {
-    mysql.pool.query("UPDATE records SET record_name=?, record_data=?, record_URL=? WHERE record_id=?", [req.body.edit_record_name, req.body.edit_record_data, req.body.edit_record_URL, req.body.edit_record_id],
+    mysql.pool.query("UPDATE records SET record_name=?, record_data=?, record_URL=? WHERE record_id=?", [req.body.record_name, req.body.record_password, req.body.record_URL, req.body.record_id],
     function(error, results, fields) {
         if (error) {
             res.write(JSON.stringify(error));
@@ -64,7 +64,6 @@ app.put('/user/:user_name', function(req,res,next) {
         }
         res.status(200);
         res.send();
-        res.redirect('/user/'+[req.params.id]);
     });
 });
 
@@ -84,9 +83,9 @@ app.post('/user/:user_name', function(req,res,next) {
 
 app.delete('/user/:user_name', function(req,res,next) {
     console.log(req.body);
-    console.log(req.body.data1);
+    console.log(req.body.record_id);
     mysql.pool.query(
-        'DELETE FROM records WHERE record_id=?', req.body.data1, function(error, results, fields) {
+        'DELETE FROM records WHERE record_id=?', req.body.record_id, function(error, results, fields) {
             if (error) {
                 res.write(JSON.stringify(error));
                 res.status(400);
@@ -112,7 +111,7 @@ app.get('/editUser:user_name',function(req,res,next){
 });
 
 app.put('/editUser:user_name',function(req,res,next){
-    mysql.pool.query("UPDATE user SET user_first=?,user_last=?, user_name=?, user_password=?, user_email=? WHERE user_name=?", [req.body.user_first,req.body.user_last,req.body.user_name, req.body.user_password, req.body.user_email, [req.params.user_name]],
+    mysql.pool.query("UPDATE user SET user_first=?, user_last=?, user_password=?, user_email=? WHERE user_name=?", [req.body.user_first,req.body.user_last, req.body.user_password, req.body.user_email, [req.body.user_name]],
     function(error, results, fields) {
         if (error) {
             res.write(JSON.stringify(error));

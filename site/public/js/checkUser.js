@@ -7,7 +7,7 @@ function checkUser(id, s){
             document.getElementById("profile").innerHTML = check;
             return;
         }
-        check = "User";
+        check = "Welcome "+id;
         console.log(check);
         document.getElementById("profile").innerHTML = check;
         return;
