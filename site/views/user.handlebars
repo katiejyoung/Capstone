@@ -1,10 +1,10 @@
 
 <body>
-    <div id="nav" class="side-nav">
-        <button onclick="location.href='/editUser/{{id}}'" type="button">Edit User Profile</button>
-    </div>
+     {{#each user}}
     <div id="banner" class="welcome"></div>
-    {{#each user}}
+    <div id="nav" class="welcome">
+        <button onclick="location.href='/editUser/{{user_name}}'" type="button">Edit User Profile</button>
+    </div>
         <script>checkUser('{{user_name}}',{{user_super}});</script>    
     {{/each}}
 <br>

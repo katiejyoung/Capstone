@@ -1,26 +1,47 @@
-<h1>Edit User Profile Page</h1>
+<h1>Edit Profile</h1>
 
+ {{#each user}}
+    <div id="banner" class="welcome"></div>
+    <div id="nav" class="welcome">
+        <button onclick="location.href='/user/{{user_name}}'" type="button">User Page</button>
+    </div>
+        <script>checkUser('{{user_name}}',{{user_super}});</script>    
+{{/each}}
 <br>
 <h2>Edit User</h2>
-<table id="userTab" class="userTable">
-    <tr>
-        <th>User First</th>
-        <th>User Last</th>
-        <th>User Name</th>
-        <th>User Password</th>
-        <th>User Email</th>
-    </tr>
-    {{#each user}}
-        <tr>
-            <td>{{user_first}}</td>
-            <td>{{user_last}}</td>
-            <td>{{user_name}}</td>
-            <td>{{user_password}}</td>
-            <td>{{user_email}}</td>
-            <td>
-                <button onclick="" type="button">Update</button>
-            </td>
-        </tr>
-    {{/each}}
-</table>
 
+<br><br>
+{{#each user}}
+<form method="post">
+    <label for="user_first">First Name: </label>
+    <input type="text" name="edit_user_first" id="edit_user_first" value='{{user_first}}'>
+    <br><br>
+    <label for="user_last">Last Name: </label>
+    <input type="text" name="edit_user_last" id="edit_user_last" value='{{user_last}}'>
+    <br><br>
+    <label for="user_password">Password: </label>
+    <input type="text" name="edit_user_password" id="edit_user_password" value='{{user_password}}'>
+    <br><br>  
+    <label for="user_email">Email: </label>
+    <input type="text" name="edit_user_email" id="edit_user_email" value='{{user_email}}'>
+    <br><br>
+    <button onClick="updateUser('{{user_name}}', document.getElementById('edit_user_first').value,document.getElementById('edit_user_last').value,document.getElementById('edit_user_password').value,document.getElementById('edit_user_email').value)" type="button">Save Change</button>
+    </form>
+{{/each}}
+
+<script language="JavaScript">
+    
+    function updateUser(user_name, user_first, user_last, user_password, user_email)
+    {
+        console.log(user_name, user_first, user_last, user_password, user_email);
+        $.ajax({
+            url: '/editUser/' + user_name,
+            data: {user_first: user_first, user_last: user_last, user_password: user_password, user_email: user_email},
+            type: 'PUT',
+            success: function(result) {
+                window.location.reload(true);
+            }
+        })
+    }
+    
+</script>

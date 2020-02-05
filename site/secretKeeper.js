@@ -96,7 +96,7 @@ app.delete('/user/:user_name', function(req,res,next) {
     )
 });
 
-app.get('/editUser:user_name',function(req,res,next){
+app.get('/editUser/:user_name',function(req,res,next){
     var context = {};
     var callbackCount = 0;
     getUser(res, mysql, context, [req.params.user_name], complete);
@@ -110,8 +110,9 @@ app.get('/editUser:user_name',function(req,res,next){
     }
 });
 
-app.put('/editUser:user_name',function(req,res,next){
-    mysql.pool.query("UPDATE user SET user_first=?, user_last=?, user_password=?, user_email=? WHERE user_name=?", [req.body.user_first,req.body.user_last, req.body.user_password, req.body.user_email, [req.body.user_name]],
+app.put('/editUser/:user_name',function(req,res,next){
+    console.log(req.body.user_first,req.body.user_last, req.body.user_password, req.body.user_email, [req.params.user_name]);
+    mysql.pool.query("UPDATE user SET user_first=?, user_last=?, user_password=?, user_email=? WHERE user_name=?", [req.body.user_first,req.body.user_last, req.body.user_password, req.body.user_email,[req.params.user_name]],
     function(error, results, fields) {
         if (error) {
             res.write(JSON.stringify(error));
