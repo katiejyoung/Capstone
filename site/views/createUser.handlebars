@@ -26,6 +26,21 @@
     <div id="invalid-email" style="display: none;">
         <p>*Error: Incorrect email format</p>
     </div>
+    <div id="invalid-password-upper" style="display: none;">
+        <p>*Error: Password must contain at least one upper-case character.</p>
+    </div>
+    <div id="invalid-password-lower" style="display: none;">
+        <p>*Error: Password must contain at least one lower-case character.</p>
+    </div>
+    <div id="invalid-password-special" style="display: none;">
+        <p>*Error: Password must contain at least one special character.</p>
+    </div>
+    <div id="invalid-password-number" style="display: none;">
+        <p>*Error: Password must contain at least one numeric character.</p>
+    </div>
+    <div id="invalid-password-length" style="display: none;">
+        <p>*Error: Password must contain at least 12 characters.</p>
+    </div>
 </div>
 <div class="secret-logo">
     <img src="images/top-secret-white.png" width="350" height="350" alt="Top Secret">
@@ -42,6 +57,7 @@
         let email = document.getElementById('email').value;
         let pword = document.getElementById('password').value;
         var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        var valid;
 
         if (fName != '' && lName != '' && uName != '' && email != '' && pword != '') {
             //Output user info for now
@@ -60,5 +76,109 @@
         if (!email.match(mailformat)) {
             document.getElementById('invalid-email').style.display="inline";
         }
+
+        valid = isValidPassword(pword);
+
+        if (valid != 0) {
+            if (valid == 1) {
+                document.getElementById('invalid-password-upper').style.display="inline";
+                document.getElementById('invalid-password-lower').style.display="none";
+                document.getElementById('invalid-password-special').style.display="none";
+                document.getElementById('invalid-password-number').style.display="none";
+                document.getElementById('invalid-password-length').style.display="none";
+            }
+            else if (valid == 2) {
+                document.getElementById('invalid-password-upper').style.display="none";
+                document.getElementById('invalid-password-lower').style.display="inline";
+                document.getElementById('invalid-password-special').style.display="none";
+                document.getElementById('invalid-password-number').style.display="none";
+                document.getElementById('invalid-password-length').style.display="none";
+            }
+            else if (valid == 3) {
+                document.getElementById('invalid-password-upper').style.display="none";
+                document.getElementById('invalid-password-lower').style.display="none";
+                document.getElementById('invalid-password-special').style.display="inline";
+                document.getElementById('invalid-password-number').style.display="none";
+                document.getElementById('invalid-password-length').style.display="none";
+            }
+            else if (valid == 4) {
+                document.getElementById('invalid-password-upper').style.display="none";
+                document.getElementById('invalid-password-lower').style.display="none";
+                document.getElementById('invalid-password-special').style.display="none";
+                document.getElementById('invalid-password-number').style.display="inline";
+                document.getElementById('invalid-password-length').style.display="none";
+            }
+            else if (valid == 5) {
+                document.getElementById('invalid-password-upper').style.display="none";
+                document.getElementById('invalid-password-lower').style.display="none";
+                document.getElementById('invalid-password-special').style.display="none";
+                document.getElementById('invalid-password-number').style.display="none";
+                document.getElementById('invalid-password-length').style.display="inline";
+            }
+        }
+        else {
+            document.getElementById('invalid-password-upper').style.display="none";
+            document.getElementById('invalid-password-lower').style.display="none";
+            document.getElementById('invalid-password-special').style.display="none";
+            document.getElementById('invalid-password-number').style.display="none";
+            document.getElementById('invalid-password-length').style.display="none";
+        }
     };
+
+    function isValidPassword(password) {
+        var lowerCaseLetters = /[a-z]/g;
+        var upperCaseLetters = /[A-Z]/g;
+        var specialCharacters = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
+        var numbers = /[0-9]/g;
+        var i;
+        var str;
+
+        i = 0;
+        while (i < password.length) {
+            if (password[i].match(upperCaseLetters)) {
+                break;
+            }
+            else if (i == (password.length - 1)) {
+                return 1;
+            }
+            i++;
+        }
+        i = 0;
+        while (i < password.length) {
+            if (password[i].match(lowerCaseLetters)) {
+                break;
+            }
+            else if (i == (password.length - 1)) {
+                return 2;
+            }
+            i++;
+        }
+        i = 0;
+        while (i < password.length) {
+            if (password[i].match(specialCharacters)) {
+                break;
+            }
+            else if (i == (password.length - 1)) {
+                return 3;
+            }
+            i++;
+        }
+        i = 0;
+        while (i < password.length) {
+            if (password[i].match(numbers)) {
+                break;
+            }
+            else if (i == (password.length - 1)) {
+                return 4;
+            }
+            i++;
+        }
+
+        if ((password.length < 12) || (password.length > 30)) {
+            return 5;
+        }
+
+        return 0;
+    };
+
 </script>
