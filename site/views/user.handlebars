@@ -51,8 +51,9 @@
         <form method="POST">
              
             <label for="record_user">*User Number (Temp): </label>
+            {{#each user}}
             <input type="text" name="add_record_user" id="add_record_user" value={{id}}>
-            
+            {{/each}}
             <br><br>
             <label for="record_name">*Account Name: </label>
             <input type="text" name="add_record_name" id="add_record_name">
@@ -64,7 +65,7 @@
             <input type="text" name="add_record_URL" id="add_record_URL">
             <br><br>
             <div class="center-button">
-                <button type="button" id="addRecord" value="Add record">Add Record</button>
+                <button type="submit" id="addRecord" value="Add record">Add Record</button>
             </div>  
         </form>
         <div id="required-field" style="display: none;">

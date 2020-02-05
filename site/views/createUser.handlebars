@@ -1,23 +1,26 @@
 <h1 class="no-nav-header">Secret Keeper</h1>
 <div class="home">
-    <form class="no-nav-form" method="post">
+    <form class="no-nav-form" method="POST">
+        <p>The Username is your unique identifier.  It cannot be changed once submitted (at this time).</p>
+        <label for="username">*Username: </label>
+        <input type="text" name="username" id="username">
+        <!--Create function to test uniqueness of Username, SQL error otherwise-->
+        <br><br>
         <label for="first">*First Name: </label>
         <input type="text" name="first" id="first">
         <br><br>
         <label for="last">*Last Name: </label>
         <input type="text" name="last" id="last">
         <br><br>
-        <label for="username">*Username: </label>
-        <input type="text" name="username" id="username">
-        <br><br>
         <label for="email">*Email: </label>
         <input type="text" name="email" id="email">
         <br><br>
         <label for="password">*Password: </label>
         <input type="text" name="password" id="password">
+        <!--Revert back to function to test password against wanted char / the common passwords txt file for secure site-->
         <br><br>
         <div class="center-button">
-            <button onclick="createAccount()" id="button" type="button">Sign Up!</button>
+            <button id="createUser" type="submit">Sign Up!</button>
         </div>  
     </form>
     <div id="required-field" style="display: none;">
@@ -60,5 +63,7 @@
         if (!email.match(mailformat)) {
             document.getElementById('invalid-email').style.display="inline";
         }
-    };
+        
+        
+    }
 </script>

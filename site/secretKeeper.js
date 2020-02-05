@@ -40,6 +40,21 @@ app.get('/createUser',function(req,res,next){
     res.render('createUser');
 });
 
+app.post('/createUser',function(req,res,next){
+    var context = {};
+    mysql.pool.query(
+        'INSERT INTO user (user_first, user_last, user_name, user_password, user_email, user_super) VALUES (?,?,?,?,?,?)',
+        [req.body.first, req.body.last, req.body.username, req.body.password, req.body.email, 0],
+         function(err, rows, fields) {
+            if (err) {
+                next(err);
+                return;
+            }
+            res.redirect('/user/'+req.body.username);
+        }
+    )
+});
+
 app.get('/user/:user_name', function(req,res,next) {
     var context = {};
     var callbackCount = 0;
