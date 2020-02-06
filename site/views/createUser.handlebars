@@ -18,7 +18,6 @@
         <input type="text" name="password" id="password">
         <!--Revert back to function to test password against wanted char / the common passwords txt file for secure site-->
         <br><br>
-        <!--Create function to test uniqueness of Username, SQL error otherwise-->
         <button type="button" id="testUser" onclick="testUsername(document.getElementById('username').value)">Check Username Avaliability</button>
         <br><br>
         <p id="avaliableResponse"></p>
@@ -34,10 +33,6 @@
         <p>*Error: Incorrect email format</p>
     </div>
 </div>
-{{#each count}}
-    <div id="helper" onclick="testCount({{total}})">!</div>
-{{/each}}
-
 
 <div class="secret-logo">
     <img src="images/top-secret-white.png" width="350" height="350" alt="Top Secret">

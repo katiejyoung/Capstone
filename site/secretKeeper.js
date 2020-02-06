@@ -61,7 +61,7 @@ app.post('/createUser',function(req,res,next){
                 next(err);
                 return;
             }
-            res.redirect('/user/'+req.body.username);
+            res.redirect('/');
         }
     )
 });
@@ -147,20 +147,6 @@ app.put('/editUser/:user_name',function(req,res,next){
         res.status(200);
         res.end();
     });
-});
-
-app.post('/createUser',function(req,res,next){
-    var context = {};
-    mysql.pool.query(
-        'INSERT INTO user (user_first, user_last, user_name, user_password, user_email) VALUES (?,?,?,?,?)',
-        [req.body.user_name, req.body.user_password, req.body.user_email], function(err, rows, fields) {
-            if (err) {
-                next(err);
-                return;
-            }
-            res.redirect('/home');
-        }
-    )
 });
 
 app.use(function(req,res){
