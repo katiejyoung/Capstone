@@ -170,6 +170,9 @@ app.listen(app.get('port'), function(){
 
 function getRecords(res, mysql, context, id, pass, complete)
 {
+    if (Number.isInteger(pass)){
+        pass = Integer.toString(pass);
+    }
     mysql.pool.query("SELECT * FROM records r INNER JOIN user u ON r.user = u.id WHERE u.user_name=? and u.user_password=?", [id, pass], function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
@@ -183,6 +186,9 @@ function getRecords(res, mysql, context, id, pass, complete)
 
 function getUser(res, mysql, context, id, pass,complete)
 {
+    if (Number.isInteger(pass)){
+        pass = Integer.toString(pass);
+    }
     mysql.pool.query("SELECT * FROM user WHERE user_name=? and user_password=?", [id, pass], function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
