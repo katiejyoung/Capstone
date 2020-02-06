@@ -40,6 +40,17 @@ app.get('/createUser',function(req,res,next){
     res.render('createUser');
 });
 
+app.put('/createUser',function(req,res,next){
+    var context = {};
+    mysql.pool.query('SELECT COUNT(1) AS total FROM user WHERE user_name=?', [req.body.username], function(error, results, fields) {
+        if (error) {
+            console.log(JSON.stringify(error));
+        }
+        console.log(results);
+        res.send(results);
+    })
+});
+
 app.post('/createUser',function(req,res,next){
     var context = {};
     mysql.pool.query(
@@ -192,3 +203,4 @@ function getUser(res, mysql, context, id, complete)
         complete();
     });
 }
+

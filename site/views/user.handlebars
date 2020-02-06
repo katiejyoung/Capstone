@@ -27,7 +27,7 @@
     <div class="record-content" >
         <table class="record-table">
                 <tr>
-                    <td id="record-id">{{record-id}}</td>
+                    <td id="record-id" style="display: none;">{{record-id}}</td>
                 </tr>
                 <tr>
                     <td id="record-name">{{record-name}}</td>
@@ -50,7 +50,7 @@
         <h2>Add a New Record to the Vault</h2><br>
         <form method="POST">
              
-            <label for="record_user">*User Number (Temp): </label>
+            <label for="record_user" style="display: none;">*User Number (Temp): </label>
             {{#each user}}
             <input type="text" name="add_record_user" id="add_record_user" value={{id}}>
             {{/each}}
@@ -87,7 +87,7 @@
             <label for="record_url">*URL: </label>
             <input type="text" name="edit_record_URL" id="edit_record_URL">
             <br><br>  
-            <label for="record_id">*Record Number (Temp): </label>
+            <label for="record_id" style="display: none;">*Record Number (Temp): </label>
             <input type="text" name="edit_record_id" id="edit_record_id">
             <br><br>
         </form>
