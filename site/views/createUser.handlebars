@@ -16,8 +16,12 @@
         <label for="password">*Password: </label>
         <input type="text" name="password" id="password">
         <br><br>
+        <button type="button" id="testUser" onclick="testUsername(document.getElementById('username').value)">Check Username Avaliability</button>
         <div class="center-button">
-            <button onclick="createAccount()" id="button" type="button">Sign Up!</button>
+            <button onclick="createAccount()" id="button" type="button">Check Form</button>
+        </div>
+        <div class="center-button">
+            <button id="createUser" type="submit" style="display: none;">Sign Up!</button>
         </div>  
     </form>
     <div id="required-field" style="display: none;">
@@ -42,6 +46,7 @@
         <p>*Error: Password must contain at least 12 characters.</p>
     </div>
 </div>
+    <p id="avaliableResponse"></p>
 <div class="secret-logo">
     <img src="images/top-secret-white.png" width="350" height="350" alt="Top Secret">
 </div>
@@ -122,6 +127,7 @@
             document.getElementById('invalid-password-special').style.display="none";
             document.getElementById('invalid-password-number').style.display="none";
             document.getElementById('invalid-password-length').style.display="none";
+            document.getElementById('createUser').style.display="inline";
         }
     };
 
@@ -179,6 +185,30 @@
         }
 
         return 0;
-    };
+    }
+    
+     function testUsername(username) {
+        return $.ajax({
+            url: '/createUser',
+            data: {username: username},
+            type: 'PUT',
+            success: function(result) {
+                testCount(result[0].total);
+            }
+        })
+    }
+    
+    function testCount(count) {
+        if (count == 0) {
+            document.getElementById('avaliableResponse').innerHTML="Avaliable!";
+        }
+        else if (count==1){
+            document.getElementById('avaliableResponse').innerHTML="NOT Avaliable, Try Again";
+        }
+        else {
+            document.getElementById('avaliableResponse').innerHTML="Check Failed";
+        }
+    }
+
 
 </script>
