@@ -16,10 +16,10 @@
         <label for="password">*Password: </label>
         <input type="text" name="password" id="password">
         <br><br>
-        <button type="button" id="testUser" onclick="testUsername(document.getElementById('username').value)">Check Username Avaliability</button>
         <div class="center-button">
             <button onclick="createAccount()" id="button" type="button">Check Form</button>
         </div>
+        <br><br>
         <div class="center-button">
             <button id="createUser" type="submit" style="display: none;">Sign Up!</button>
         </div>  
@@ -45,8 +45,10 @@
     <div id="invalid-password-length" style="display: none;">
         <p>*Error: Password must contain at least 12 characters.</p>
     </div>
+    <div id="invalid-username" style="display: none;">
+        <p>*Error: Username is taken.</p>
+    </div>
 </div>
-    <p id="avaliableResponse"></p>
 <div class="secret-logo">
     <img src="images/top-secret-white.png" width="350" height="350" alt="Top Secret">
 </div>
@@ -54,7 +56,7 @@
 
 <script language="JavaScript">
     
-    function createAccount() {
+    async function createAccount() {
         //Validate input and send to database
         let fName = document.getElementById('first').value;
         let lName = document.getElementById('last').value;
@@ -83,14 +85,17 @@
         }
 
         valid = isValidPassword(pword);
+        const res = await testUsername(uName);
+        var nameCheck = document.getElementById('invalid-username').value;
 
-        if (valid != 0) {
+        if (valid != 0 || nameCheck != 0) {
             if (valid == 1) {
                 document.getElementById('invalid-password-upper').style.display="inline";
                 document.getElementById('invalid-password-lower').style.display="none";
                 document.getElementById('invalid-password-special').style.display="none";
                 document.getElementById('invalid-password-number').style.display="none";
                 document.getElementById('invalid-password-length').style.display="none";
+                document.getElementById('createUser').style.display="none";
             }
             else if (valid == 2) {
                 document.getElementById('invalid-password-upper').style.display="none";
@@ -98,6 +103,7 @@
                 document.getElementById('invalid-password-special').style.display="none";
                 document.getElementById('invalid-password-number').style.display="none";
                 document.getElementById('invalid-password-length').style.display="none";
+                document.getElementById('createUser').style.display="none";
             }
             else if (valid == 3) {
                 document.getElementById('invalid-password-upper').style.display="none";
@@ -105,6 +111,7 @@
                 document.getElementById('invalid-password-special').style.display="inline";
                 document.getElementById('invalid-password-number').style.display="none";
                 document.getElementById('invalid-password-length').style.display="none";
+                document.getElementById('createUser').style.display="none";
             }
             else if (valid == 4) {
                 document.getElementById('invalid-password-upper').style.display="none";
@@ -112,6 +119,7 @@
                 document.getElementById('invalid-password-special').style.display="none";
                 document.getElementById('invalid-password-number').style.display="inline";
                 document.getElementById('invalid-password-length').style.display="none";
+                document.getElementById('createUser').style.display="none";
             }
             else if (valid == 5) {
                 document.getElementById('invalid-password-upper').style.display="none";
@@ -119,6 +127,7 @@
                 document.getElementById('invalid-password-special').style.display="none";
                 document.getElementById('invalid-password-number').style.display="none";
                 document.getElementById('invalid-password-length').style.display="inline";
+                document.getElementById('createUser').style.display="none";
             }
         }
         else {
@@ -200,13 +209,14 @@
     
     function testCount(count) {
         if (count == 0) {
-            document.getElementById('avaliableResponse').innerHTML="Avaliable!";
+            document.getElementById('invalid-username').style.display="none";
+            document.getElementById('invalid-username').value=0;
         }
         else if (count==1){
-            document.getElementById('avaliableResponse').innerHTML="NOT Avaliable, Try Again";
+            document.getElementById('invalid-username').style.display="inline";
+            document.getElementById('invalid-username').value=1;
         }
         else {
-            document.getElementById('avaliableResponse').innerHTML="Check Failed";
         }
     }
 
