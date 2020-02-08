@@ -20,7 +20,7 @@
     color: #696969;
 }
 
-#required-field, #invalid-email, #invalid-password-upper, #invalid-password-lower, #invalid-password-special, #invalid-password-number, #invalid-password-length {
+#required-field, #invalid-email, #invalid-password-upper, #invalid-password-lower, #invalid-password-special, #invalid-password-number, #invalid-password-length, #invalid-username {
     text-align:center;
 }
 
@@ -53,6 +53,14 @@
 }
 
 .add-record-form, .edit-record-form {
+    padding-top: 3%;
+    width: 50%;
+    margin:0 auto;
+    text-align: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.admin-form {
     padding-top: 3%;
     width: 50%;
     margin:0 auto;

@@ -1,10 +1,9 @@
-
 <body>
-    <div id="nav" class="side-nav">
-        <button onclick="location.href='/editUser/{{id}}'" type="button">Edit User Profile</button>
-    </div>
+     {{#each user}}
     <div id="banner" class="welcome"></div>
-    {{#each user}}
+    <div id="nav" class="welcome">
+        <button onclick="location.href='/editUser/{{user_name}}'+'&'+'{{user_password}}'" type="button">Edit User Profile</button>
+    </div>
         <script>checkUser('{{user_name}}',{{user_super}});</script>    
     {{/each}}
 <br>
@@ -27,7 +26,7 @@
     <div class="record-content" >
         <table class="record-table">
                 <tr>
-                    <td id="record-id">{{record-id}}</td>
+                    <td id="record-id" style="display: none;">{{record-id}}</td>
                 </tr>
                 <tr>
                     <td id="record-name">{{record-name}}</td>
@@ -50,9 +49,10 @@
         <h2>Add a New Record to the Vault</h2><br>
         <form method="POST">
              
-            <label for="record_user">*User Number (Temp): </label>
-            <input type="text" name="add_record_user" id="add_record_user" value={{id}}>
-            
+            <label for="record_user" style="display: none;">*User Number (Temp): </label>
+            {{#each user}}
+            <input type="text" name="add_record_user" id="add_record_user" style="display: none;" value={{id}}>
+            {{/each}}
             <br><br>
             <label for="record_name">*Account Name: </label>
             <input type="text" name="add_record_name" id="add_record_name">
@@ -64,7 +64,7 @@
             <input type="text" name="add_record_URL" id="add_record_URL">
             <br><br>
             <div class="center-button">
-                <button type="button" id="addRecord" value="Add record">Add Record</button>
+                <button type="submit" id="addRecord" value="Add record">Add Record</button>
             </div>  
         </form>
         <div id="required-field" style="display: none;">
@@ -86,16 +86,38 @@
             <label for="record_url">*URL: </label>
             <input type="text" name="edit_record_URL" id="edit_record_URL">
             <br><br>  
-            <label for="record_id">*Record Number (Temp): </label>
-            <input type="text" name="edit_record_id" id="edit_record_id">
+            <label for="record_id" style="display: none;">*Record Number (Temp): </label>
+            <input type="text" name="edit_record_id" id="edit_record_id" style="display: none;">
             <br><br>
         </form>
         {{#each user}}
-        <div> <button onClick="updateRecord('{{user_name}}', document.getElementById('edit_record_name').value,document.getElementById('edit_record_password').value,document.getElementById('edit_record_URL').value,document.getElementById('edit_record_id').value)" type="button">Save Change</button></div><br>
-        <div> <button onclick="deleteRecord('{{user_name}}', document.getElementById('edit_record_id').value)" type="button">Delete Record</button></div>
+        <div> <button onClick="updateRecord('{{user_name}}','{{user_password}}', document.getElementById('edit_record_name').value,document.getElementById('edit_record_password').value,document.getElementById('edit_record_URL').value,document.getElementById('edit_record_id').value)" type="button">Save Change</button></div><br>
+        <div> <button onclick="deleteRecord('{{user_name}}','{{user_password}}', document.getElementById('edit_record_id').value)" type="button">Delete Record</button></div>
         {{/each}}
     </div>
 </div>
+    
+<div class="admin-form" id="admin-record" style="display: none;">
+        <h2>Admin Table</h2><br>
+        <form>
+            {{#each admin}}
+            <div name="admin_name" id="admin_name">{{user_name}} </div>
+            <div name="admin_password" id="admin_password">{{user_password}} </div>
+            <br>
+            {{/each}}
+        </form>
+</div>
+{{#each user}}
+    <script>
+        let n = '{{user_name}}';
+        let p = '{{user_password}}';
+        if (  n== 'Admin' && p == 'password' ) {
+            document.getElementById('admin-record').style.display="inline";
+            document.getElementById('admin_name').style.display="table-cell";
+            document.getElementById('admin_password').style.display="table-cell";
+        }
+    </script>
+{{/each}}
 
 <script language="JavaScript">
     
@@ -134,10 +156,10 @@
         document.getElementById('edit_record_password').value = pass;
     }
 
-    function deleteRecord(user_name, record_id){
+    function deleteRecord(user_name,user_pass, record_id){
         console.log(user_name, record_id);
         $.ajax({
-            url: '/user/' + user_name,
+            url: '/user/' + user_name+'&'+user_pass,
             data: {record_id: record_id},
             type: 'DELETE',
             success: function(result){
@@ -146,11 +168,11 @@
         })
     }
     
-    function updateRecord(user_name, record_name, record_password, record_URL, record_id)
+    function updateRecord(user_name,user_pass, record_name, record_password, record_URL, record_id)
     {
         console.log(record_id, record_name, record_URL, record_password);
         $.ajax({
-            url: '/user/' + user_name,
+            url: '/user/' + user_name+'&'+user_pass,
             data: {record_id: record_id, record_name: record_name, record_URL: record_URL, record_password: record_password},
             type: 'PUT',
             success: function(result) {

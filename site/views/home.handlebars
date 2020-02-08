@@ -31,7 +31,8 @@
     function validateAccount() {
         let uName = document.getElementById('username').value;
         let pword = document.getElementById('password').value;
-
+        testAccount(uName, pword);
+        /*
         if (fName != '' && lName != '' && uName != '' && email != '' && pword != '') {
             //Outputting user info for now
             //Will validate input and redirect
@@ -41,6 +42,7 @@
         else {
             document.getElementById('required-field').style.display="inline";
         }
+        */
     };
 
     $('#flipSwitch').click(function() {
@@ -53,4 +55,24 @@
             document.getElementById('site-not-secure').style.display = "none";    
         }
     });
+    
+    function testAccount(user_name,user_pass)
+    {
+        $.ajax({
+            url: '/',
+            data: {user_name: user_name, user_pass: user_pass},
+            type: 'PUT',
+            success: function(result) {
+                count = result[0].total;
+                if (count == 0) {
+
+                }
+                else if (count==1){
+                    window.location.href = '/user/'+user_name+'&'+user_pass;
+                }
+                else {
+                }
+            }
+        })
+    }
 </script>

@@ -7,7 +7,7 @@ var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 6060);
+app.set('port', 6061);
 
 var path = require('path'); 
 app.use('/static', express.static('public'));
@@ -20,6 +20,18 @@ app.use(bodyParser.json())
 
 app.get('/',function(req,res){
     res.render('home');
+});
+
+app.put('/',function(req,res,next){
+    var context = {};
+    mysql.pool.query("SELECT COUNT(1) AS total FROM user WHERE user_name=? and user_password=?", [req.body.user_name, req.body.user_pass], function(error, results, fields) {
+        if (error) {
+            console.log(JSON.stringify(error));
+            return;
+        }
+        console.log(results);
+        res.send(results);
+    })
 });
 
 app.get('/test',function(req,res,next){
@@ -44,34 +56,76 @@ app.get('/createUser',function(req,res,next){
     res.render('createUser');
 });
 
-app.get('/user/:user_name', function(req,res,next) {
+app.put('/createUser',function(req,res,next){
     var context = {};
-    var callbackCount = 0;
-    getUser(res, mysql, context, [req.params.user_name], complete);
-    getRecords(res, mysql, context, [req.params.user_name], complete);
-    function complete()
-    {
-        callbackCount++;
-        if (callbackCount >= 2)
-        {
-            res.render('user',context);
+    mysql.pool.query('SELECT COUNT(1) AS total FROM user WHERE user_name=?', [req.body.username], function(error, results, fields) {
+        if (error) {
+            console.log(JSON.stringify(error));
+            return;
         }
-    }
+        console.log(results);
+        res.send(results);
+    })
 });
 
-app.put('/user/:user_name', function(req,res,next) {
+app.post('/createUser',function(req,res,next){
+    var context = {};
+    mysql.pool.query(
+        'INSERT INTO user (user_first, user_last, user_name, user_password, user_email, user_super) VALUES (?,?,?,?,?,?)',
+        [req.body.first, req.body.last, req.body.username, req.body.password, req.body.email, 0],
+         function(err, rows, fields) {
+            if (err) {
+                next(err);
+                return;
+            }
+            res.redirect('/');
+        }
+    )
+});
+
+app.get('/user/:user_name&:password', function(req,res,next) {
+    var context = {};
+    var callbackCount = 0;
+    if (req.params.user_name == 'Admin' && req.params.password == 'password'){
+        getAdmin(res, mysql, context, complete);
+        getUser(res, mysql, context, [req.params.user_name],[req.params.password], complete);
+        function complete()
+        {
+            callbackCount++;
+            if (callbackCount >= 2)
+            {
+                res.render('user',context);
+            }
+        }
+    }
+    else {
+        getUser(res, mysql, context, [req.params.user_name],[req.params.password], complete);
+        getRecords(res, mysql, context, [req.params.user_name],[req.params.password], complete);
+        function complete()
+        {
+            callbackCount++;
+            if (callbackCount >= 2)
+            {
+                res.render('user',context);
+            }
+        }
+    }
+
+});
+
+app.put('/user/:user_name&:password', function(req,res,next) {
     mysql.pool.query("UPDATE records SET record_name=?, record_data=?, record_URL=? WHERE record_id=?", [req.body.record_name, req.body.record_password, req.body.record_URL, req.body.record_id],
     function(error, results, fields) {
         if (error) {
-            res.write(JSON.stringify(error));
-            res.end();
+            console.log(JSON.stringify(error));
+            return;
         }
         res.status(200);
         res.send();
     });
 });
 
-app.post('/user/:user_name', function(req,res,next) {
+app.post('/user/:user_name&:password', function(req,res,next) {
     var context = {};
     mysql.pool.query(
         'INSERT INTO records (record_name, record_data, record_URL, user) VALUES (?,?,?,?)',
@@ -80,30 +134,29 @@ app.post('/user/:user_name', function(req,res,next) {
                 next(err);
                 return;
             }
-            res.redirect('/user/'+[req.params.user_name]);
+            res.redirect('/user/'+[req.params.user_name]+'&'+[req.params.password]);
         }
     )
 });
 
-app.delete('/user/:user_name', function(req,res,next) {
+app.delete('/user/:user_name&:password', function(req,res,next) {
     console.log(req.body);
     console.log(req.body.record_id);
     mysql.pool.query(
         'DELETE FROM records WHERE record_id=?', req.body.record_id, function(error, results, fields) {
             if (error) {
-                res.write(JSON.stringify(error));
-                res.status(400);
-                res.end();
+                console.log(JSON.stringify(error));
+                return;
             }
             res.status(202).end();
         }
     )
 });
 
-app.get('/editUser:user_name',function(req,res,next){
+app.get('/editUser/:user_name&:password',function(req,res,next){
     var context = {};
     var callbackCount = 0;
-    getUser(res, mysql, context, [req.params.user_name], complete);
+    getUser(res, mysql, context, [req.params.user_name],[req.params.password], complete);
     function complete()
     {
         callbackCount++;
@@ -114,30 +167,17 @@ app.get('/editUser:user_name',function(req,res,next){
     }
 });
 
-app.put('/editUser:user_name',function(req,res,next){
-    mysql.pool.query("UPDATE user SET user_first=?, user_last=?, user_password=?, user_email=? WHERE user_name=?", [req.body.user_first,req.body.user_last, req.body.user_password, req.body.user_email, [req.body.user_name]],
+app.put('/editUser/:user_name&:password',function(req,res,next){
+    console.log(req.body.user_first,req.body.user_last, req.body.user_password, req.body.user_email, [req.params.user_name],[req.params.password]);
+    mysql.pool.query("UPDATE user SET user_first=?, user_last=?, user_password=?, user_email=? WHERE user_name=?", [req.body.user_first,req.body.user_last, req.params.password, req.body.user_email,[req.params.user_name]],
     function(error, results, fields) {
         if (error) {
-            res.write(JSON.stringify(error));
-            res.end();
+            console.log(JSON.stringify(error));
+            return;
         }
         res.status(200);
         res.end();
     });
-});
-
-app.post('/createUser',function(req,res,next){
-    var context = {};
-    mysql.pool.query(
-        'INSERT INTO user (user_first, user_last, user_name, user_password, user_email) VALUES (?,?,?,?,?)',
-        [req.body.user_name, req.body.user_password, req.body.user_email], function(err, rows, fields) {
-            if (err) {
-                next(err);
-                return;
-            }
-            res.redirect('/home');
-        }
-    )
 });
 
 app.use(function(req,res){
@@ -155,12 +195,15 @@ app.listen(app.get('port'), function(){
     console.log('Express started on http://flip3.engr.oregonstate.edu:' + app.get('port') + '; press Ctrl-C to terminate.');
 });
 
-function getRecords(res, mysql, context, id, complete)
+function getRecords(res, mysql, context, id, pass, complete)
 {
-    mysql.pool.query("SELECT * FROM records r INNER JOIN user u ON r.user = u.id WHERE u.user_name=?", id, function(error, results, fields) {
+    if (Number.isInteger(pass)){
+        pass = Integer.toString(pass);
+    }
+    mysql.pool.query("SELECT * FROM records r INNER JOIN user u ON r.user = u.id WHERE u.user_name=? and u.user_password=?", [id, pass], function(error, results, fields) {
         if (error) {
-            res.write(JSON.stringify(error));
-            res.end();
+            console.log(JSON.stringify(error));
+            return;
         }
         context.records=results;
         console.log(context.records);
@@ -168,15 +211,31 @@ function getRecords(res, mysql, context, id, complete)
     });
 }
 
-function getUser(res, mysql, context, id, complete)
+function getUser(res, mysql, context, id, pass,complete)
 {
-    mysql.pool.query("SELECT * FROM user WHERE user_name=?", id, function(error, results, fields) {
+    if (Number.isInteger(pass)){
+        pass = Integer.toString(pass);
+    }
+    mysql.pool.query("SELECT * FROM user WHERE user_name=? and user_password=?", [id, pass], function(error, results, fields) {
         if (error) {
-            res.write(JSON.stringify(error));
-            res.end();
+            console.log(JSON.stringify(error));
+            return;
         }
         context.user=results;
         console.log(context.user);
+        complete();
+    });
+}
+
+function getAdmin(res, mysql, context, complete)
+{
+    mysql.pool.query("SELECT * FROM user", function(error, results, fields) {
+        if (error) {
+            console.log(JSON.stringify(error));
+            return;
+        }
+        context.admin=results;
+        console.log(context.admin);
         complete();
     });
 }
