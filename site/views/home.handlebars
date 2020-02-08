@@ -10,12 +10,21 @@
         <p>New User? <a href="/createUser" style="text-decoration: none;">Click here.</a></p>
         <div class="center-button">
             <button onclick="validateAccount()" id="button" type="button">Sign In</button>
-        </div>  
+        </div><br><br>
+        <div class="securityToggle">
+            <label class="flipSwitch">
+                <input type="checkbox" id="flipSwitch">
+                <span class="slider round"></span>
+            </label>
+        </div><br><br>
+        <div id="site-secure" style="display: inline;"><p>Site Secure</p></div>
+        <div id="site-not-secure" style="display: none;"><p>Site Not Secure</p></div>
     </form>
-</div>
+</div><br><br>
 <div class="secret-logo">
     <img src="images/top-secret-white.png" width="350" height="350" alt="Top Secret">
 </div>
+
 
 <script language="JavaScript">
     
@@ -33,4 +42,15 @@
             document.getElementById('required-field').style.display="inline";
         }
     };
+
+    $('#flipSwitch').click(function() {
+        if (document.getElementById('site-secure').style.display === "inline") {
+            document.getElementById('site-secure').style.display = "none";
+            document.getElementById('site-not-secure').style.display = "";
+        }
+        else {
+            document.getElementById('site-secure').style.display = "";
+            document.getElementById('site-not-secure').style.display = "none";    
+        }
+    });
 </script>
