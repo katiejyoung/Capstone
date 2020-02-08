@@ -22,6 +22,18 @@ app.get('/',function(req,res){
     res.render('home');
 });
 
+app.put('/',function(req,res,next){
+    var context = {};
+    mysql.pool.query("SELECT COUNT(1) AS total FROM user WHERE user_name=? and user_password=?", [req.body.user_name, req.body.user_pass], function(error, results, fields) {
+        if (error) {
+            console.log(JSON.stringify(error));
+            return;
+        }
+        console.log(results);
+        res.send(results);
+    })
+});
+
 app.get('/test',function(req,res,next){
     res.render('test');
 });
