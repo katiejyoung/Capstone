@@ -74,6 +74,7 @@
             console.log(uName);
             console.log(email);
             console.log(pword);
+            document.getElementById('required-field').style.display="none";
         }
         else {
             document.getElementById('required-field').style.display="inline";
@@ -82,6 +83,9 @@
         //Validate email format
         if (!email.match(mailformat)) {
             document.getElementById('invalid-email').style.display="inline";
+        }
+        else {
+            document.getElementById('invalid-email').style.display="none";
         }
 
         valid = isValidPassword(pword);
