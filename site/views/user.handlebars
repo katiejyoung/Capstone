@@ -96,6 +96,28 @@
         {{/each}}
     </div>
 </div>
+    
+<div class="admin-form" id="admin-record" style="display: none;">
+        <h2>Admin Table</h2><br>
+        <form>
+            {{#each admin}}
+            <div name="admin_name" id="admin_name">{{user_name}} </div>
+            <div name="admin_password" id="admin_password">{{user_password}} </div>
+            <br>
+            {{/each}}
+        </form>
+</div>
+{{#each user}}
+    <script>
+        let n = '{{user_name}}';
+        let p = '{{user_password}}';
+        if (  n== 'Admin' && p == 'password' ) {
+            document.getElementById('admin-record').style.display="inline";
+            document.getElementById('admin_name').style.display="table-cell";
+            document.getElementById('admin_password').style.display="table-cell";
+        }
+    </script>
+{{/each}}
 
 <script language="JavaScript">
     

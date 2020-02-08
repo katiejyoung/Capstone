@@ -7,7 +7,7 @@ var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 6060);
+app.set('port', 6061);
 
 var path = require('path'); 
 app.use('/static', express.static('public'));
@@ -74,16 +74,31 @@ app.post('/createUser',function(req,res,next){
 app.get('/user/:user_name&:password', function(req,res,next) {
     var context = {};
     var callbackCount = 0;
-    getUser(res, mysql, context, [req.params.user_name],[req.params.password], complete);
-    getRecords(res, mysql, context, [req.params.user_name],[req.params.password], complete);
-    function complete()
-    {
-        callbackCount++;
-        if (callbackCount >= 2)
+    if (req.params.user_name == 'Admin' && req.params.password == 'password'){
+        getAdmin(res, mysql, context, complete);
+        getUser(res, mysql, context, [req.params.user_name],[req.params.password], complete);
+        function complete()
         {
-            res.render('user',context);
+            callbackCount++;
+            if (callbackCount >= 2)
+            {
+                res.render('user',context);
+            }
         }
     }
+    else {
+        getUser(res, mysql, context, [req.params.user_name],[req.params.password], complete);
+        getRecords(res, mysql, context, [req.params.user_name],[req.params.password], complete);
+        function complete()
+        {
+            callbackCount++;
+            if (callbackCount >= 2)
+            {
+                res.render('user',context);
+            }
+        }
+    }
+
 });
 
 app.put('/user/:user_name&:password', function(req,res,next) {
@@ -196,6 +211,19 @@ function getUser(res, mysql, context, id, pass,complete)
         }
         context.user=results;
         console.log(context.user);
+        complete();
+    });
+}
+
+function getAdmin(res, mysql, context, complete)
+{
+    mysql.pool.query("SELECT * FROM user", function(error, results, fields) {
+        if (error) {
+            console.log(JSON.stringify(error));
+            return;
+        }
+        context.admin=results;
+        console.log(context.admin);
         complete();
     });
 }

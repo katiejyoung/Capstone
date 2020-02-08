@@ -60,6 +60,14 @@
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
+.admin-form {
+    padding-top: 3%;
+    width: 50%;
+    margin:0 auto;
+    text-align: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
 .record-table {
     width:50%; 
     margin:0 auto;
