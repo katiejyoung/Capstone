@@ -20,13 +20,43 @@
 <script language="JavaScript">
     function startEncrypt(event) {
         event.preventDefault();
-        document.getElementById('output').innerHTML = [... document.getElementById('pre').value ].map(char => encrypt(char)).join('');
+        var str = [... document.getElementById('pre').value ].map(char => encrypt(char)).join('');
+        var middle = str.split();
+        var enNum = Math.floor(Math.random() * 90000) + 10000;
+        var clipNum = convNum(enNum);
+        var i;
+        for (i=0; i<clipNum[0];i++) {
+            middle.push(getChar());
+        }
+        for (i=0; i<clipNum[1];i++) {
+            middle.unshift(getChar());
+        }
+        middle.unshift(enNum);
+        str = middle.join('');
+        document.getElementById('output').innerHTML = str;
     }
     document.getElementById('form1').addEventListener('submit',startEncrypt);
     
     function startDecrypt(event) {
         event.preventDefault();
-        document.getElementById('output').innerHTML = [... document.getElementById('post').value ].map(char => decrypt(char)).join('');
+        var str = [... document.getElementById('post').value ];
+        var middle = str;
+        var enNumPre = middle.slice(0,5);
+        var enNum = enNumPre.join('');
+        var i;
+        for (i=0; i<5;i++) {
+            middle.shift();
+        }
+        var clipNum = convNum(enNum);
+        for (i=0; i<clipNum[0];i++) {
+            middle.pop();
+        }
+        for (i=0; i<clipNum[1];i++) {
+            middle.shift();
+        }
+        middle = middle.map(middle => decrypt(middle));
+        str = middle.join('');
+        document.getElementById('output').innerHTML = str;
     }
     document.getElementById('form2').addEventListener('submit',startDecrypt);
 </script>
