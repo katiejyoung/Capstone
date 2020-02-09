@@ -124,46 +124,46 @@ function revealKey(charKey) {
 }
 
 //
-function convNum(preNum) {
-  var postNums =[];
-  postNums[0] = Math.floor((( (preNum*3) /6) %4) +1);
-  postNums[1] = Math.floor((( (preNum*5) /2) %4) +1);
-  postNums[2] = Math.floor((( (preNum/7) *3) %3) +2);
-  postNums[3] = Math.floor((( (preNum/8) *9) %3) +6);
-  postNums[4] = Math.floor((( (preNum*3) *6) %3) +2);
-  postNums[5] = Math.floor((( (preNum*5) *2) %4) +6);
-  postNums[6] = Math.floor((( (preNum/7) /3) %3) +2);
-  postNums[7] = Math.floor((( (preNum/8) /9) %3) +6);
-  return postNums;
+function getValues(numKey) {
+  var values =[];
+  values[0] = Math.floor((( (numKey*3) /6) %4) +1);
+  values[1] = Math.floor((( (numKey*5) /2) %4) +1);
+  values[2] = Math.floor((( (numKey/7) *3) %3) +2);
+  values[3] = Math.floor((( (numKey/8) *9) %3) +6);
+  values[4] = Math.floor((( (numKey*3) *6) %3) +2);
+  values[5] = Math.floor((( (numKey*5) *2) %4) +6);
+  values[6] = Math.floor((( (numKey/7) /5) %3) +2);
+  values[7] = Math.floor((( (numKey/8) /5) %3) +6);
+  return values;
 }
 
 //
 function addMask(line) {
   line = line.map(line => encrypt(line));
   var middle = line;
-  var enNum = Math.floor(Math.random() * 90000) + 10000;
-  var clipNum = convNum(enNum);
+  var numKey = Math.floor(Math.random() * 90000) + 10000;
+  var keyValues = getValues(numKey);
   var i;
-  for (i=0; i<clipNum[0];i++) {
+  for (i=0; i<keyValues[0];i++) {
       middle.push(getChar());
   }
-  for (i=0; i<clipNum[1];i++) {
+  for (i=0; i<keyValues[1];i++) {
       middle.unshift(getChar());
   }
   var str = middle.join('');
   for (i = 0; i < str.length; i++) {
     middle[i]=(str.charAt(i));
   }
-  for (i=0; i<clipNum[2];i++) {
-    middle.splice(clipNum[3],0,getChar());
+  for (i=0; i<keyValues[2];i++) {
+    middle.splice(keyValues[3],0,getChar());
   }
-  for (i=0; i<clipNum[4];i++) {
-    middle.splice(clipNum[5],0,getChar());
+  for (i=0; i<keyValues[4];i++) {
+    middle.splice(keyValues[5],0,getChar());
   }
-  for (i=0; i<clipNum[6];i++) {
-    middle.splice(clipNum[7],0,getChar());
+  for (i=0; i<keyValues[6];i++) {
+    middle.splice(keyValues[7],0,getChar());
   }
-  var maskKey = hideKey(enNum);
+  var maskKey = hideKey(numKey);
   maskKey = maskKey.join('');
   middle.unshift(maskKey);
   line = middle.join('');
@@ -173,26 +173,26 @@ function addMask(line) {
 //
 function removeMask(line) {
   var middle = line;
-  var enNumPre = middle.slice(0,5);
-  enNumPre = enNumPre.join('');
-  var enNum = revealKey(enNumPre);
-  enNum = enNum.join('');
+  var maskKey = middle.slice(0,5);
+  maskKey = maskKey.join('');
+  var numKey = revealKey(maskKey);
+  numKey = numKey.join('');
   var i;
   for (i=0; i<5;i++) {
       middle.shift();
   }
-  var clipNum = convNum(enNum);
+  var keyValues = getValues(numKey);
   var str = middle.join('');
   for (i = 0; i < str.length; i++) {
     middle[i]=(str.charAt(i));
   }
-  middle.splice(clipNum[7],clipNum[6]);
-  middle.splice(clipNum[5],clipNum[4]);
-  middle.splice(clipNum[3],clipNum[2]);
-  for (i=0; i<clipNum[0];i++) {
+  middle.splice(keyValues[7],keyValues[6]);
+  middle.splice(keyValues[5],keyValues[4]);
+  middle.splice(keyValues[3],keyValues[2]);
+  for (i=0; i<keyValues[0];i++) {
       middle.pop();
   }
-  for (i=0; i<clipNum[1];i++) {
+  for (i=0; i<keyValues[1];i++) {
       middle.shift();
   }
   middle = middle.map(middle => decrypt(middle));
