@@ -81,22 +81,72 @@ function decrypt(char) {
       else { return char }  
   }
 
-
-function getChar() {
-  var value;
-   switch (Math.floor(Math.random()*2)) {
-    case 0:
-      value =  alphabetUp[Math.floor(Math.random()*26)];
-      break;
-    case 1:
-      value =  alphabetLow[Math.floor(Math.random()*26)];
-   }
-   return value;
-  }
+  function getChar() {
+    var value;
+     switch (Math.floor(Math.random()*2)) {
+      case 0:
+        value =  alphabetUp[Math.floor(Math.random()*26)];
+        break;
+      case 1:
+        value =  alphabetLow[Math.floor(Math.random()*26)];
+     }
+     return value;
+    }
 
   function convNum(preNum) {
     var postNums =[];
-    postNums[0] = Math.floor((( (preNum*3) /6) %10)+1);
-    postNums[1] = Math.floor((( (preNum*5) /2) %10)+1);
+    postNums[0] = Math.floor((( (preNum*3) /6) %4)+2);
+    postNums[1] = Math.floor((( (preNum*5) /2) %4)+2);
+    postNums[2] = Math.floor((( (preNum /7) *3) %4)+2);
+    postNums[3] = Math.floor((( (preNum /8) *9) %3)+3);
     return postNums;
+  }
+
+  function addMask(line) {
+    line = line.map(line => encrypt(line));
+    var middle = line;
+    var enNum = Math.floor(Math.random() * 90000) + 10000;
+    var clipNum = convNum(enNum);
+    var i;
+    for (i=0; i<clipNum[0];i++) {
+        middle.push(getChar());
+    }
+    for (i=0; i<clipNum[1];i++) {
+        middle.unshift(getChar());
+    }
+    var str = middle.join('');
+    for (i = 0; i < str.length; i++) {
+      middle[i]=(str.charAt(i));
+    }
+    for (i=0; i<clipNum[2];i++) {
+      middle.splice(clipNum[3],0,getChar());
+    }
+    middle.unshift(enNum);
+    line = middle.join('');
+    return line;
+  }
+
+  function removeMask(line) {
+    var middle = line;
+    var enNumPre = middle.slice(0,5);
+    var enNum = enNumPre.join('');
+    var i;
+    for (i=0; i<5;i++) {
+        middle.shift();
+    }
+    var clipNum = convNum(enNum);
+    var str = middle.join('');
+    for (i = 0; i < str.length; i++) {
+      middle[i]=(str.charAt(i));
+    }
+    middle.splice(clipNum[3],clipNum[2]);
+    for (i=0; i<clipNum[0];i++) {
+        middle.pop();
+    }
+    for (i=0; i<clipNum[1];i++) {
+        middle.shift();
+    }
+    middle = middle.map(middle => decrypt(middle));
+    line = middle.join('');
+    return line;
   }
