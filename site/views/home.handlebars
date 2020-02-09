@@ -10,32 +10,48 @@
         <p>New User? <a href="/createUser" style="text-decoration: none;">Click here.</a></p>
         <div class="center-button">
             <button onclick="validateAccount()" id="button" type="button">Sign In</button>
-        </div>  
+        </div><br><br>
+        <div class="securityToggle">
+            <label class="flipSwitch">
+                <input type="checkbox" id="flipSwitch">
+                <span class="slider round"></span>
+            </label>
+        </div><br><br>
+        <div id="site-secure" style="display: inline;"><p>Site Secure</p></div>
+        <div id="site-not-secure" style="display: none;"><p>Site Not Secure</p></div>
     </form>
-</div>
+</div><br><br>
 <div class="secret-logo">
     <img src="images/top-secret-white.png" width="350" height="350" alt="Top Secret">
 </div>
 
+
 <script language="JavaScript">
     
+    //Function gets the username and password via the DOM
+        //passes data to the testAccount function
     function validateAccount() {
         let uName = document.getElementById('username').value;
         let pword = document.getElementById('password').value;
         testAccount(uName, pword);
-        /*
-        if (fName != '' && lName != '' && uName != '' && email != '' && pword != '') {
-            //Outputting user info for now
-            //Will validate input and redirect
-            console.log(uName);
-            console.log(pword);
+    };
+
+    //Function uses the switch to change the site from secure to unsecure
+    //!!Still very much in development!!
+    $('#flipSwitch').click(function() {
+        if (document.getElementById('site-secure').style.display === "inline") {
+            document.getElementById('site-secure').style.display = "none";
+            document.getElementById('site-not-secure').style.display = "inline";
         }
         else {
-            document.getElementById('required-field').style.display="inline";
+            document.getElementById('site-secure').style.display = "inline";
+            document.getElementById('site-not-secure').style.display = "none";    
         }
-        */
-    };
+    });
     
+    //Function sends AJAX PUT message to own URL 
+        //Count refers to the presence of the username and password combo, 1 = present
+        //If the username and password match a user, load the user page with credentials
     function testAccount(user_name,user_pass)
     {
         $.ajax({

@@ -13,30 +13,25 @@
 <br><br>
 {{#each user}}
 <form method="post">
-    <label for="user_first">First Name: </label>
-    <input type="text" name="edit_user_first" id="edit_user_first" value='{{user_first}}'>
-    <br><br>
-    <label for="user_last">Last Name: </label>
-    <input type="text" name="edit_user_last" id="edit_user_last" value='{{user_last}}'>
-    <br><br>
     <label for="user_password">Password: </label>
     <input type="text" name="edit_user_password" id="edit_user_password" value='{{user_password}}'>
     <br><br>  
     <label for="user_email">Email: </label>
     <input type="text" name="edit_user_email" id="edit_user_email" value='{{user_email}}'>
     <br><br>
-    <button onClick="updateUser('{{user_name}}', document.getElementById('edit_user_first').value,document.getElementById('edit_user_last').value,document.getElementById('edit_user_password').value,document.getElementById('edit_user_email').value)" type="button">Save Change</button>
+    <button onClick="updateUser('{{user_name}}', document.getElementById('edit_user_password').value,document.getElementById('edit_user_email').value)" type="button">Save Change</button>
     </form>
 {{/each}}
 
 <script language="JavaScript">
     
-    function updateUser(user_name, user_first, user_last, user_password, user_email)
+    //Function sends AJAX PUT to its own URL with changes to user profile
+        //!! There are currently no checks for the new password !!
+    function updateUser(user_name, user_password, user_email)
     {
-        console.log(user_name, user_first, user_last, user_password, user_email);
         $.ajax({
             url: '/editUser/' + user_name+'&'+user_password,
-            data: {user_first: user_first, user_last: user_last, user_password: user_password, user_email: user_email},
+            data: {user_password: user_password, user_email: user_email},
             type: 'PUT',
             success: function(result) {
                 location.href = "/editUser/" + user_name + '&' + user_password;
