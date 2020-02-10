@@ -1,17 +1,20 @@
+DROP TABLE IF EXISTS `records`;
+DROP TABLE IF EXISTS `user`;
+
 CREATE TABLE `user`(
 	`id` int NOT NULL AUTO_INCREMENT,
     `user_name` varchar(50) NOT NULL unique,
-    `user_password` varchar(50)) NOT NULL,
-    `user_email` varchar(50)) NOT NULL,
+    `user_password` varchar(50) NOT NULL,
+    `user_email` varchar(50) NOT NULL,
     `user_super` int,
     PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `records`(
 	`record_id` int NOT NULL AUTO_INCREMENT,
-    `record_name` varchar(50)) NOT NULL,
-    `record_data` varchar(50)) NOT NULL,
-    `record_URL` varchar(50)),
+    `record_name` varchar(50) NOT NULL,
+    `record_data` varchar(50) NOT NULL,
+    `record_URL` varchar(50),
     `user` int,
     PRIMARY KEY (`record_id`),
     FOREIGN KEY (`user`) REFERENCES `user`(`id`) ON DELETE SET NULL
