@@ -215,6 +215,18 @@
         })
     }
     
+    function updateUser(user_name, user_password, user_email)
+    {
+        $.ajax({
+            url: '/editUser/' + user_name+'&'+user_password,
+            data: {user_password: user_password, user_email: user_email},
+            type: 'PUT',
+            success: function(result) {
+                location.href = "/user/" + user_name + '&' + user_password;
+            }
+        })
+    }
+    
 </script>
 
 
