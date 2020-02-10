@@ -7,7 +7,7 @@ var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 6060);
+app.set('port', 6061);
 
 var path = require('path'); 
 app.use('/static', express.static('public'));
@@ -22,24 +22,52 @@ app.get('/',function(req,res){
     res.render('home');
 });
 
+//PUT to the home page currently takes a username and password and looks for a match in the db 
+    //(may move if using a PUT for this is poor form)
+    //Returned count allows login
+    //result[0].total == access count on html
+app.put('/',function(req,res,next){
+    var context = {};
+    mysql.pool.query("SELECT COUNT(1) AS total FROM user WHERE user_name=? and user_password=?", [req.body.user_name, req.body.user_pass], function(error, results, fields) {
+        if (error) {
+            console.log(JSON.stringify(error));
+            return;
+        }
+        console.log(results);
+        res.send(results);
+    })
+});
+
+//Test page is set to mess with encryption 
+app.get('/test',function(req,res,next){
+    res.render('test');
+});
+
+//Basic page with no functionality
 app.get('/user',function(req,res,next){
     var context = {};
     var callbackCount = 0;
     res.render('user');
 });
 
+//Basic page with no functionality
 app.get('/editUser',function(req,res,next){
     var context = {};
     var callbackCount = 0;
     res.render('editUser');
 });
 
+//Basic page with no functionality
 app.get('/createUser',function(req,res,next){
     var context = {};
     var callbackCount = 0;
     res.render('createUser');
 });
 
+//PUT to the create user page currently takes a username and looks for a match in the db 
+    //(may move if using a PUT for this is poor form)
+    //Returned count allows for creation of a profile (need unique username)
+    //result[0].total == access count on html
 app.put('/createUser',function(req,res,next){
     var context = {};
     mysql.pool.query('SELECT COUNT(1) AS total FROM user WHERE user_name=?', [req.body.username], function(error, results, fields) {
@@ -52,14 +80,17 @@ app.put('/createUser',function(req,res,next){
     })
 });
 
+//POST to create user page creates a new user with no administrative access
+    //Success redirects to the home page to allow user to log in with new credentials
 app.post('/createUser',function(req,res,next){
     var context = {};
     mysql.pool.query(
-        'INSERT INTO user (user_first, user_last, user_name, user_password, user_email, user_super) VALUES (?,?,?,?,?,?)',
-        [req.body.first, req.body.last, req.body.username, req.body.password, req.body.email, 0],
-         function(err, rows, fields) {
-            if (err) {
-                next(err);
+        'INSERT INTO user (user_name, user_password, user_email, user_super) VALUES (?,?,?,?)',
+        [req.body.username, req.body.password, req.body.email, 0],
+         function(error, rows, fields) {
+            if (error) {
+                console.log(JSON.stringify(error));
+                next(error);
                 return;
             }
             res.redirect('/');
@@ -67,22 +98,43 @@ app.post('/createUser',function(req,res,next){
     )
 });
 
-app.get('/user/:user_name', function(req,res,next) {
+//GET to user page returns all the user records
+    //function checks for admin profile to get ALL users' info passed to page
+    //getX functions perform sql Select statements and store info in context array
+    //complete function makes sure the appropriate getX functions have been called before context is passed
+app.get('/user/:user_name&:password', function(req,res,next) {
     var context = {};
     var callbackCount = 0;
-    getUser(res, mysql, context, [req.params.user_name], complete);
-    getRecords(res, mysql, context, [req.params.user_name], complete);
-    function complete()
-    {
-        callbackCount++;
-        if (callbackCount >= 2)
+    if (req.params.user_name == 'Admin' && req.params.password == 'password'){
+        getAdmin(res, mysql, context, complete);
+        getUser(res, mysql, context, [req.params.user_name],[req.params.password], complete);
+        function complete()
         {
-            res.render('user',context);
+            callbackCount++;
+            if (callbackCount >= 2)
+            {
+                res.render('user',context);
+            }
         }
     }
+    else {
+        getUser(res, mysql, context, [req.params.user_name],[req.params.password], complete);
+        getRecords(res, mysql, context, [req.params.user_name],[req.params.password], complete);
+        function complete()
+        {
+            callbackCount++;
+            if (callbackCount >= 2)
+            {
+                res.render('user',context);
+            }
+        }
+    }
+
 });
 
-app.put('/user/:user_name', function(req,res,next) {
+//PUT to user page updates the records via the record id
+    //Success is ultimately a reload of the user page (via JS on the html file)
+app.put('/user/:user_name&:password', function(req,res,next) {
     mysql.pool.query("UPDATE records SET record_name=?, record_data=?, record_URL=? WHERE record_id=?", [req.body.record_name, req.body.record_password, req.body.record_URL, req.body.record_id],
     function(error, results, fields) {
         if (error) {
@@ -94,23 +146,26 @@ app.put('/user/:user_name', function(req,res,next) {
     });
 });
 
-app.post('/user/:user_name', function(req,res,next) {
+//POST to user page inserts a new record via the record user
+    //Success reloads the user page with the new record
+app.post('/user/:user_name&:password', function(req,res,next) {
     var context = {};
     mysql.pool.query(
         'INSERT INTO records (record_name, record_data, record_URL, user) VALUES (?,?,?,?)',
-        [req.body.add_record_name, req.body.add_record_password, req.body.add_record_URL,req.body.add_record_user], function(err, rows, fields) {
-            if (err) {
-                next(err);
+        [req.body.add_record_name, req.body.add_record_password, req.body.add_record_URL,req.body.add_record_user], function(error, rows, fields) {
+            if (error) {
+                console.log(JSON.stringify(error));
+                next(error);
                 return;
             }
-            res.redirect('/user/'+[req.params.user_name]);
+            res.redirect('/user/'+[req.params.user_name]+'&'+[req.params.password]);
         }
     )
 });
 
-app.delete('/user/:user_name', function(req,res,next) {
-    console.log(req.body);
-    console.log(req.body.record_id);
+//DELETE to the user page deletes a record via the record ID
+    //Success is ultimately a reload of the user page (via JS on the html file)
+app.delete('/user/:user_name&:password', function(req,res,next) {
     mysql.pool.query(
         'DELETE FROM records WHERE record_id=?', req.body.record_id, function(error, results, fields) {
             if (error) {
@@ -122,10 +177,11 @@ app.delete('/user/:user_name', function(req,res,next) {
     )
 });
 
-app.get('/editUser/:user_name',function(req,res,next){
+//GET to the editUser page returns all of the user info via the getUser function
+app.get('/editUser/:user_name&:password',function(req,res,next){
     var context = {};
     var callbackCount = 0;
-    getUser(res, mysql, context, [req.params.user_name], complete);
+    getUser(res, mysql, context, [req.params.user_name], [req.params.password], complete);
     function complete()
     {
         callbackCount++;
@@ -136,9 +192,12 @@ app.get('/editUser/:user_name',function(req,res,next){
     }
 });
 
-app.put('/editUser/:user_name',function(req,res,next){
-    console.log(req.body.user_first,req.body.user_last, req.body.user_password, req.body.user_email, [req.params.user_name]);
-    mysql.pool.query("UPDATE user SET user_first=?, user_last=?, user_password=?, user_email=? WHERE user_name=?", [req.body.user_first,req.body.user_last, req.body.user_password, req.body.user_email,[req.params.user_name]],
+//PUT to the editUser page updates user info
+    //Success reloads the editUser page with the username and potentially new password
+    //Currently username is not allowed to be changed, but it is not the primary key for users (so it can be implemented later)
+app.put('/editUser/:user_name&:password',function(req,res,next){
+    console.log(req.body.user_password, req.body.user_email, [req.params.user_name],[req.params.password]);
+    mysql.pool.query("UPDATE user SET user_password=?, user_email=? WHERE user_name=?", [req.params.password, req.body.user_email, [req.params.user_name]],
     function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
@@ -164,9 +223,13 @@ app.listen(app.get('port'), function(){
     console.log('Express started on http://flip3.engr.oregonstate.edu:' + app.get('port') + '; press Ctrl-C to terminate.');
 });
 
-function getRecords(res, mysql, context, id, complete)
+//GETX FUNCTIONS
+    //SQL statements for which the results are stored in the passed array context
+    //The passed function complete renders the context array on the html when it is appropriate
+
+function getRecords(res, mysql, context, id, pass, complete)
 {
-    mysql.pool.query("SELECT * FROM records r INNER JOIN user u ON r.user = u.id WHERE u.user_name=?", id, function(error, results, fields) {
+    mysql.pool.query("SELECT * FROM records r INNER JOIN user u ON r.user = u.id WHERE u.user_name=? and u.user_password=?", [id, pass], function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
             return;
@@ -177,9 +240,9 @@ function getRecords(res, mysql, context, id, complete)
     });
 }
 
-function getUser(res, mysql, context, id, complete)
+function getUser(res, mysql, context, id, pass,complete)
 {
-    mysql.pool.query("SELECT * FROM user WHERE user_name=?", id, function(error, results, fields) {
+    mysql.pool.query("SELECT * FROM user WHERE user_name=? and user_password=?", [id, pass], function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
             return;
@@ -190,5 +253,15 @@ function getUser(res, mysql, context, id, complete)
     });
 }
 
-
-
+function getAdmin(res, mysql, context, complete)
+{
+    mysql.pool.query("SELECT * FROM user", function(error, results, fields) {
+        if (error) {
+            console.log(JSON.stringify(error));
+            return;
+        }
+        context.admin=results;
+        console.log(context.admin);
+        complete();
+    });
+}
