@@ -4,6 +4,7 @@
   "description": "Senior Capstone Project",
   "main": "home.handlebars",
   "scripts": {
+    "forever" : "forever",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node secretKeeper.js"
   },
