@@ -93,7 +93,7 @@
     padding-top: 20%;
 }
 
-#add-record-button, #update-user-button {
+#add-record-button, #update-user-button, #log-out-button {
     border-radius: 5px;
     padding: 5px;
     width: 70%;
