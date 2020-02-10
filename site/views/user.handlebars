@@ -106,7 +106,7 @@
             <br><br>  
             <label for="record_id" style="display: none;">*Record Number (Temp): </label>
             <input type="text" name="edit_record_id" id="edit_record_id" style="display: none;">
-            <br><br>
+            <br>
         </form>
         {{#each user}}
         <div> <button onClick="updateRecord('{{user_name}}','{{user_password}}', document.getElementById('edit_record_name').value,document.getElementById('edit_record_password').value,document.getElementById('edit_record_URL').value,document.getElementById('edit_record_id').value)" type="button">Save Change</button></div><br>
