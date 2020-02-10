@@ -41,6 +41,7 @@
     font-size: 25px;
     color: #696969;
     display: block;
+    cursor: pointer;
 }
 
 .side-nav td:hover {
@@ -89,16 +90,18 @@
     padding-top: 10%;
 }
 
-#side-nav-element {
+#side-nav-elements {
     padding-top: 20%;
 }
 
-#add-record-button {
+#add-record-button, #update-user-button {
     border-radius: 5px;
-    padding: 4%;
+    padding: 5px;
+    width: 70%;
     background-color: white;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 15px;
+    cursor: pointer;
 }
 
 #submit-record-button, #edit-record-button {
@@ -109,7 +112,7 @@
     font-size: 15px;
 }
 
-#side-nav-header, #side-nav-table, #side-nav-element {
+#side-nav-header, #side-nav-table, #side-nav-elements {
     padding-left: 20%;
     padding-right: 20%;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -125,7 +128,9 @@
     padding-left: 45%;
 }
 
-
+.button-spacing {
+    height: 10px;
+}
 
 .flipSwitch {
     position: relative;

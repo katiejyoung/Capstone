@@ -1,9 +1,7 @@
 <body>
      {{#each user}}
     <div id="banner" class="welcome"></div>
-    <div id="nav" class="welcome">
-        <button onclick="location.href='/editUser/{{user_name}}'+'&'+'{{user_password}}'" type="button">Edit User Profile</button>
-    </div>
+    <div id="nav" class="welcome"></div>
         <script>checkUser('{{user_name}}',{{user_super}});</script>    
     {{/each}}
 <br>
@@ -19,7 +17,11 @@
             {{/each}}
         </table>
     </div>
-    <div id="side-nav-element"><button id="add-record-button" onclick="newRecord()" type="button">Add a Record</button></div>
+    <div id="side-nav-elements">
+        <button id="add-record-button" onclick="newRecord()" type="button">Add a Record</button>
+        <div class="button-spacing"></div>
+        <button id="update-user-button" onclick="updateAccount()" type="button">Update Account</button>
+    </div>
 </div>
 
 <div id="record-display" style="display: none;">
@@ -41,6 +43,22 @@
                     <td><button id="edit-record-button" onclick="editRecord(document.getElementById('record-id').innerHTML,document.getElementById('record-name').innerHTML,document.getElementById('record-URL').innerHTML,document.getElementById('record-pass').innerHTML)" type="button">Edit Record</button></td>
                 </tr>
         </table>
+    </div>
+</div>
+
+<div id="update-account" style="display:none;">
+    <div class="no-nav-form">
+        {{#each user}}
+        <form method="post">
+            <label for="user_password">Password: </label>
+            <input type="text" name="edit_user_password" id="edit_user_password" value='{{user_password}}'>
+            <br><br>  
+            <label for="user_email">Email: </label>
+            <input type="text" name="edit_user_email" id="edit_user_email" value='{{user_email}}'>
+            <br><br>
+            <button onClick="updateUser('{{user_name}}', document.getElementById('edit_user_password').value,document.getElementById('edit_user_email').value)" type="button">Save Change</button>
+            </form>
+        {{/each}}
     </div>
 </div>
 
@@ -97,9 +115,6 @@
     </div>
 </div>
 
-
-<!--> This table should only show for the Admin profile <-->
-    <!--> It currently only displays users' info, more functionality will be added <-->
 <div class="admin-form" id="admin-record" style="display: none;">
         <h2>Admin Table</h2><br>
         <form>
@@ -110,7 +125,7 @@
             {{/each}}
         </form>
 </div>
-    <!--> This function can be moved to a seperate JS, but not below due to DOM <-->
+
 {{#each user}}
     <script>
         let n = '{{user_name}}';
@@ -137,6 +152,7 @@
         document.getElementById('edit-record').style.display="none";
         document.getElementById('add-record').style.display="none";
         document.getElementById('required-field').style.display="none";
+        document.getElementById('update-account').style.display="none";
     }
 
     //Functions displays the add record form
@@ -145,6 +161,16 @@
         document.getElementById('edit-record').style.display="none";
         document.getElementById('add-record').style.display="inline";
         document.getElementById('required-field').style.display="none";
+        document.getElementById('update-account').style.display="none";
+    }
+
+    //Function displays the update account form
+    function updateAccount() {
+        document.getElementById('record-display').style.display="none";
+        document.getElementById('edit-record').style.display="none";
+        document.getElementById('add-record').style.display="none";
+        document.getElementById('required-field').style.display="none";
+        document.getElementById('update-account').style.display="inline";
     }
 
     //Function takes the passed data and adds it to the DOM
@@ -154,6 +180,7 @@
         document.getElementById('add-record').style.display="none";
         document.getElementById('edit-record').style.display="inline";
         document.getElementById('required-field').style.display="none";
+        document.getElementById('update-account').style.display="none";
         
         document.getElementById('edit_record_id').value = id;
         document.getElementById('edit_record_name').value = name;
