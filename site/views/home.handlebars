@@ -39,13 +39,26 @@
     //Function uses the switch to change the site from secure to unsecure
     //!!Still very much in development!!
     $('#flipSwitch').click(function() {
-        if (document.getElementById('site-secure').style.display === "inline") {
+        if (sessionStorage.getItem('security') == null) {
             document.getElementById('site-secure').style.display = "none";
             document.getElementById('site-not-secure').style.display = "inline";
+
+            sessionStorage.setItem('security', 'not-secure');
+            console.log(sessionStorage.getItem('security'));
         }
         else {
-            document.getElementById('site-secure').style.display = "inline";
-            document.getElementById('site-not-secure').style.display = "none";    
+            if (sessionStorage.getItem('security') == 'secure') {
+                document.getElementById('site-secure').style.display = "none";
+                document.getElementById('site-not-secure').style.display = "inline";
+                sessionStorage.setItem('security', 'not-secure');
+                console.log(sessionStorage.getItem('security'));
+            }
+            else if (sessionStorage.getItem('security') == 'not-secure') {
+                document.getElementById('site-secure').style.display = "inline";
+                document.getElementById('site-not-secure').style.display = "none";
+                sessionStorage.setItem('security', 'secure');
+                console.log(sessionStorage.getItem('security'));
+            }
         }
     });
     
