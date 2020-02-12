@@ -147,64 +147,58 @@
         var i;
         var str;
 
-        // No checks for not-secure site
-        if (sessionStorage.getItem('security') != 'secure') {
-            return 0;
+        //Password must have at least one uppercase letter
+        i = 0;
+        while (i < password.length) {
+            if (password[i].match(upperCaseLetters)) {
+                break;
+            }
+            else if (i == (password.length - 1)) {
+                return 1;
+            }
+            i++;
         }
-        else {
-            //Password must have at least one uppercase letter
-            i = 0;
-            while (i < password.length) {
-                if (password[i].match(upperCaseLetters)) {
-                    break;
-                }
-                else if (i == (password.length - 1)) {
-                    return 1;
-                }
-                i++;
+        //Password must have at least one lowercase letter
+        i = 0;
+        while (i < password.length) {
+            if (password[i].match(lowerCaseLetters)) {
+                break;
             }
-            //Password must have at least one lowercase letter
-            i = 0;
-            while (i < password.length) {
-                if (password[i].match(lowerCaseLetters)) {
-                    break;
-                }
-                else if (i == (password.length - 1)) {
-                    return 2;
-                }
-                i++;
+            else if (i == (password.length - 1)) {
+                return 2;
             }
-            //Password must have at least one special char
-            //COMMENTED OUT UNTIL CHAR CAUSING SQL ERRORS ARE FOUND
-            /*
-            i = 0;
-            while (i < password.length) {
-                if (password[i].match(specialCharacters)) {
-                    break;
-                }
-                else if (i == (password.length - 1)) {
-                    return 3;
-                }
-                i++;
-            }
-            */
-            //Password must have at least one number
-            i = 0;
-            while (i < password.length) {
-                if (password[i].match(numbers)) {
-                    break;
-                }
-                else if (i == (password.length - 1)) {
-                    return 4;
-                }
-                i++;
-            }
-            //Password must be between 12 and 30 characters long
-            if ((password.length < 12) || (password.length > 30)) {
-                return 5;
-            }
-            return 0;
+            i++;
         }
+        //Password must have at least one special char
+        //COMMENTED OUT UNTIL CHAR CAUSING SQL ERRORS ARE FOUND
+        /*
+        i = 0;
+        while (i < password.length) {
+            if (password[i].match(specialCharacters)) {
+                break;
+            }
+            else if (i == (password.length - 1)) {
+                return 3;
+            }
+            i++;
+        }
+        */
+        //Password must have at least one number
+        i = 0;
+        while (i < password.length) {
+            if (password[i].match(numbers)) {
+                break;
+            }
+            else if (i == (password.length - 1)) {
+                return 4;
+            }
+            i++;
+        }
+        //Password must be between 12 and 30 characters long
+        if ((password.length < 12) || (password.length > 30)) {
+            return 5;
+        }
+        return 0;
         
     }
     
