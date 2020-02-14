@@ -33,7 +33,7 @@ app.put('/',function(req,res,next){
             console.log(JSON.stringify(error));
             return;
         }
-        console.log(results);
+        console.log("Login attempt: ", req.body.user_name, req.body.user_pass);
         res.send(results);
     })
 });
@@ -105,6 +105,7 @@ app.post('/createUser',function(req,res,next){
 app.get('/user/:user_name&:password', function(req,res,next) {
     var context = {};
     var callbackCount = 0;
+    console.log("Getting user page for: ", [req.params.user_name]," p: ", [req.params.password]);
     if (req.params.user_name == 'Admin' && req.params.password == 'password'){
         getAdmin(res, mysql, context, complete);
         getUser(res, mysql, context, [req.params.user_name],[req.params.password], complete);
