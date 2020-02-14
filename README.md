@@ -1,5 +1,5 @@
-# Vulnerability Outline
-## To exploit the vulnerabilities outlined below, utilize the secret-keeper-not-secure branch
+## Vulnerability Outline
+**To exploit the vulnerabilities outlined below, utilize the secret-keeper-not-secure branch**
 
 ### Brute-Force Attack
 **brutePass.sh**
