@@ -28,7 +28,7 @@ app.get('/',function(req,res){
     //result[0].total == access count on html
 app.put('/',function(req,res,next){
     var context = {};
-    mysql.pool.query("SELECT COUNT(1) AS total FROM user WHERE user_name=? and user_password=?", [req.body.user_name, req.body.user_pass], function(error, results, fields) {
+    mysql.pool.query("SELECT COUNT(1) AS total FROM user WHERE user_name= '" + req.body.user_name + "' and user_password='" + req.body.user_pass + "'", function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
             return;
@@ -70,7 +70,7 @@ app.get('/createUser',function(req,res,next){
     //result[0].total == access count on html
 app.put('/createUser',function(req,res,next){
     var context = {};
-    mysql.pool.query('SELECT COUNT(1) AS total FROM user WHERE user_name=?', [req.body.username], function(error, results, fields) {
+    mysql.pool.query("SELECT COUNT(1) AS total FROM user WHERE user_name='" + req.body.username + "'", function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
             return;
@@ -105,10 +105,10 @@ app.post('/createUser',function(req,res,next){
 app.get('/user/:user_name&:password', function(req,res,next) {
     var context = {};
     var callbackCount = 0;
-    console.log([req.params.user_name], [req.params.password]);
+    console.log("Getting user page for: ", req.params.user_name, req.params.password);
     if (req.params.user_name == 'Admin' && req.params.password == 'password'){
         getAdmin(res, mysql, context, complete);
-        getUser(res, mysql, context, [req.params.user_name],[req.params.password], complete);
+        getUser(res, mysql, context, req.params.user_name, req.params.password, complete);
         function complete()
         {
             callbackCount++;
@@ -119,8 +119,8 @@ app.get('/user/:user_name&:password', function(req,res,next) {
         }
     }
     else {
-        getUser(res, mysql, context, [req.params.user_name],[req.params.password], complete);
-        getRecords(res, mysql, context, [req.params.user_name],[req.params.password], complete);
+        getUser(res, mysql, context, req.params.user_name, req.params.password, complete);
+        getRecords(res, mysql, context, req.params.user_name, req.params.password, complete);
         function complete()
         {
             callbackCount++;
@@ -231,7 +231,7 @@ app.listen(app.get('port'), function(){
 function getRecords(res, mysql, context, id, pass, complete)
 {
     //console.log(id, pass);
-    mysql.pool.query("SELECT * FROM records r INNER JOIN user u ON r.user = u.id WHERE u.user_name=? and u.user_password=?", [id, pass], function(error, results, fields) {
+    mysql.pool.query("SELECT * FROM records r INNER JOIN user u ON r.user = u.id WHERE u.user_name='" + id + "' and u.user_password='" + pass + "'", function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
             return;
@@ -244,7 +244,7 @@ function getRecords(res, mysql, context, id, pass, complete)
 function getUser(res, mysql, context, id, pass,complete)
 {
     //console.log(id, pass);
-    mysql.pool.query("SELECT * FROM user WHERE user_name=? and user_password=?", [id, pass], function(error, results, fields) {
+    mysql.pool.query("SELECT * FROM user WHERE user_name='" + id + "' and user_password='" + pass + "'", function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
             return;
