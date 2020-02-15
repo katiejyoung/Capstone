@@ -20,7 +20,7 @@
     color: #696969;
 }
 
-#required-field, #invalid-email {
+#required-field, #invalid-email, #invalid-password-upper, #invalid-password-lower, #invalid-password-special, #invalid-password-number, #invalid-password-length, #invalid-username {
     text-align:center;
 }
 
@@ -41,6 +41,7 @@
     font-size: 25px;
     color: #696969;
     display: block;
+    cursor: pointer;
 }
 
 .side-nav td:hover {
@@ -53,6 +54,13 @@
 }
 
 .add-record-form, .edit-record-form {
+    width: 50%;
+    margin:0 auto;
+    text-align: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.admin-form {
     padding-top: 3%;
     width: 50%;
     margin:0 auto;
@@ -81,16 +89,18 @@
     padding-top: 10%;
 }
 
-#side-nav-element {
+#side-nav-elements {
     padding-top: 20%;
 }
 
-#add-record-button {
+#add-record-button, #update-user-button, #log-out-button {
     border-radius: 5px;
-    padding: 4%;
+    padding: 5px;
+    width: 70%;
     background-color: white;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 15px;
+    cursor: pointer;
 }
 
 #submit-record-button, #edit-record-button {
@@ -101,7 +111,7 @@
     font-size: 15px;
 }
 
-#side-nav-header, #side-nav-table, #side-nav-element {
+#side-nav-header, #side-nav-table, #side-nav-elements {
     padding-left: 20%;
     padding-right: 20%;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -111,6 +121,10 @@
     position: absolute;
     right: 0px;
     padding-bottom: 5%;
+}
+
+.button-spacing {
+    height: 10px;
 }
 
 input {

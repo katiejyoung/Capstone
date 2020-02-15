@@ -1,10 +1,7 @@
-
 <body>
-    <div id="nav" class="side-nav">
-        <button onclick="location.href='/editUser/{{id}}'" type="button">Edit User Profile</button>
-    </div>
+     {{#each user}}
     <div id="banner" class="welcome"></div>
-    {{#each user}}
+    <div id="nav" class="welcome"></div>
         <script>checkUser('{{user_name}}',{{user_super}});</script>    
     {{/each}}
 <br>
@@ -20,14 +17,20 @@
             {{/each}}
         </table>
     </div>
-    <div id="side-nav-element"><button id="add-record-button" onclick="newRecord()" type="button">Add a Record</button></div>
+    <div id="side-nav-elements">
+        <button id="add-record-button" onclick="newRecord()" type="button">Add a Record</button>
+        <div class="button-spacing"></div>
+        <button id="update-user-button" onclick="updateAccount()" type="button">Update Account</button>
+        <div class="button-spacing"></div>
+        <button id="log-out-button" onclick="logOut()" type="button">Log Out</button>
+    </div>
 </div>
 
 <div id="record-display" style="display: none;">
     <div class="record-content" >
         <table class="record-table">
                 <tr>
-                    <td id="record-id">{{record-id}}</td>
+                    <td id="record-id" style="display: none;">{{record-id}}</td>
                 </tr>
                 <tr>
                     <td id="record-name">{{record-name}}</td>
@@ -45,14 +48,31 @@
     </div>
 </div>
 
+<div id="update-account" style="display:none;">
+    <div class="no-nav-form">
+        {{#each user}}
+        <form method="post">
+            <label for="user_password">Password: </label>
+            <input type="text" name="edit_user_password" id="edit_user_password" value='{{user_password}}'>
+            <br><br>  
+            <label for="user_email">Email: </label>
+            <input type="text" name="edit_user_email" id="edit_user_email" value='{{user_email}}'>
+            <br><br>
+            <button onClick="updateUser('{{user_name}}', document.getElementById('edit_user_password').value,document.getElementById('edit_user_email').value)" type="button">Save Change</button>
+            </form>
+        {{/each}}
+    </div>
+</div>
+
 <div id="add-record" style="display: none;">
     <div class="add-record-form">
         <h2>Add a New Record to the Vault</h2><br>
         <form method="POST">
              
-            <label for="record_user">*User Number (Temp): </label>
-            <input type="text" name="add_record_user" id="add_record_user" value={{id}}>
-            
+            <label for="record_user" style="display: none;">*User Number (Temp): </label>
+            {{#each user}}
+            <input type="text" name="add_record_user" id="add_record_user" style="display: none;" value={{id}}>
+            {{/each}}
             <br><br>
             <label for="record_name">*Account Name: </label>
             <input type="text" name="add_record_name" id="add_record_name">
@@ -64,7 +84,7 @@
             <input type="text" name="add_record_URL" id="add_record_URL">
             <br><br>
             <div class="center-button">
-                <button type="button" id="addRecord" value="Add record">Add Record</button>
+                <button type="submit" id="addRecord" value="Add record">Add Record</button>
             </div>  
         </form>
         <div id="required-field" style="display: none;">
@@ -86,21 +106,45 @@
             <label for="record_url">*URL: </label>
             <input type="text" name="edit_record_URL" id="edit_record_URL">
             <br><br>  
-            <label for="record_id">*Record Number (Temp): </label>
-            <input type="text" name="edit_record_id" id="edit_record_id">
-            <br><br>
+            <label for="record_id" style="display: none;">*Record Number (Temp): </label>
+            <input type="text" name="edit_record_id" id="edit_record_id" style="display: none;">
+            <br>
         </form>
         {{#each user}}
-        <div> <button onClick="updateRecord('{{user_name}}', document.getElementById('edit_record_name').value,document.getElementById('edit_record_password').value,document.getElementById('edit_record_URL').value,document.getElementById('edit_record_id').value)" type="button">Save Change</button></div><br>
-        <div> <button onclick="deleteRecord('{{user_name}}', document.getElementById('edit_record_id').value)" type="button">Delete Record</button></div>
+        <div> <button onClick="updateRecord('{{user_name}}','{{user_password}}', document.getElementById('edit_record_name').value,document.getElementById('edit_record_password').value,document.getElementById('edit_record_URL').value,document.getElementById('edit_record_id').value)" type="button">Save Change</button></div><br>
+        <div> <button onclick="deleteRecord('{{user_name}}','{{user_password}}', document.getElementById('edit_record_id').value)" type="button">Delete Record</button></div>
         {{/each}}
     </div>
 </div>
 
+<div class="admin-form" id="admin-record" style="display: none;">
+        <h2>Admin Table</h2><br>
+        <form>
+            {{#each admin}}
+            <div name="admin_name" id="admin_name">{{user_name}} </div>
+            <div name="admin_password" id="admin_password">{{user_password}} </div>
+            <br>
+            {{/each}}
+        </form>
+</div>
+
+{{#each user}}
+    <script>
+        let n = '{{user_name}}';
+        let p = '{{user_password}}';
+        if (  n== 'Admin' && p == 'password' ) {
+            document.getElementById('admin-record').style.display="inline";
+            document.getElementById('admin_name').style.display="table-cell";
+            document.getElementById('admin_password').style.display="table-cell";
+        }
+    </script>
+{{/each}}
+
 <script language="JavaScript">
     
+    //Function takes the passed data and adds it to the DOM
+        //Function displays the record table
     function displayRecord(id, name, data, URL) {
-        //Add the passed values
         document.getElementById('record-id').innerHTML = id;
         document.getElementById('record-name').innerHTML = name;
         document.getElementById('record-URL').innerHTML = URL;
@@ -110,34 +154,47 @@
         document.getElementById('edit-record').style.display="none";
         document.getElementById('add-record').style.display="none";
         document.getElementById('required-field').style.display="none";
+        document.getElementById('update-account').style.display="none";
     }
 
+    //Functions displays the add record form
     function newRecord() {
-        //Display only new-record form
         document.getElementById('record-display').style.display="none";
         document.getElementById('edit-record').style.display="none";
         document.getElementById('add-record').style.display="inline";
         document.getElementById('required-field').style.display="none";
+        document.getElementById('update-account').style.display="none";
     }
 
+    //Function displays the update account form
+    function updateAccount() {
+        document.getElementById('record-display').style.display="none";
+        document.getElementById('edit-record').style.display="none";
+        document.getElementById('add-record').style.display="none";
+        document.getElementById('required-field').style.display="none";
+        document.getElementById('update-account').style.display="inline";
+    }
+
+    //Function takes the passed data and adds it to the DOM
+        //Function displays the edit record form
     function editRecord(id, name, URL, pass) {
-        //Display only edit-record form
         document.getElementById('record-display').style.display="none";
         document.getElementById('add-record').style.display="none";
         document.getElementById('edit-record').style.display="inline";
         document.getElementById('required-field').style.display="none";
+        document.getElementById('update-account').style.display="none";
         
-        //Add in values from individual record table
         document.getElementById('edit_record_id').value = id;
         document.getElementById('edit_record_name').value = name;
         document.getElementById('edit_record_URL').value = URL;
         document.getElementById('edit_record_password').value = pass;
     }
 
-    function deleteRecord(user_name, record_id){
-        console.log(user_name, record_id);
+    //Function sends a AJAX DELETE to it's own URL with the record id to be deleted
+        //Success reloads the current page, sans record
+    function deleteRecord(user_name,user_pass, record_id){
         $.ajax({
-            url: '/user/' + user_name,
+            url: '/user/' + user_name+'&'+user_pass,
             data: {record_id: record_id},
             type: 'DELETE',
             success: function(result){
@@ -146,17 +203,35 @@
         })
     }
     
-    function updateRecord(user_name, record_name, record_password, record_URL, record_id)
+    //Function sends a AJAX PUT to it's own URL with the record info to be updated
+        //Success reloads the current page, with new record info
+    function updateRecord(user_name,user_pass, record_name, record_password, record_URL, record_id)
     {
-        console.log(record_id, record_name, record_URL, record_password);
         $.ajax({
-            url: '/user/' + user_name,
+            url: '/user/' + user_name+'&'+user_pass,
             data: {record_id: record_id, record_name: record_name, record_URL: record_URL, record_password: record_password},
             type: 'PUT',
             success: function(result) {
                 window.location.reload(true);
             }
         })
+    }
+    
+    function updateUser(user_name, user_password, user_email)
+    {
+        $.ajax({
+            url: '/editUser/' + user_name+'&'+user_password,
+            data: {user_password: user_password, user_email: user_email},
+            type: 'PUT',
+            success: function(result) {
+                location.href = "/user/" + user_name + '&' + user_password;
+            }
+        })
+    }
+
+    function logOut()
+    {
+        document.location.href="/";
     }
     
 </script>
