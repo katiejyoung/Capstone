@@ -7,7 +7,7 @@ var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 6061);
+app.set('port', 6060);
 
 var path = require('path'); 
 app.use('/static', express.static('public'));
@@ -152,8 +152,7 @@ app.put('/user/:user_name&:password', function(req,res,next) {
 app.post('/user/:user_name&:password', function(req,res,next) {
     var context = {};
     mysql.pool.query(
-        'INSERT INTO records (record_name, record_data, record_URL, user) VALUES (?,?,?,?)',
-        [req.body.add_record_name, req.body.add_record_password, req.body.add_record_URL,req.body.add_record_user], function(error, rows, fields) {
+        "INSERT INTO records (record_name, record_data, record_URL, user) VALUES ('" + req.body.add_record_name + "','"+req.body.add_record_password+"','"+req.body.add_record_URL+"','"+req.body.add_record_user+"')", function(error, rows, fields) {
             if (error) {
                 console.log(JSON.stringify(error));
                 next(error);
