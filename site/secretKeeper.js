@@ -136,7 +136,7 @@ app.get('/user/:user_name&:password', function(req,res,next) {
 //PUT to user page updates the records via the record id
     //Success is ultimately a reload of the user page (via JS on the html file)
 app.put('/user/:user_name&:password', function(req,res,next) {
-    mysql.pool.query("UPDATE records SET record_name=?, record_data=?, record_URL=? WHERE record_id=?", [req.body.record_name, req.body.record_password, req.body.record_URL, req.body.record_id],
+    mysql.pool.query("UPDATE records SET (record_name, record_data, record_URL) WHERE record_id='" + req.body.record_name + "','" + req.body.record_password+"','"+req.body.record_URL+"','"+req.body.record_id+"'",
     function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
@@ -154,10 +154,11 @@ app.post('/user/:user_name&:password', function(req,res,next) {
     mysql.pool.query(
         "INSERT INTO records (record_name, record_data, record_URL, user) VALUES ('" + req.body.add_record_name + "','"+req.body.add_record_password+"','"+req.body.add_record_URL+"','"+req.body.add_record_user+"')", function(error, rows, fields) {
             if (error) {
-                console.log(JSON.stringify(error));
+                console.log(JSON.stringify(req.body.add_record_password));
                 next(error);
                 return;
             }
+            console.log(JSON.stringify(error));
             res.redirect('/user/'+[req.params.user_name]+'&'+[req.params.password]);
         }
     )
