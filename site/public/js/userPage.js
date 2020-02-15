@@ -83,17 +83,26 @@ function updateUser(user_name, user_password, user_email){
     })
 }
 
+function deleteUser(user_name, user_password){
+    $.ajax({
+        url: '/editUser/' + user_name+'&'+user_password,
+        data: {user_password: user_password, user_name: user_name},
+        type: 'DELETE',
+        success: function(result) {
+            location.href = "/user/Admin&password";
+        }
+    })
+}
+
 function logOut()
 {
     document.location.href="/";
 }
         
 function displayAdmin(user_name, user_password) {
-    let n = user_name;
-    let p = user_password;
-    if (  n== 'Admin' && p == 'password' ) {
+    if (  user_name == 'Admin' && user_password == 'password' ) {
         document.getElementById('admin-record').style.display="inline";
-        document.getElementById('admin_name').style.display="table-cell";
-        document.getElementById('admin_password').style.display="table-cell";
+        document.getElementById('admin_name').style.display="inline";
+        document.getElementById('admin_password').style.display="inline";
     }
 }
