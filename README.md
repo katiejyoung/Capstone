@@ -26,7 +26,7 @@
 ### HTML Injection Attack
 **To inject a script:**
 1. Sign into any existing user account
-2. Add a new record, using the following as the value for one field in the form: "&gt;<script>alert("Warining: This site is vulnerable")</script>
+2. Add a new record, using the following as the value for one field in the form: "&amp;gt;<script>alert("Warining: This site is vulnerable")</script>
 3. Note the popup alert warning of possible attack
 
 ### Distributed Denial of Service (DDoS) Attack
