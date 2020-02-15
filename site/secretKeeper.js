@@ -7,7 +7,7 @@ var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 6061);
+app.set('port', 6060);
 
 var path = require('path'); 
 app.use('/static', express.static('public'));
@@ -65,7 +65,7 @@ app.get('/createUser',function(req,res,next){
 });
 
 //PUT to the create user page currently takes a username and looks for a match in the db 
-    //(may move if using a PUT for this is poor form)
+    //(This is currently exploited with the brute pass attack code)
     //Returned count allows for creation of a profile (need unique username)
     //result[0].total == access count on html
 app.put('/createUser',function(req,res,next){
