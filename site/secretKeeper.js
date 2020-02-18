@@ -18,6 +18,9 @@ app.use(express.static(path.join(__dirname, '/public')));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
+var tokenDB = require('./public/js/tokenDB.js');
+tokens = tokenDB.createTokens();
+
 app.get('/',function(req,res){
     res.render('home');
 });
@@ -28,14 +31,17 @@ app.get('/',function(req,res){
     //result[0].total == access count on html
 app.put('/',function(req,res,next){
     var context = {};
-    mysql.pool.query("SELECT COUNT(1) AS total FROM user WHERE user_name=? and user_password=?", [req.body.user_name, req.body.user_pass], function(error, results, fields) {
-        if (error) {
-            console.log(JSON.stringify(error));
-            return;
-        }
-        console.log("Login attempt: ", req.body.user_name," p: ", req.body.user_pass);
-        res.send(results);
-    })
+    var useTokens = takeToken([req.body.user_name].toString());
+    useTokens.then(() =>
+        mysql.pool.query("SELECT COUNT(1) AS total FROM user WHERE user_name=? and user_password=?", [req.body.user_name, req.body.user_pass], function(error, results, fields) {
+            if (error) {
+                console.log(JSON.stringify(error));
+                return;
+            }
+            console.log("Login attempt: ", req.body.user_name," p: ", req.body.user_pass);
+            res.send(results);
+        })
+    );
 });
 
 //Test page is set to mess with encryption 
@@ -279,4 +285,29 @@ function getAdmin(res, mysql, context, complete)
         //console.log(context.admin);
         complete();
     });
+}
+
+function getDelay(attempts) {
+    return 1000 * Math.pow(2, attempts);
+}
+  
+function take(oldToken, now) {
+    if (typeof oldToken == 'undefined') {
+      return { attempts: 0, timestamp: now };
+    }
+    return {
+      attempts: oldToken.attempts + 1,
+      timestamp: Math.max(oldToken.timestamp + getDelay(oldToken.attempts),now) };
+}
+
+function takeToken(key) {
+    const now = Date.now();
+    const oldToken = tokenDB.getToken(key, tokens);
+    const newToken = take(oldToken, now);
+    tokenDB.replaceToken(key, newToken, oldToken, tokens);   // avoid concurrent token usage
+    if (newToken.timestamp - now > 0) {
+        console.log("Delay initiated: ", (newToken.timestamp - now));
+        return new Promise(r => setTimeout(r, newToken.timestamp - now));
+    }
+    return new Promise(r => setTimeout(r, newToken.timestamp - now));
 }
