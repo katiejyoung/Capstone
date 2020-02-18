@@ -7,7 +7,7 @@ var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 6061);
+app.set('port', 6060);
 
 var path = require('path'); 
 app.use('/static', express.static('public'));
@@ -33,7 +33,7 @@ app.put('/',function(req,res,next){
             console.log(JSON.stringify(error));
             return;
         }
-        console.log("Login attempt: ", req.body.user_name, req.body.user_pass);
+        console.log("Login attempt: ", req.body.user_name," p: ", req.body.user_pass);
         res.send(results);
     })
 });
@@ -65,7 +65,7 @@ app.get('/createUser',function(req,res,next){
 });
 
 //PUT to the create user page currently takes a username and looks for a match in the db 
-    //(may move if using a PUT for this is poor form)
+    //(This is currently exploited with the brute pass attack code)
     //Returned count allows for creation of a profile (need unique username)
     //result[0].total == access count on html
 app.put('/createUser',function(req,res,next){
@@ -75,7 +75,7 @@ app.put('/createUser',function(req,res,next){
             console.log(JSON.stringify(error));
             return;
         }
-        console.log(results);
+        //console.log(results);
         res.send(results);
     })
 });
@@ -209,6 +209,20 @@ app.put('/editUser/:user_name&:password',function(req,res,next){
     });
 });
 
+//DELETE to the user page deletes a user profile
+    //Success is ultimately a reload of the user page (via JS on the html file)
+app.delete('/editUser/:user_name&:password', function(req,res,next) {
+    mysql.pool.query(
+        'DELETE FROM user WHERE user_name=? AND user_password=?', [req.body.user_name, req.body.user_password], function(error, results, fields) {
+            if (error) {
+                console.log(JSON.stringify(error));
+                return;
+            }
+            res.status(202).end();
+        }
+    )
+});
+
 app.use(function(req,res){
     res.status(404);
     res.render('404');
@@ -236,7 +250,7 @@ function getRecords(res, mysql, context, id, pass, complete)
             return;
         }
         context.records=results;
-        console.log(context.records);
+        //console.log(context.records);
         complete();
     });
 }
@@ -249,20 +263,20 @@ function getUser(res, mysql, context, id, pass,complete)
             return;
         }
         context.user=results;
-        console.log(context.user);
+        //console.log(context.user);
         complete();
     });
 }
 
 function getAdmin(res, mysql, context, complete)
 {
-    mysql.pool.query("SELECT * FROM user", function(error, results, fields) {
+    mysql.pool.query("SELECT * FROM user WHERE NOT user_name=?", "Admin", function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
             return;
         }
         context.admin=results;
-        console.log(context.admin);
+        //console.log(context.admin);
         complete();
     });
 }
