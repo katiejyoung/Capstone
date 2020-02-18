@@ -116,6 +116,10 @@
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
+#password {
+    -webkit-text-security: disc;
+}
+
 .secret-logo {
     position: absolute;
     right: 0px;
