@@ -121,8 +121,9 @@
         <h2>Admin Table</h2><br>
         <form>
             {{#each admin}}
-            <div name="admin_name" id="admin_name">{{user_name}} </div>
-            <div name="admin_password" id="admin_password">{{user_password}} </div>
+            <div name="admin_name" id="admin_name">{{user_name}}</div>
+            <div name="admin_password" id="admin_password">{{user_password}}</div>
+            <div> <button onclick="deleteUser('{{user_name}}','{{user_password}}')" type="button">Delete Profile</button></div>
             <br>
             {{/each}}
         </form>
@@ -134,8 +135,8 @@
         let p = '{{user_password}}';
         if (  n== 'Admin' && p == 'password' ) {
             document.getElementById('admin-record').style.display="inline";
-            document.getElementById('admin_name').style.display="table-cell";
-            document.getElementById('admin_password').style.display="table-cell";
+            document.getElementById('admin_name').style.display="inline";
+            document.getElementById('admin_password').style.display="inline";
         }
     </script>
 {{/each}}
@@ -229,10 +230,22 @@
         })
     }
 
+    function deleteUser(user_name, user_password){
+        $.ajax({
+            url: '/editUser/' + user_name+'&'+user_password,
+            data: {user_password: user_password, user_name: user_name},
+            type: 'DELETE',
+            success: function(result) {
+                location.href = "/user/Admin&password";
+            }
+        })
+    }
+
     function logOut()
     {
         document.location.href="/";
     }
+
     
 </script>
 

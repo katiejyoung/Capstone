@@ -207,6 +207,20 @@ app.put('/editUser/:user_name&:password',function(req,res,next){
     });
 });
 
+//DELETE to the user page deletes a user profile
+    //Success is ultimately a reload of the user page (via JS on the html file)
+    app.delete('/editUser/:user_name&:password', function(req,res,next) {
+        mysql.pool.query(
+            'DELETE FROM user WHERE user_name=? AND user_password=?', [req.body.user_name, req.body.user_password], function(error, results, fields) {
+                if (error) {
+                    console.log(JSON.stringify(error));
+                    return;
+                }
+                res.status(202).end();
+            }
+        )
+    });
+
 app.use(function(req,res){
     res.status(404);
     res.render('404');
@@ -254,7 +268,7 @@ function getUser(res, mysql, context, id, pass,complete)
 
 function getAdmin(res, mysql, context, complete)
 {
-    mysql.pool.query("SELECT * FROM user", function(error, results, fields) {
+    mysql.pool.query("SELECT * FROM user WHERE NOT user_name=?", "Admin", function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
             return;
