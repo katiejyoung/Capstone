@@ -18,6 +18,7 @@ app.use(express.static(path.join(__dirname, '/public')));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
+//To use tokens with functions
 var tokenDB = require('./public/js/tokenDB.js');
 tokens = tokenDB.createTokens();
 
@@ -287,10 +288,16 @@ function getAdmin(res, mysql, context, complete)
     });
 }
 
+
+//Token Functions
+    //Source: https://levelup.gitconnected.com/rate-limiting-a0783293026a
+
+//
 function getDelay(attempts) {
     return 1000 * Math.pow(2, attempts);
 }
-  
+
+//
 function take(oldToken, now) {
     if (typeof oldToken == 'undefined') {
       return { attempts: 0, timestamp: now };
@@ -300,6 +307,7 @@ function take(oldToken, now) {
       timestamp: Math.max(oldToken.timestamp + getDelay(oldToken.attempts),now) };
 }
 
+//
 function takeToken(key) {
     const now = Date.now();
     const oldToken = tokenDB.getToken(key, tokens);

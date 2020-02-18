@@ -1,16 +1,10 @@
 //Source: https://levelup.gitconnected.com/rate-limiting-a0783293026a
 
-
-
+//Export for Server Use (secretKeeper.js)
 module.exports = {
-  //Not async Functions
   createTokens: function() {
     return newTokens = new Map();
   },
-  inspect: function(key, tokens) {
-    return tokens.get(key);
-  },
-  //Async Functions
   deleteToken: function(key, tokens) {
     return tokens.delete(key);
   },
