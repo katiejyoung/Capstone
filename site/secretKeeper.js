@@ -51,13 +51,6 @@ app.get('/user',function(req,res,next){
 });
 
 //Basic page with no functionality
-app.get('/editUser',function(req,res,next){
-    var context = {};
-    var callbackCount = 0;
-    res.render('editUser');
-});
-
-//Basic page with no functionality
 app.get('/createUser',function(req,res,next){
     var context = {};
     var callbackCount = 0;
