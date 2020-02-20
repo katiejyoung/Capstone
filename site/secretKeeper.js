@@ -33,7 +33,7 @@ app.put('/',function(req,res,next){
             console.log(JSON.stringify(error));
             return;
         }
-        console.log("Login attempt: ", req.body.user_name, req.body.user_pass);
+        console.log("Login attempt: ", req.body.user_name," p: ", req.body.user_pass);
         res.send(results);
     })
 });
@@ -58,7 +58,7 @@ app.get('/createUser',function(req,res,next){
 });
 
 //PUT to the create user page currently takes a username and looks for a match in the db 
-    //(may move if using a PUT for this is poor form)
+    //(This is currently exploited with the brute pass attack code)
     //Returned count allows for creation of a profile (need unique username)
     //result[0].total == access count on html
 app.put('/createUser',function(req,res,next){
@@ -68,7 +68,7 @@ app.put('/createUser',function(req,res,next){
             console.log(JSON.stringify(error));
             return;
         }
-        console.log(results);
+        //console.log(results);
         res.send(results);
     })
 });
@@ -242,6 +242,7 @@ function getRecords(res, mysql, context, id, pass, complete)
             return;
         }
         context.records=results;
+        //console.log(context.records);
         complete();
     });
 }
@@ -255,6 +256,7 @@ function getUser(res, mysql, context, id, pass,complete)
             return;
         }
         context.user=results;
+        //console.log(context.user);
         complete();
     });
 }
@@ -267,6 +269,7 @@ function getAdmin(res, mysql, context, complete)
             return;
         }
         context.admin=results;
+        //console.log(context.admin);
         complete();
     });
 }
