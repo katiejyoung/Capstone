@@ -171,6 +171,51 @@ app.delete('/user/:user_name&:password', function(req,res,next) {
     )
 });
 
+//GET to the editUser page returns all of the user info via the getUser function
+app.get('/editUser/:user_name&:password',function(req,res,next){
+    var context = {};
+    var callbackCount = 0;
+    getUser(res, mysql, context, [req.params.user_name], [req.params.password], complete);
+    function complete()
+    {
+        callbackCount++;
+        if (callbackCount >= 1)
+        {
+            res.render('editUser',context);
+        }
+    }
+});
+
+//PUT to the editUser page updates user info
+    //Success reloads the editUser page with the username and potentially new password
+    //Currently username is not allowed to be changed, but it is not the primary key for users (so it can be implemented later)
+app.put('/editUser/:user_name&:password',function(req,res,next){
+    console.log(req.body.user_password, req.body.user_email, [req.params.user_name],[req.params.password]);
+    mysql.pool.query("UPDATE user SET user_password=?, user_email=? WHERE user_name=?", [req.params.password, req.body.user_email, [req.params.user_name]],
+    function(error, results, fields) {
+        if (error) {
+            console.log(JSON.stringify(error));
+            return;
+        }
+        res.status(200);
+        res.end();
+    });
+});
+
+//DELETE to the user page deletes a user profile
+    //Success is ultimately a reload of the user page (via JS on the html file)
+    app.delete('/editUser/:user_name&:password', function(req,res,next) {
+        mysql.pool.query(
+            'DELETE FROM user WHERE user_name=? AND user_password=?', [req.body.user_name, req.body.user_password], function(error, results, fields) {
+                if (error) {
+                    console.log(JSON.stringify(error));
+                    return;
+                }
+                res.status(202).end();
+            }
+        )
+    });
+
 app.use(function(req,res){
     res.status(404);
     res.render('404');
