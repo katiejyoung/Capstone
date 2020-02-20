@@ -13,6 +13,7 @@ async function createAccount() {
     }
     else {
         document.getElementById('required-field').style.display="inline";
+        document.getElementById('createUser').style.display="none";
     }
 
     //Validate email format
@@ -21,6 +22,7 @@ async function createAccount() {
     }
     else {
         document.getElementById('invalid-email').style.display="none";
+        document.getElementById('createUser').style.display="none";
     }
 
     //Send password to another function to validate
