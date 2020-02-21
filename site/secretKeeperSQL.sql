@@ -12,9 +12,9 @@ CREATE TABLE `user`(
 
 CREATE TABLE `records`(
 	`record_id` int NOT NULL AUTO_INCREMENT,
-    `record_name` varchar(50) NOT NULL,
-    `record_data` varchar(50) NOT NULL,
-    `record_URL` varchar(50),
+    `record_name` varchar(100) NOT NULL,
+    `record_data` varchar(100) NOT NULL,
+    `record_URL` varchar(100),
     `user` int,
     PRIMARY KEY (`record_id`),
     FOREIGN KEY (`user`) REFERENCES `user`(`id`) ON DELETE SET NULL
