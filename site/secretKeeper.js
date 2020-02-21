@@ -144,8 +144,10 @@ app.put('/user/:user_name&:password', function(req,res,next) {
     //Success reloads the user page with the new record
 app.post('/user/:user_name&:password', function(req,res,next) {
     var context = {};
+    console.log(req.body.add_record_name, req.body.add_record_password, req.body.add_record_URL, req.body.add_record_user);
+    const buf = new Buffer(req.body.add_record_name);
     mysql.pool.query(
-        "INSERT INTO records (record_name, record_data, record_URL, user) VALUES ('" + req.body.add_record_name + "','"+req.body.add_record_password+"','"+req.body.add_record_URL+"','"+req.body.add_record_user+"')", function(error, rows, fields) {
+        "INSERT INTO records (record_name, record_data, record_URL, user) VALUES ('"+ buf + "','"+req.body.add_record_password+"','"+req.body.add_record_URL+"','"+req.body.add_record_user+"')", function(error, rows, fields) {
             if (error) {
                 next(error);
                 return;
