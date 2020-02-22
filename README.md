@@ -23,7 +23,7 @@
 ### SQL Injection Attack
 **HTML SQL Injection:**
 * Use the following URL to access users' information without their credentials
-* flip3.engr.oregonstate.edu:6061/user/'*'%20OR%20ALL&'*'%20OR%20ALL
+* flip3.engr.oregonstate.edu:6061/user/'/*'%20OR%20ALL&'/*'%20OR%20ALL
 
 ### HTML Injection Attack
 **To inject a script:**
