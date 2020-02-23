@@ -6,6 +6,13 @@
     color: #696969;
 }
 
+.no-nav-subheader {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 150%;
+    text-align: center;
+    color: #696969;
+}
+
 .no-nav-form {
     width:50%; 
     margin:0 auto;

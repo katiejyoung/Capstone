@@ -1,0 +1,21 @@
+<h1 class="no-nav-header">Secret Keeper FAQs</h1>
+<script src="/js/faq.js"></script>
+<h3 class="no-nav-subheader">Don't see your question here? Leave us a note.</h3>
+<form class="no-nav-form" method="post">
+    <textarea class="faq-comments" name="content" id="question-content" rows="9" cols="50" maxlength="400" placeholder="Enter your question here"></textarea>
+    <br><br>
+    <div class="center-button">
+        <button onclick="addQuestion(document.getElementById('question-content'))" id="button" type="button">Submit Comment</button>
+    </div>
+</form>
+<div class="display-faqs">
+    {{#each questions}}
+        <tr>
+            <td>{{record_data}}</td>
+            <td>{{record_response}}</td>
+        </tr>
+    {{/each}}
+</div>
+<div class="secret-logo">
+    <img src="images/top-secret-white.png" width="350" height="350" alt="Top Secret">
+</div>

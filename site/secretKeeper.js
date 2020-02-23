@@ -51,6 +51,29 @@ app.get('/user',function(req,res,next){
 });
 
 //Basic page with no functionality
+app.get('/faq',function(req,res,next){
+    res.render('faq');
+});
+
+//POST to FAQ page creates a new question
+//Success renders the FAQ page to allow user to view the new comment
+app.post('/faq',function(req,res,next){
+    var context = {};
+    mysql.pool.query(
+        'INSERT INTO questions (record_data, record_response) VALUES (?,?)',
+        [req.body.comment, 'No response provided.'],
+            function(error, rows, fields) {
+            if (error) {
+                console.log(JSON.stringify(error));
+                next(error);
+                return;
+            }
+            res.render('faq');
+        }
+    )
+});
+
+//Basic page with no functionality
 app.get('/createUser',function(req,res,next){
     var context = {};
     var callbackCount = 0;
