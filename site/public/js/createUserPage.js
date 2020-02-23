@@ -34,7 +34,12 @@ async function createAccount() {
 
         //Validate email format
         if (!isValidEmail(email)) {
-            document.getElementById('invalid-email').style.display="inline";
+            if (email == '') {
+                document.getElementById('invalid-email').style.display="none";
+            }
+            else {
+                document.getElementById('invalid-email').style.display="inline";
+            }
         }
         else {
             document.getElementById('invalid-email').style.display="none";
@@ -42,20 +47,22 @@ async function createAccount() {
 
         //Change the DOM via the returned check values
         if (valid != 0) {
-            if (valid == 1) {
-                document.getElementById('invalid-password-upper').style.display="inline";
-            }
-            else if (valid == 2) {
-                document.getElementById('invalid-password-lower').style.display="inline";
-            }
-            else if (valid == 3) {
-                document.getElementById('invalid-password-special').style.display="inline";
-            }
-            else if (valid == 4) {
-                document.getElementById('invalid-password-number').style.display="inline";
-            }
-            else if (valid == 5) {
-                document.getElementById('invalid-password-length').style.display="inline";
+            if (pword != '') {
+                if (valid == 1) {
+                    document.getElementById('invalid-password-upper').style.display="inline";
+                }
+                else if (valid == 2) {
+                    document.getElementById('invalid-password-lower').style.display="inline";
+                }
+                else if (valid == 3) {
+                    document.getElementById('invalid-password-special').style.display="inline";
+                }
+                else if (valid == 4) {
+                    document.getElementById('invalid-password-number').style.display="inline";
+                }
+                else if (valid == 5) {
+                    document.getElementById('invalid-password-length').style.display="inline";
+                }
             }
         }
     }
