@@ -1,6 +1,6 @@
+DROP TABLE IF EXISTS `questions`;
 DROP TABLE IF EXISTS `records`;
 DROP TABLE IF EXISTS `user`;
-DROP TABLE IF EXISTS `questions`;
 
 CREATE TABLE `user`(
 	`id` int NOT NULL AUTO_INCREMENT,
@@ -22,10 +22,9 @@ CREATE TABLE `records`(
 );
 
 CREATE TABLE `questions`(
-	`record_id` int NOT NULL AUTO_INCREMENT,
-    `record_data` varchar(401) NOT NULL,
-    `record_response` varchar(401) NOT NULL,
-    PRIMARY KEY (`record_id`),
+	`question_id` int NOT NULL AUTO_INCREMENT,
+    `question_content` varchar(300) NOT NULL,
+    PRIMARY KEY (`question_id`)
 );
 
 INSERT INTO `user`(`user_name`,`user_password`,`user_email`,`user_super`)
@@ -44,8 +43,3 @@ VALUES
 ('OffShoreBank', '987654321', 'OffShoreBank.com',(SELECT id FROM user WHERE user_name='Katie')),
 ('OSU', 'banana', 'oregonstate.edu',(SELECT id FROM user WHERE user_name='Katie')),
 ('Xfinity', 'secrets', 'xfinity.com',(SELECT id FROM user WHERE user_name='Katie'));
-
-INSERT INTO `questions`(`record_data`, `record_response`)
-VALUES
-('How do I know that my information is secure?', 'We have taken measures to ensure data security. Please review our README for more information.'),
-('Why did you choose the name Secret Keeper?', 'Our site is indended as a safe space for users to store data (i.e., secrets)!');
