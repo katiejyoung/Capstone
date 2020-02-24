@@ -58,8 +58,7 @@ app.get('/faq',function(req,res,next){
 //POST to FAQ page creates a new question
 //Success renders the FAQ page to allow user to view the new comment
 app.post('/faq',function(req,res,next){
-    var context = {};
-    var callbackCount = 0;
+    req.content = req.body.content;
     mysql.pool.query(
         'INSERT INTO questions (question_content) VALUES (?)',[req.body.content],function(error, rows, fields) {
             if (error) {
@@ -67,21 +66,29 @@ app.post('/faq',function(req,res,next){
                 next(error);
                 return;
             }
-            res.redirect('/faqSent');
-        }
-    )
+            res.redirect('/faqSent/'+req.body.content);
+        })
 });
 
 //
-app.get('/faqSent',function(req,res,next){
-    res.render('faqSent');
+app.get('/faqSent/:comment',function(req,res,next){
+    var context = {};
+    var callbackCount = 0;
+    comment = req.params.comment;
+    getComment(res, mysql, context, comment, complete);
+    function complete()
+    {
+        callbackCount++;
+        if (callbackCount >= 1)
+        {
+            res.render('faqSent', context);
+        }
+    }
 });
 
 
 //Basic page with no functionality
 app.get('/createUser',function(req,res,next){
-    var context = {};
-    var callbackCount = 0;
     res.render('createUser');
 });
 
