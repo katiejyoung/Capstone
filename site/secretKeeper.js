@@ -59,19 +59,24 @@ app.get('/faq',function(req,res,next){
 //Success renders the FAQ page to allow user to view the new comment
 app.post('/faq',function(req,res,next){
     var context = {};
+    var callbackCount = 0;
     mysql.pool.query(
-        'INSERT INTO questions (record_data, record_response) VALUES (?,?)',
-        [req.body.comment, 'No response provided.'],
-            function(error, rows, fields) {
+        'INSERT INTO questions (question_content) VALUES (?)',[req.body.content],function(error, rows, fields) {
             if (error) {
                 console.log(JSON.stringify(error));
                 next(error);
                 return;
             }
-            res.render('faq');
+            res.redirect('/faqSent');
         }
     )
 });
+
+//
+app.get('/faqSent',function(req,res,next){
+    res.render('faqSent');
+});
+
 
 //Basic page with no functionality
 app.get('/createUser',function(req,res,next){
@@ -294,6 +299,19 @@ function getAdmin(res, mysql, context, complete)
             return;
         }
         context.admin=results;
+        //console.log(context.admin);
+        complete();
+    });
+}
+
+function getComment(res, mysql, context, content, complete)
+{
+    mysql.pool.query("SELECT * FROM questions WHERE question_content='" + content + "'",function(error, results, fields) {
+        if (error) {
+            console.log(JSON.stringify(error));
+            return;
+        }
+        context.questions=results;
         //console.log(context.admin);
         complete();
     });

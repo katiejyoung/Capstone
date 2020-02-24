@@ -4,15 +4,12 @@
 <form class="no-nav-form" method="post">
     <textarea class="faq-comments" name="content" id="question-content" rows="9" cols="50" maxlength="400" placeholder="Enter your question here"></textarea>
     <br><br>
-    <div class="center-button">
-        <button onclick="addQuestion(document.getElementById('question-content'))" id="button" type="button">Submit Comment</button>
-    </div>
+    <input type="submit" value="Submit">
 </form>
 <div class="display-faqs">
     {{#each questions}}
         <tr>
-            <td>{{record_data}}</td>
-            <td>{{record_response}}</td>
+            <td>{{question_content}}</td>
         </tr>
     {{/each}}
 </div>
