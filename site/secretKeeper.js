@@ -7,7 +7,7 @@ var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 6060);
+app.set('port', 6061);
 
 var path = require('path'); 
 app.use('/static', express.static('public'));
@@ -18,10 +18,14 @@ app.use(express.static(path.join(__dirname, '/public')));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
+//To encrypt records
+var masks = require('./public/js/encryptServer.js');
+
 //To use tokens with functions
 var tokenDB = require('./public/js/tokenDB.js');
-tokens = tokenDB.createTokens();
+tokens = tokenDB.createTokens();        //Create map (username = key, attempt number and timestamp = values) when starting server
 
+//Basic Home page
 app.get('/',function(req,res){
     res.render('home');
 });
@@ -31,7 +35,6 @@ app.get('/',function(req,res){
     //Returned count allows login
     //result[0].total == access count on html
 app.put('/',function(req,res,next){
-    var context = {};
     var useTokens = takeToken([req.body.user_name].toString());
     useTokens.then(() =>
         mysql.pool.query("SELECT COUNT(1) AS total FROM user WHERE user_name=? and user_password=?", [req.body.user_name, req.body.user_pass], function(error, results, fields) {
@@ -39,7 +42,8 @@ app.put('/',function(req,res,next){
                 console.log(JSON.stringify(error));
                 return;
             }
-            console.log("Login attempt: ", req.body.user_name," p: ", req.body.user_pass);
+            const now = Date.now();
+            console.log("Login attempt: ", req.body.user_name," p: ", req.body.user_pass,  " @: ", now);
             res.send(results);
         })
     );
@@ -52,15 +56,11 @@ app.get('/test',function(req,res,next){
 
 //Basic page with no functionality
 app.get('/user',function(req,res,next){
-    var context = {};
-    var callbackCount = 0;
     res.render('user');
 });
 
 //Basic page with no functionality
 app.get('/createUser',function(req,res,next){
-    var context = {};
-    var callbackCount = 0;
     res.render('createUser');
 });
 
@@ -69,13 +69,11 @@ app.get('/createUser',function(req,res,next){
     //Returned count allows for creation of a profile (need unique username)
     //result[0].total == access count on html
 app.put('/createUser',function(req,res,next){
-    var context = {};
     mysql.pool.query('SELECT COUNT(1) AS total FROM user WHERE user_name=?', [req.body.username], function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
             return;
         }
-        //console.log(results);
         res.send(results);
     })
 });
@@ -83,7 +81,6 @@ app.put('/createUser',function(req,res,next){
 //POST to create user page creates a new user with no administrative access
     //Success redirects to the home page to allow user to log in with new credentials
 app.post('/createUser',function(req,res,next){
-    var context = {};
     mysql.pool.query(
         'INSERT INTO user (user_name, user_password, user_email, user_super) VALUES (?,?,?,?)',
         [req.body.username, req.body.password, req.body.email, 0],
@@ -105,7 +102,8 @@ app.post('/createUser',function(req,res,next){
 app.get('/user/:user_name&:password', function(req,res,next) {
     var context = {};
     var callbackCount = 0;
-    console.log("Getting user page for: ", [req.params.user_name]," p: ", [req.params.password]);
+    const now = Date.now();
+    console.log("Getting user page for: ", [req.params.user_name]," p: ", [req.params.password], " @: ", now);
     if (req.params.user_name == 'Admin' && req.params.password == 'password'){
         getAdmin(res, mysql, context, complete);
         getUser(res, mysql, context, [req.params.user_name],[req.params.password], complete);
@@ -136,7 +134,13 @@ app.get('/user/:user_name&:password', function(req,res,next) {
 //PUT to user page updates the records via the record id
     //Success is ultimately a reload of the user page (via JS on the html file)
 app.put('/user/:user_name&:password', function(req,res,next) {
-    mysql.pool.query("UPDATE records SET record_name=?, record_data=?, record_URL=? WHERE record_id=?", [req.body.record_name, req.body.record_password, req.body.record_URL, req.body.record_id],
+    var rname = [... req.body.record_name];     //Mask the record values
+    var rnameE = masks.addMask(rname);
+    var rpass = [... req.body.record_password];
+    var rpassE = masks.addMask(rpass);
+    var rurl = [... req.body.record_URL];
+    var rurlE = masks.addMask(rurl);
+    mysql.pool.query("UPDATE recordsE SET record_name=?, record_data=?, record_URL=? WHERE record_id=?", [rnameE, rpassE, rurlE, req.body.record_id],
     function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
@@ -150,10 +154,15 @@ app.put('/user/:user_name&:password', function(req,res,next) {
 //POST to user page inserts a new record via the record user
     //Success reloads the user page with the new record
 app.post('/user/:user_name&:password', function(req,res,next) {
-    var context = {};
+    var rname = [... req.body.add_record_name];     //Mask the record values
+    var rnameE = masks.addMask(rname);
+    var rpass = [... req.body.add_record_password];
+    var rpassE = masks.addMask(rpass);
+    var rurl = [... req.body.add_record_URL];
+    var rurlE = masks.addMask(rurl);
     mysql.pool.query(
-        'INSERT INTO records (record_name, record_data, record_URL, user) VALUES (?,?,?,?)',
-        [req.body.add_record_name, req.body.add_record_password, req.body.add_record_URL,req.body.add_record_user], function(error, rows, fields) {
+        'INSERT INTO recordsE (record_name, record_data, record_URL, user) VALUES (?,?,?,?)',
+        [rnameE, rpassE, rurlE,req.body.add_record_user], function(error, rows, fields) {
             if (error) {
                 console.log(JSON.stringify(error));
                 next(error);
@@ -168,7 +177,7 @@ app.post('/user/:user_name&:password', function(req,res,next) {
     //Success is ultimately a reload of the user page (via JS on the html file)
 app.delete('/user/:user_name&:password', function(req,res,next) {
     mysql.pool.query(
-        'DELETE FROM records WHERE record_id=?', req.body.record_id, function(error, results, fields) {
+        'DELETE FROM recordsE WHERE record_id=?', req.body.record_id, function(error, results, fields) {
             if (error) {
                 console.log(JSON.stringify(error));
                 return;
@@ -197,7 +206,6 @@ app.get('/editUser/:user_name&:password',function(req,res,next){
     //Success reloads the editUser page with the username and potentially new password
     //Currently username is not allowed to be changed, but it is not the primary key for users (so it can be implemented later)
 app.put('/editUser/:user_name&:password',function(req,res,next){
-    console.log(req.body.user_password, req.body.user_email, [req.params.user_name],[req.params.password]);
     mysql.pool.query("UPDATE user SET user_password=?, user_email=? WHERE user_name=?", [req.params.password, req.body.user_email, [req.params.user_name]],
     function(error, results, fields) {
         if (error) {
@@ -223,6 +231,7 @@ app.delete('/editUser/:user_name&:password', function(req,res,next) {
     )
 });
 
+//Error Pages
 app.use(function(req,res){
     res.status(404);
     res.render('404');
@@ -233,7 +242,8 @@ app.use(function(err, req, res, next){
     res.status(500);
     res.render('500');
 });
-  
+
+//Server Port
 app.listen(app.get('port'), function(){
     console.log('Express started on http://flip3.engr.oregonstate.edu:' + app.get('port') + '; press Ctrl-C to terminate.');
 });
@@ -244,13 +254,21 @@ app.listen(app.get('port'), function(){
 
 function getRecords(res, mysql, context, id, pass, complete)
 {
-    mysql.pool.query("SELECT * FROM records r INNER JOIN user u ON r.user = u.id WHERE u.user_name=? and u.user_password=?", [id, pass], function(error, results, fields) {
+    mysql.pool.query("SELECT * FROM recordsE r INNER JOIN user u ON r.user = u.id WHERE u.user_name=? and u.user_password=?", [id, pass], function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
             return;
         }
-        context.records=results;
-        //console.log(context.records);
+        var resultArray = JSON.parse(JSON.stringify(results));  //Convert results object to JSON
+        resultArray.forEach(function(v){ 
+            var rnameE = [... v.record_name];           //Unmask wanted values and pass
+            v.record_name = masks.removeMask(rnameE);
+            var rpassE = [... v.record_data];
+            v.record_data = masks.removeMask(rpassE);
+            var rurlE = [... v.record_URL];
+            v.record_URL = masks.removeMask(rurlE);
+        });
+        context.records=resultArray;
         complete();
     });
 }
@@ -263,7 +281,6 @@ function getUser(res, mysql, context, id, pass,complete)
             return;
         }
         context.user=results;
-        //console.log(context.user);
         complete();
     });
 }
@@ -276,7 +293,6 @@ function getAdmin(res, mysql, context, complete)
             return;
         }
         context.admin=results;
-        //console.log(context.admin);
         complete();
     });
 }
@@ -285,12 +301,15 @@ function getAdmin(res, mysql, context, complete)
 //Token Functions
     //Source: https://levelup.gitconnected.com/rate-limiting-a0783293026a
 
-//
+//Get Delay function
+    //Increase numbers to make the rate limiter greater per failed attempt
 function getDelay(attempts) {
     return 1000 * Math.pow(2, attempts);
 }
 
-//
+//Take function
+    //Creates a token if there is no token in the map with username as key
+    //If there is a token, increases the attempt and sets timestamp
 function take(oldToken, now) {
     if (typeof oldToken == 'undefined') {
       return { attempts: 0, timestamp: now };
@@ -300,14 +319,17 @@ function take(oldToken, now) {
       timestamp: Math.max(oldToken.timestamp + getDelay(oldToken.attempts),now) };
 }
 
-//
+//Take Token Function
+    //Gets an old and new token based on the username
+    //Compares timestamp to limit rate if needed
+    //Promise keeps function from completing until the limit time has passed
 function takeToken(key) {
     const now = Date.now();
     const oldToken = tokenDB.getToken(key, tokens);
     const newToken = take(oldToken, now);
     tokenDB.replaceToken(key, newToken, oldToken, tokens);   // avoid concurrent token usage
     if (newToken.timestamp - now > 0) {
-        console.log("Delay initiated: ", (newToken.timestamp - now));
+        console.log("Delay initiated: ", (newToken.timestamp - now),  " @: ", now);
         return new Promise(r => setTimeout(r, newToken.timestamp - now));
     }
     return new Promise(r => setTimeout(r, newToken.timestamp - now));

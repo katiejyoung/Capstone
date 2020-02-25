@@ -1,6 +1,7 @@
 //Source: https://www.sitepoint.com/how-to-build-a-cipher-machine-with-javascript/
 //Includes encrypt and decrypt functions
 //Performs basic shift encryption, different shifts are used for different char types
+//Export for Server Use (secretKeeper.js)
 
 //Randomize arrays to add complexity or Create multiple different versions
 const alphabetUp = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
@@ -12,6 +13,7 @@ const numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
 Number.prototype.mod = function(n) {
   return ((this%n)+n)%n;
 }
+
 
 //Takes a passed character and performs a shift
 function encrypt(char) {
@@ -142,73 +144,76 @@ function revealKey(charKey) {
   return keyConv;
 }
 
-//Add Mask Function
-  //Encrypts passed in array of characters
-  //Creates number key and adds additional characters to the encrypted array
-  //Masks number key and attaches to encrypted array
-  //returns encrypted array as string
-function addMask(line) {
-  line = line.map(line => encrypt(line));   //encrypt
-  var middle = line;
-  var numKey = Math.floor(Math.random() * 90000) + 10000; //Generate 5 digit key
-  var keyValues = getValues(numKey);    //Generate values based on key
-  var i;
-  for (i=0; i<keyValues[0];i++) {   //Add characters based on values
-      middle.push(getChar());
-  }
-  for (i=0; i<keyValues[1];i++) {
-      middle.unshift(getChar());
-  }
-  var str = middle.join('');
-  for (i = 0; i < str.length; i++) {
-    middle[i]=(str.charAt(i));
-  }
-  for (i=0; i<keyValues[2];i++) {
-    middle.splice(keyValues[3],0,getChar());
-  }
-  for (i=0; i<keyValues[4];i++) {
-    middle.splice(keyValues[5],0,getChar());
-  }
-  for (i=0; i<keyValues[6];i++) {
-    middle.splice(keyValues[7],0,getChar());
-  }
-  var maskKey = hideKey(numKey);  //Mask the key
-  maskKey = maskKey.join('');
-  middle.unshift(maskKey);    //Add the masked key
-  line = middle.join('');
-  return line;
-}
+//Mask and Remove Mask are exported for server use
+module.exports = {
+    //Add Mask Function
+    //Encrypts passed in array of characters
+    //Creates number key and adds additional characters to the encrypted array
+    //Masks number key and attaches to encrypted array
+    //returns encrypted array as string
+    addMask: function(line) {
+        line = line.map(line => encrypt(line));   //encrypt
+        var middle = line;
+        var numKey = Math.floor(Math.random() * 90000) + 10000; //Generate 5 digit key
+        var keyValues = getValues(numKey);    //Generate values based on key
+        var i;
+        for (i=0; i<keyValues[0];i++) {   //Add characters based on values
+            middle.push(getChar());
+        }
+        for (i=0; i<keyValues[1];i++) {
+            middle.unshift(getChar());
+        }
+        var str = middle.join('');
+        for (i = 0; i < str.length; i++) {
+            middle[i]=(str.charAt(i));
+        }
+        for (i=0; i<keyValues[2];i++) {
+            middle.splice(keyValues[3],0,getChar());
+        }
+        for (i=0; i<keyValues[4];i++) {
+            middle.splice(keyValues[5],0,getChar());
+        }
+        for (i=0; i<keyValues[6];i++) {
+            middle.splice(keyValues[7],0,getChar());
+        }
+        var maskKey = hideKey(numKey);  //Mask the key
+        maskKey = maskKey.join('');
+        middle.unshift(maskKey);    //Add the masked key
+        line = middle.join('');
+        return line;
+    },
 
-//Remove Mask Function
-  //Gets and unmasks number key from passed in encrypted array of characters
-  //Removes additional characters from encrypted array using number key
-  //Decrypts remaining encrypted array
-  //Returns decrypted array as a string
-function removeMask(line) {
-  var middle = line;
-  var maskKey = middle.slice(0,5);    //Get masked key
-  maskKey = maskKey.join('');
-  var numKey = revealKey(maskKey);    //Unmask key
-  numKey = numKey.join('');
-  var i;
-  for (i=0; i<5;i++) {
-      middle.shift();
-  }
-  var keyValues = getValues(numKey);  //Generate values based on key
-  var str = middle.join('');
-  for (i = 0; i < str.length; i++) {
-    middle[i]=(str.charAt(i));
-  }
-  middle.splice(keyValues[7],keyValues[6]);   //Remove characters based on key
-  middle.splice(keyValues[5],keyValues[4]);
-  middle.splice(keyValues[3],keyValues[2]);
-  for (i=0; i<keyValues[0];i++) {
-      middle.pop();
-  }
-  for (i=0; i<keyValues[1];i++) {
-      middle.shift();
-  }
-  middle = middle.map(middle => decrypt(middle));   //decrypt
-  line = middle.join('');
-  return line;
+    //Remove Mask Function
+    //Gets and unmasks number key from passed in encrypted array of characters
+    //Removes additional characters from encrypted array using number key
+    //Decrypts remaining encrypted array
+    //Returns decrypted array as a string
+    removeMask: function(line) {
+        var middle = line;
+        var maskKey = middle.slice(0,5);    //Get masked key
+        maskKey = maskKey.join('');
+        var numKey = revealKey(maskKey);    //Unmask key
+        numKey = numKey.join('');
+        var i;
+        for (i=0; i<5;i++) {
+            middle.shift();
+        }
+        var keyValues = getValues(numKey);  //Generate values based on key
+        var str = middle.join('');
+        for (i = 0; i < str.length; i++) {
+            middle[i]=(str.charAt(i));
+        }
+        middle.splice(keyValues[7],keyValues[6]);   //Remove characters based on key
+        middle.splice(keyValues[5],keyValues[4]);
+        middle.splice(keyValues[3],keyValues[2]);
+        for (i=0; i<keyValues[0];i++) {
+            middle.pop();
+        }
+        for (i=0; i<keyValues[1];i++) {
+            middle.shift();
+        }
+        middle = middle.map(middle => decrypt(middle));   //decrypt
+        line = middle.join('');
+        return line;
+    }
 }
