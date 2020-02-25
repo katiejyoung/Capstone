@@ -1,5 +1,6 @@
 <body>
     <script src="/js/userPage.js"></script>
+    <script src="/js/updateUserPage.js"></script>
      {{#each user}}
     <div id="banner" class="welcome"></div>
     <div id="nav" class="welcome"></div>
@@ -59,8 +60,31 @@
             <label for="user_email">Email: </label>
             <input type="text" name="edit_user_email" id="edit_user_email" value='{{user_email}}'>
             <br><br>
-            <button onClick="updateUser('{{user_name}}', document.getElementById('edit_user_password').value,document.getElementById('edit_user_email').value)" type="button">Save Change</button>
-            </form>
+            <div class="center-button">
+                <button onclick="validateUpdateAccount()" id="button" type="button">Check Form</button>
+            </div><br>
+            <button id="updateUser" onClick="updateUser('{{user_name}}', document.getElementById('edit_user_password').value,document.getElementById('edit_user_email').value)" type="button" style="display: none;">Save Change</button>
+            <div id="invalid-email" style="display: none;">
+                <p>*Error: Incorrect email format</p>
+            </div>
+            <div class="validate-password">
+                <div id="invalid-password-upper" style="display: none;">
+                    <p>*Error: Password must contain at least one upper-case character.</p>
+                </div>
+                <div id="invalid-password-lower" style="display: none;">
+                    <p>*Error: Password must contain at least one lower-case character.</p>
+                </div>
+                <div id="invalid-password-special" style="display: none;">
+                    <p>*Error: Password must contain at least one special character.</p>
+                </div>
+                <div id="invalid-password-number" style="display: none;">
+                    <p>*Error: Password must contain at least one numeric character.</p>
+                </div>
+                <div id="invalid-password-length" style="display: none;">
+                    <p>*Error: Password must contain at least 12 characters.</p>
+                </div>
+            </div>
+        </form>
         {{/each}}
     </div>
 </div>
