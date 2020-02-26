@@ -50,9 +50,19 @@ app.get('/user',function(req,res,next){
     res.render('user');
 });
 
-//Basic page with no functionality
+//Basic page
 app.get('/faq',function(req,res,next){
-    res.render('faq');
+    var context = {};
+    var callbackCount = 0;
+    getComment(res, mysql, context, complete);
+    function complete()
+    {
+        callbackCount++;
+        if (callbackCount >= 1)
+        {
+            res.render('faq', context);
+        }
+    }
 });
 
 //POST to FAQ page creates a new question
@@ -70,20 +80,8 @@ app.post('/faq',function(req,res,next){
         })
 });
 
-
 app.get('/faqSent/:comment',function(req,res,next){
-    var context = {};
-    var callbackCount = 0;
-    comment = req.params.comment;
-    getComment(res, mysql, context, comment, complete);
-    function complete()
-    {
-        callbackCount++;
-        if (callbackCount >= 1)
-        {
-            res.render('faqSent', context);
-        }
-    }
+    res.render('faqSent');
 });
 
 
@@ -311,15 +309,15 @@ function getAdmin(res, mysql, context, complete)
     });
 }
 
-function getComment(res, mysql, context, content, complete)
+function getComment(res, mysql, context, complete)
 {
-    mysql.pool.query("SELECT * FROM questions WHERE question_content='" + content + "'",function(error, results, fields) {
+    mysql.pool.query("SELECT * FROM questions",function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
             return;
         }
         context.questions=results;
-        //console.log(context.admin);
+        //console.log(context.questions);
         complete();
     });
 }
