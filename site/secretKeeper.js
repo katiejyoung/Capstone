@@ -65,12 +65,12 @@ app.post('/faq',function(req,res,next){
                 console.log(JSON.stringify(error));
                 next(error);
                 return;
-            }
+            }        
             res.redirect('/faqSent/'+req.body.content);
         })
 });
 
-//
+
 app.get('/faqSent/:comment',function(req,res,next){
     var context = {};
     var callbackCount = 0;

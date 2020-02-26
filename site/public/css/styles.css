@@ -13,7 +13,7 @@
     color: #696969;
 }
 
-.no-nav-form {
+.no-nav-form, .no-nav-links {
     width:50%; 
     margin:0 auto;
     text-align:center;
