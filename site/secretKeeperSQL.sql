@@ -43,3 +43,8 @@ VALUES
 ('OffShoreBank', '987654321', 'OffShoreBank.com',(SELECT id FROM user WHERE user_name='Katie')),
 ('OSU', 'banana', 'oregonstate.edu',(SELECT id FROM user WHERE user_name='Katie')),
 ('Xfinity', 'secrets', 'xfinity.com',(SELECT id FROM user WHERE user_name='Katie'));
+
+INSERT INTO `questions`(`question_content`)
+VALUES
+('What is a question?'),
+('What is a question not?');
