@@ -84,6 +84,32 @@ app.get('/faqSent/:comment',function(req,res,next){
     res.render('faqSent');
 });
 
+//DELETE to the faq page deletes a question via the question_content
+    //Success is ultimately a reload of the admin user page (via JS on the html file)
+app.delete('/faq', function(req,res,next) {
+    mysql.pool.query(
+        'DELETE FROM questions WHERE question_content=?', req.body.question_content, function(error, results, fields) {
+            if (error) {
+                console.log(JSON.stringify(error));
+                return;
+            }
+            res.status(202).end();
+        }
+    )
+});
+
+//PUT faq
+app.put('/faq',function(req,res,next){
+    var context = {};
+    mysql.pool.query("UPDATE questions SET question_response ='"+ req.body.question_response + "' WHERE question_content='"+ req.body.question_content + "'", function(error, results, fields) {
+        if (error) {
+            console.log(JSON.stringify(error));
+            return;
+        }
+        res.status(202).end();
+    })
+});
+
 
 //Basic page with no functionality
 app.get('/createUser',function(req,res,next){
@@ -135,10 +161,11 @@ app.get('/user/:user_name&:password', function(req,res,next) {
     if (req.params.user_name == 'Admin' && req.params.password == 'password'){
         getAdmin(res, mysql, context, complete);
         getUser(res, mysql, context, req.params.user_name, req.params.password, complete);
+        getComment(res, mysql, context, complete);
         function complete()
         {
             callbackCount++;
-            if (callbackCount >= 2)
+            if (callbackCount >= 3)
             {
                 res.render('user',context);
             }

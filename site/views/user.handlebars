@@ -121,10 +121,22 @@
 <div class="admin-form" id="admin-record" style="display: none;">
         <h2>Admin Table</h2><br>
         <form>
+            <div><label>Users </label></div><br>
             {{#each admin}}
             <div name="admin_name" id="admin_name">{{user_name}}</div>
             <div name="admin_password" id="admin_password">{{user_password}}</div>
             <div> <button onclick="deleteUser('{{user_name}}','{{user_password}}')" type="button">Delete Profile</button></div>
+            <br>
+            {{/each}}
+            <br><br>
+            <div><label>Questions </label></div><br>
+            {{#each questions}}
+            <div name="question_content" id="question_content">{{question_content}}</div>
+            <div><button onclick="deleteQuestion('{{question_content}}')" type="button">Delete Comment</button></div>
+            <br>
+            <div><label>Response: </label>
+            <input type="text" id='{{question_content}}' name="question_response" value='{{question_response}}'>
+            <button onclick="respondQuestion('{{question_content}}', document.getElementById('{{question_content}}').value)" type="button">Save Response</button></div>
             <br>
             {{/each}}
         </form>
