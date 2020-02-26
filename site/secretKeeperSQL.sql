@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS `questions`;
 DROP TABLE IF EXISTS `records`;
+DROP TABLE IF EXISTS `recordsE`;
 DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user`(
@@ -21,9 +22,21 @@ CREATE TABLE `records`(
     FOREIGN KEY (`user`) REFERENCES `user`(`id`) ON DELETE SET NULL
 );
 
+CREATE TABLE `recordsE`(
+	`record_id` int NOT NULL AUTO_INCREMENT,
+    `record_name` varchar(100) NOT NULL,
+    `record_data` varchar(100) NOT NULL,
+    `record_URL` varchar(100),
+    `user` int,
+    PRIMARY KEY (`record_id`),
+    FOREIGN KEY (`user`) REFERENCES `user`(`id`) ON DELETE SET NULL
+);
+
 CREATE TABLE `questions`(
 	`question_id` int NOT NULL AUTO_INCREMENT,
     `question_content` varchar(300) NOT NULL,
+    `question_response` varchar(300),
+    `question_email` varchar(300),
     PRIMARY KEY (`question_id`)
 );
 
@@ -43,6 +56,15 @@ VALUES
 ('OffShoreBank', '987654321', 'OffShoreBank.com',(SELECT id FROM user WHERE user_name='Katie')),
 ('OSU', 'banana', 'oregonstate.edu',(SELECT id FROM user WHERE user_name='Katie')),
 ('Xfinity', 'secrets', 'xfinity.com',(SELECT id FROM user WHERE user_name='Katie'));
+
+INSERT INTO `recordsE`(`record_name`, `record_data`, `record_URL`,`user`)
+VALUES
+('DagjbKUFiZXKQbdATIGerodVss', 'Fajdgul45678XRDwnEI9012irjY', 'cdagjmlZXGeLqQYeroBwe.gsqik',(SELECT id FROM user WHERE user_name='Kyle')),
+('HDCIDMJYamxanYTzqxiXFvUB', 'CAjACWqsrxerTcJeTPpfoTiU', 'fJJiJBVYamxKAxkxicuv.gsqAq',(SELECT id FROM user WHERE user_name='Kyle')),
+('eGGfdrTUNWXncLOMNQBE', 'AiJEhVnwytiEqyWYvwXuyigvixNf', 'ICdCGyZXF.ksjfOqzHQuwCBb',(SELECT id FROM user WHERE user_name='Kyle')),
+('eecbGXLTjjXHqHclVpgGCzsviGeroxMUE', 'caaECgxm2109cXBZmuZPA87654N', 'hBAIcoNYTjjXsNfWiKrNSOlsviGero.gsqq',(SELECT id FROM user WHERE user_name='Katie')),
+('fBBaFJTXZLCKUBgGo', 'DHJAbNWqferBXWheqxhYremjR', 'eJIIjiYiisvgtpatYgiksrwxexi.ihyGmzI',(SELECT id FROM user WHERE user_name='Katie')),
+('bfACgRtLCjmrzbFJGPouWnmxct', 'ihGhhUqZwigeqzHcAvGbDixwJRD', 'ceBGjbVcabjTUeATxmnTmrmxc.gsqQqDK',(SELECT id FROM user WHERE user_name='Katie'));
 
 INSERT INTO `questions`(`question_content`)
 VALUES
