@@ -13,10 +13,14 @@
     color: #696969;
 }
 
-.no-nav-form, .no-nav-links {
+.no-nav-form, .no-nav-links, .display-faqs {
     width:50%; 
     margin:0 auto;
     text-align:center;
+}
+
+.display-faqs {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .welcome {

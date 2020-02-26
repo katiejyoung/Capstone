@@ -5,11 +5,11 @@
     <textarea class="faq-comments" name="content" id="question-content" rows="9" cols="50" maxlength="400" placeholder="Enter your question here"></textarea>
     <br><br>
     <button type="submit" value="Submit">Submit</button>
-</form>
+</form><br>
 <div class="display-faqs">
     {{#each questions}}
         <tr>
-            <td>{{question_content}}</td>
+            <td class="faq-header"><strong>{{question_content}}</strong></td><br>
         </tr>
     {{/each}}
 </div>
