@@ -35,6 +35,8 @@ CREATE TABLE `recordsE`(
 CREATE TABLE `questions`(
 	`question_id` int NOT NULL AUTO_INCREMENT,
     `question_content` varchar(300) NOT NULL,
+    `question_response` varchar(300),
+    `question_email` varchar(300),
     PRIMARY KEY (`question_id`)
 );
 
@@ -63,3 +65,8 @@ VALUES
 ('eecbGXLTjjXHqHclVpgGCzsviGeroxMUE', 'caaECgxm2109cXBZmuZPA87654N', 'hBAIcoNYTjjXsNfWiKrNSOlsviGero.gsqq',(SELECT id FROM user WHERE user_name='Katie')),
 ('fBBaFJTXZLCKUBgGo', 'DHJAbNWqferBXWheqxhYremjR', 'eJIIjiYiisvgtpatYgiksrwxexi.ihyGmzI',(SELECT id FROM user WHERE user_name='Katie')),
 ('bfACgRtLCjmrzbFJGPouWnmxct', 'ihGhhUqZwigeqzHcAvGbDixwJRD', 'ceBGjbVcabjTUeATxmnTmrmxc.gsqQqDK',(SELECT id FROM user WHERE user_name='Katie'));
+
+INSERT INTO `questions`(`question_content`)
+VALUES
+('What is a question?'),
+('What is a question not?');
