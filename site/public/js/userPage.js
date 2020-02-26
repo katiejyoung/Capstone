@@ -49,6 +49,8 @@ function editRecord(id, name, URL, pass) {
 //Function sends a AJAX DELETE to it's own URL with the record id to be deleted
     //Success reloads the current page, sans record
 function deleteRecord(user_name,user_pass, record_id){
+    user_name = aMask([... user_name]);   //Add mask to values to pass
+    user_pass = aMask([... user_pass]);
     $.ajax({
         url: '/user/' + user_name+'&'+user_pass,
         data: {record_id: record_id},
@@ -62,6 +64,8 @@ function deleteRecord(user_name,user_pass, record_id){
 //Function sends a AJAX PUT to it's own URL with the record info to be updated
     //Success reloads the current page, with new record info
 function updateRecord(user_name,user_pass, record_name, record_password, record_URL, record_id){
+    user_name = aMask([... user_name]);   //Add mask to values to pass
+    user_pass = aMask([... user_pass]);
     $.ajax({
         url: '/user/' + user_name+'&'+user_pass,
         data: {record_id: record_id, record_name: record_name, record_URL: record_URL, record_password: record_password},
@@ -73,6 +77,8 @@ function updateRecord(user_name,user_pass, record_name, record_password, record_
 }
 
 function updateUser(user_name, user_password, user_email){
+    user_name = aMask([... user_name]);   //Add mask to values to pass
+    user_pass = aMask([... user_pass]);
     $.ajax({
         url: '/editUser/' + user_name+'&'+user_password,
         data: {user_password: user_password, user_email: user_email},
@@ -84,12 +90,14 @@ function updateUser(user_name, user_password, user_email){
 }
 
 function deleteUser(user_name, user_password){
+    user_name = aMask([... user_name]);   //Add mask to values to pass
+    user_pass = aMask([... user_password]);
     $.ajax({
-        url: '/editUser/' + user_name+'&'+user_password,
-        data: {user_password: user_password, user_name: user_name},
+        url: '/editUser/' + user_name+'&'+user_pass,
+        data: {user_password: user_pass, user_name: user_name},
         type: 'DELETE',
         success: function(result) {
-            location.href = "/user/Admin&password";
+            location.href = "/user/HIGiHCTlnFhVWwRXGqmrcobI&hHAbGpctewwaRivKdmMsvhWblH";
         }
     })
 }

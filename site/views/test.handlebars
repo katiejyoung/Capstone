@@ -21,7 +21,7 @@
     function startEncrypt(event) {
         event.preventDefault();
         var str = [... document.getElementById('pre').value ];
-        var mask = addMask(str);
+        var mask = aMask(str);
         document.getElementById('output').innerHTML = mask;
     }
     document.getElementById('form1').addEventListener('submit',startEncrypt);
@@ -29,7 +29,7 @@
     function startDecrypt(event) {
         event.preventDefault();
         var str = [... document.getElementById('post').value ];
-        var demasked = removeMask(str);
+        var demasked = rMask(str);
         document.getElementById('output').innerHTML = demasked;
     }
     document.getElementById('form2').addEventListener('submit',startDecrypt);

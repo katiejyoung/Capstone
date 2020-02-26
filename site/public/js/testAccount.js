@@ -1,7 +1,10 @@
-    //Function sends AJAX PUT message to own URL 
+
+//Function sends AJAX PUT message to own URL 
         //Count refers to the presence of the username and password combo, 1 = present
         //If the username and password match a user, load the user page with credentials
 function testAccount(user_name,user_pass){
+    user_name = aMask([... user_name]);
+    user_pass = aMask([... user_pass]);
     $.ajax({
         url: '/',
         data: {user_name: user_name, user_pass: user_pass},

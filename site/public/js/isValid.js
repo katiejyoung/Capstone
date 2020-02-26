@@ -1,3 +1,4 @@
+
 //Function takes a passed password and checks for predetermined criteria 
 //Function returns an int which corresponds to a check potentially failed
 function isValidPassword(password) {
@@ -81,10 +82,11 @@ function isValidEmail(email) {
 //Function sends a PUT message to its own URL with the username to check in the db
 //returned value refers to the presence of the username in the db, 1 = present
 //function calls testCount to apply results
-function testUsername(username) {
+async function testUsername(username) {
+    username = aMask([... username]);
     return $.ajax({
         url: '/createUser',
-        data: {username: username},
+        data: {user_name: username},
         type: 'PUT',
         success: function(result) {
             testCount(result[0].total);

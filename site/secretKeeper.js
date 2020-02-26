@@ -18,8 +18,8 @@ app.use(express.static(path.join(__dirname, '/public')));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-//To encrypt records
-var masks = require('./public/js/encryptServer.js');
+//To encrypt
+var masks = require('./public/js/encryptMod.js');
 
 //To use tokens with functions
 var tokenDB = require('./public/js/tokenDB.js');
@@ -35,15 +35,17 @@ app.get('/',function(req,res){
     //Returned count allows login
     //result[0].total == access count on html
 app.put('/',function(req,res,next){
-    var useTokens = takeToken([req.body.user_name].toString());
+    var uname = masks.removeMask([... req.body.user_name]);
+    var upass = masks.removeMask([... req.body.user_pass]);
+    var useTokens = takeToken([uname].toString());
     useTokens.then(() =>
-        mysql.pool.query("SELECT COUNT(1) AS total FROM user WHERE user_name=? and user_password=?", [req.body.user_name, req.body.user_pass], function(error, results, fields) {
+        mysql.pool.query("SELECT COUNT(1) AS total FROM user WHERE user_name=? and user_password=?", [uname, upass], function(error, results, fields) {
             if (error) {
                 console.log(JSON.stringify(error));
                 return;
             }
-            const now = Date.now();
-            console.log("Login attempt: ", req.body.user_name," p: ", req.body.user_pass,  " @: ", now);
+            const now = Date();
+            console.log("Login attempt: ", uname," p: ", upass,  " @: ", now);
             res.send(results);
         })
     );
@@ -69,7 +71,8 @@ app.get('/createUser',function(req,res,next){
     //Returned count allows for creation of a profile (need unique username)
     //result[0].total == access count on html
 app.put('/createUser',function(req,res,next){
-    mysql.pool.query('SELECT COUNT(1) AS total FROM user WHERE user_name=?', [req.body.username], function(error, results, fields) {
+    var uname = masks.removeMask([... req.body.user_name]);
+    mysql.pool.query('SELECT COUNT(1) AS total FROM user WHERE user_name=?', [uname], function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
             return;
@@ -102,11 +105,13 @@ app.post('/createUser',function(req,res,next){
 app.get('/user/:user_name&:password', function(req,res,next) {
     var context = {};
     var callbackCount = 0;
-    const now = Date.now();
-    console.log("Getting user page for: ", [req.params.user_name]," p: ", [req.params.password], " @: ", now);
-    if (req.params.user_name == 'Admin' && req.params.password == 'password'){
+    var uname = masks.removeMask([... req.params.user_name]);
+    var upass = masks.removeMask([... req.params.password]);
+    const now = Date();
+    console.log("Getting user page for: ", [uname]," p: ", [upass], " @: ", now);
+    if (uname == 'Admin' && upass == 'password'){
         getAdmin(res, mysql, context, complete);
-        getUser(res, mysql, context, [req.params.user_name],[req.params.password], complete);
+        getUser(res, mysql, context, uname, upass, complete);
         function complete()
         {
             callbackCount++;
@@ -117,8 +122,8 @@ app.get('/user/:user_name&:password', function(req,res,next) {
         }
     }
     else {
-        getUser(res, mysql, context, [req.params.user_name],[req.params.password], complete);
-        getRecords(res, mysql, context, [req.params.user_name],[req.params.password], complete);
+        getUser(res, mysql, context, uname, upass, complete);
+        getRecords(res, mysql, context, uname, upass, complete);
         function complete()
         {
             callbackCount++;
@@ -134,12 +139,10 @@ app.get('/user/:user_name&:password', function(req,res,next) {
 //PUT to user page updates the records via the record id
     //Success is ultimately a reload of the user page (via JS on the html file)
 app.put('/user/:user_name&:password', function(req,res,next) {
-    var rname = [... req.body.record_name];     //Mask the record values
-    var rnameE = masks.addMask(rname);
-    var rpass = [... req.body.record_password];
-    var rpassE = masks.addMask(rpass);
-    var rurl = [... req.body.record_URL];
-    var rurlE = masks.addMask(rurl);
+//Mask the record values
+    var rnameE = masks.addMask([... req.body.record_name]);
+    var rpassE = masks.addMask([... req.body.record_password]);
+    var rurlE = masks.addMask([... req.body.record_URL]);
     mysql.pool.query("UPDATE recordsE SET record_name=?, record_data=?, record_URL=? WHERE record_id=?", [rnameE, rpassE, rurlE, req.body.record_id],
     function(error, results, fields) {
         if (error) {
@@ -154,12 +157,9 @@ app.put('/user/:user_name&:password', function(req,res,next) {
 //POST to user page inserts a new record via the record user
     //Success reloads the user page with the new record
 app.post('/user/:user_name&:password', function(req,res,next) {
-    var rname = [... req.body.add_record_name];     //Mask the record values
-    var rnameE = masks.addMask(rname);
-    var rpass = [... req.body.add_record_password];
-    var rpassE = masks.addMask(rpass);
-    var rurl = [... req.body.add_record_URL];
-    var rurlE = masks.addMask(rurl);
+    var rnameE = masks.addMask([... req.body.record_name]);
+    var rpassE = masks.addMask([... req.body.record_password]);
+    var rurlE = masks.addMask([... req.body.record_URL]);
     mysql.pool.query(
         'INSERT INTO recordsE (record_name, record_data, record_URL, user) VALUES (?,?,?,?)',
         [rnameE, rpassE, rurlE,req.body.add_record_user], function(error, rows, fields) {
@@ -191,7 +191,9 @@ app.delete('/user/:user_name&:password', function(req,res,next) {
 app.get('/editUser/:user_name&:password',function(req,res,next){
     var context = {};
     var callbackCount = 0;
-    getUser(res, mysql, context, [req.params.user_name], [req.params.password], complete);
+    var uname = masks.removeMask([... req.params.user_name]);
+    var upass = masks.removeMask([... req.params.password]);
+    getUser(res, mysql, context, uname, upass, complete);
     function complete()
     {
         callbackCount++;
@@ -206,7 +208,9 @@ app.get('/editUser/:user_name&:password',function(req,res,next){
     //Success reloads the editUser page with the username and potentially new password
     //Currently username is not allowed to be changed, but it is not the primary key for users (so it can be implemented later)
 app.put('/editUser/:user_name&:password',function(req,res,next){
-    mysql.pool.query("UPDATE user SET user_password=?, user_email=? WHERE user_name=?", [req.params.password, req.body.user_email, [req.params.user_name]],
+    var uname = masks.removeMask([... req.params.user_name]);
+    var upass = masks.removeMask([... req.params.password]);
+    mysql.pool.query("UPDATE user SET user_password=?, user_email=? WHERE user_name=?", [upass, req.body.user_email, uname],
     function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
@@ -220,8 +224,10 @@ app.put('/editUser/:user_name&:password',function(req,res,next){
 //DELETE to the user page deletes a user profile
 //Success is ultimately a reload of the user page (via JS on the html file)
 app.delete('/editUser/:user_name&:password', function(req,res,next) {
+    var uname = masks.removeMask([... req.body.user_name]);
+    var upass = masks.removeMask([... req.body.user_password]);
     mysql.pool.query(
-        'DELETE FROM user WHERE user_name=? AND user_password=?', [req.body.user_name, req.body.user_password], function(error, results, fields) {
+        'DELETE FROM user WHERE user_name=? AND user_password=?', [uname, upass], function(error, results, fields) {
             if (error) {
                 console.log(JSON.stringify(error));
                 return;
@@ -261,12 +267,9 @@ function getRecords(res, mysql, context, id, pass, complete)
         }
         var resultArray = JSON.parse(JSON.stringify(results));  //Convert results object to JSON
         resultArray.forEach(function(v){ 
-            var rnameE = [... v.record_name];           //Unmask wanted values and pass
-            v.record_name = masks.removeMask(rnameE);
-            var rpassE = [... v.record_data];
-            v.record_data = masks.removeMask(rpassE);
-            var rurlE = [... v.record_URL];
-            v.record_URL = masks.removeMask(rurlE);
+            v.record_name = masks.removeMask([... v.record_name]);
+            v.record_data = masks.removeMask([... v.record_data]);
+            v.record_URL = masks.removeMask([... v.record_URL]);
         });
         context.records=resultArray;
         complete();
@@ -300,7 +303,6 @@ function getAdmin(res, mysql, context, complete)
 
 //Token Functions
     //Source: https://levelup.gitconnected.com/rate-limiting-a0783293026a
-
 //Get Delay function
     //Increase numbers to make the rate limiter greater per failed attempt
 function getDelay(attempts) {
@@ -325,11 +327,12 @@ function take(oldToken, now) {
     //Promise keeps function from completing until the limit time has passed
 function takeToken(key) {
     const now = Date.now();
+    const nowLog = Date();
     const oldToken = tokenDB.getToken(key, tokens);
     const newToken = take(oldToken, now);
     tokenDB.replaceToken(key, newToken, oldToken, tokens);   // avoid concurrent token usage
     if (newToken.timestamp - now > 0) {
-        console.log("Delay initiated: ", (newToken.timestamp - now),  " @: ", now);
+        console.log("Delay initiated: ", (newToken.timestamp - now),  " @: ", nowLog);
         return new Promise(r => setTimeout(r, newToken.timestamp - now));
     }
     return new Promise(r => setTimeout(r, newToken.timestamp - now));
