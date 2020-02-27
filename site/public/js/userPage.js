@@ -76,9 +76,9 @@ function updateRecord(user_name,user_pass, record_name, record_password, record_
     })
 }
 
-function updateUser(user_name, user_password, user_email){
+function updateUserFunc(user_name, user_password, user_email){
     user_name = aMask([... user_name]);   //Add mask to values to pass
-    user_pass = aMask([... user_pass]);
+    user_password = aMask([... user_password]);
     $.ajax({
         url: '/editUser/' + user_name+'&'+user_password,
         data: {user_password: user_password, user_email: user_email},

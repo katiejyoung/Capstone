@@ -63,7 +63,7 @@
             <div class="center-button">
                 <button onclick="validateUpdateAccount()" id="button" type="button">Check Form</button>
             </div><br>
-            <button id="updateUser" onClick="updateUser('{{user_name}}', document.getElementById('edit_user_password').value,document.getElementById('edit_user_email').value)" type="button" style="display: none;">Save Change</button>
+            <button id="updateUser" onclick="updateUserFunc('{{user_name}}',document.getElementById('edit_user_password').value,document.getElementById('edit_user_email').value)" type="button" style="display: none;">Save Change</button>
             <div id="invalid-email" style="display: none;">
                 <p>*Error: Incorrect email format</p>
             </div>
@@ -97,6 +97,7 @@
             <label for="record_user" style="display: none;">*User Number (Temp): </label>
             {{#each user}}
             <input type="text" name="add_record_user" id="add_record_user" style="display: none;" value={{id}}>
+            <input type="text" name="add_record_username" id="add_record_username" style="display: none;" value={{user_name}}>
             {{/each}}
             <br><br>
             <label for="record_name">*Account Name: </label>

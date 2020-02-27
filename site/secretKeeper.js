@@ -20,6 +20,7 @@ app.use(bodyParser.json())
 
 //To encrypt
 var masks = require('./public/js/encryptMod.js');
+var masksSalt = require('./public/js/encryptModSalt.js');
 
 //To use tokens with functions
 var tokenDB = require('./public/js/tokenDB.js');
@@ -31,24 +32,36 @@ app.get('/',function(req,res){
 });
 
 //PUT to the home page currently takes a username and password and looks for a match in the db 
-    //(may move if using a PUT for this is poor form)
     //Returned count allows login
     //result[0].total == access count on html
 app.put('/',function(req,res,next){
     var uname = masks.removeMask([... req.body.user_name]);
     var upass = masks.removeMask([... req.body.user_pass]);
-    var useTokens = takeToken([uname].toString());
-    useTokens.then(() =>
-        mysql.pool.query("SELECT COUNT(1) AS total FROM user WHERE user_name=? and user_password=?", [uname, upass], function(error, results, fields) {
-            if (error) {
-                console.log(JSON.stringify(error));
-                return;
-            }
-            const now = Date();
-            console.log("Login attempt: ", uname," p: ", upass,  " @: ", now);
-            res.send(results);
-        })
-    );
+    var unameE;
+    var upassE;
+
+    mysql.pool.query("SELECT salt FROM salts WHERE user_name=?", [uname], function(error, results, fields) {
+        if (error) {
+            console.log(JSON.stringify(error));
+            return;
+        }
+        var salt = results[0].salt;
+        unameE = masksSalt.addMaskSalt([... uname],salt);
+        upassE = masksSalt.addMaskSalt([... upass],salt);
+        var useTokens = takeToken([uname].toString());
+
+        useTokens.then(() =>
+            mysql.pool.query("SELECT COUNT(1) AS total FROM userE WHERE user_name=? and user_password=?", [unameE, upassE], function(error, results, fields) {
+                if (error) {
+                    console.log(JSON.stringify(error));
+                    return;
+                }
+                const now = Date();
+                console.log("Login attempt: ", uname," p: ", upass,  " @: ", now);
+                res.send(results);
+            })
+        );
+    })
 });
 
 //Test page is set to mess with encryption 
@@ -72,7 +85,7 @@ app.get('/createUser',function(req,res,next){
     //result[0].total == access count on html
 app.put('/createUser',function(req,res,next){
     var uname = masks.removeMask([... req.body.user_name]);
-    mysql.pool.query('SELECT COUNT(1) AS total FROM user WHERE user_name=?', [uname], function(error, results, fields) {
+    mysql.pool.query('SELECT COUNT(1) AS total FROM salts WHERE user_name=?', [uname], function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
             return;
@@ -84,18 +97,28 @@ app.put('/createUser',function(req,res,next){
 //POST to create user page creates a new user with no administrative access
     //Success redirects to the home page to allow user to log in with new credentials
 app.post('/createUser',function(req,res,next){
-    mysql.pool.query(
-        'INSERT INTO user (user_name, user_password, user_email, user_super) VALUES (?,?,?,?)',
-        [req.body.username, req.body.password, req.body.email, 0],
-         function(error, rows, fields) {
+    var salt = Math.floor(Math.random() * 900000000) + 100000000; //Generate 9 digit salt
+    console.log(salt);
+    var unameE = masksSalt.addMaskSalt([... req.body.username],salt);
+    var upassE = masksSalt.addMaskSalt([... req.body.password],salt);
+    var uemailE = masksSalt.addMaskSalt([... req.body.email],salt);
+
+    mysql.pool.query('INSERT INTO salts (user_name, salt) VALUES (?,?)', [req.body.username, salt], function(error, rows, fields) {
+        if (error) {
+            console.log(JSON.stringify(error));
+            next(error);
+            return;
+        }
+
+        mysql.pool.query('INSERT INTO userE (user_name, user_password, user_email, user_super) VALUES (?,?,?,?)', [unameE, upassE, uemailE, 0], function(error, rows, fields) {
             if (error) {
                 console.log(JSON.stringify(error));
                 next(error);
                 return;
             }
             res.redirect('/');
-        }
-    )
+        })
+    })
 });
 
 //GET to user page returns all the user records
@@ -143,6 +166,7 @@ app.put('/user/:user_name&:password', function(req,res,next) {
     var rnameE = masks.addMask([... req.body.record_name]);
     var rpassE = masks.addMask([... req.body.record_password]);
     var rurlE = masks.addMask([... req.body.record_URL]);
+
     mysql.pool.query("UPDATE recordsE SET record_name=?, record_data=?, record_URL=? WHERE record_id=?", [rnameE, rpassE, rurlE, req.body.record_id],
     function(error, results, fields) {
         if (error) {
@@ -157,34 +181,40 @@ app.put('/user/:user_name&:password', function(req,res,next) {
 //POST to user page inserts a new record via the record user
     //Success reloads the user page with the new record
 app.post('/user/:user_name&:password', function(req,res,next) {
-    var rnameE = masks.addMask([... req.body.record_name]);
-    var rpassE = masks.addMask([... req.body.record_password]);
-    var rurlE = masks.addMask([... req.body.record_URL]);
-    mysql.pool.query(
-        'INSERT INTO recordsE (record_name, record_data, record_URL, user) VALUES (?,?,?,?)',
-        [rnameE, rpassE, rurlE,req.body.add_record_user], function(error, rows, fields) {
+    var rnameE = masks.addMask([... req.body.add_record_name]);
+    var rpassE = masks.addMask([... req.body.add_record_password]);
+    var rurlE = masks.addMask([... req.body.add_record_URL]);
+    var unameE;
+
+    mysql.pool.query("SELECT salt FROM salts WHERE user_name=?", [req.body.add_record_username], function(error, results, fields) {
+        if (error) {
+            console.log(JSON.stringify(error));
+            return;
+        }
+        var salt = results[0].salt;
+        unameE = masksSalt.addMaskSalt([... req.body.add_record_user],salt);
+
+        mysql.pool.query('INSERT INTO recordsE (record_name, record_data, record_URL, user) VALUES (?,?,?,?)',[rnameE, rpassE, rurlE, req.body.add_record_user], function(error, rows, fields) {
             if (error) {
                 console.log(JSON.stringify(error));
                 next(error);
                 return;
             }
             res.redirect('/user/'+[req.params.user_name]+'&'+[req.params.password]);
-        }
-    )
+        })
+    })
 });
 
 //DELETE to the user page deletes a record via the record ID
     //Success is ultimately a reload of the user page (via JS on the html file)
 app.delete('/user/:user_name&:password', function(req,res,next) {
-    mysql.pool.query(
-        'DELETE FROM recordsE WHERE record_id=?', req.body.record_id, function(error, results, fields) {
-            if (error) {
-                console.log(JSON.stringify(error));
-                return;
-            }
-            res.status(202).end();
+    mysql.pool.query('DELETE FROM recordsE WHERE record_id=?', req.body.record_id, function(error, results, fields) {
+        if (error) {
+            console.log(JSON.stringify(error));
+            return;
         }
-    )
+        res.status(202).end();
+    })
 });
 
 //GET to the editUser page returns all of the user info via the getUser function
@@ -210,15 +240,29 @@ app.get('/editUser/:user_name&:password',function(req,res,next){
 app.put('/editUser/:user_name&:password',function(req,res,next){
     var uname = masks.removeMask([... req.params.user_name]);
     var upass = masks.removeMask([... req.params.password]);
-    mysql.pool.query("UPDATE user SET user_password=?, user_email=? WHERE user_name=?", [upass, req.body.user_email, uname],
-    function(error, results, fields) {
+    var unameE;
+    var upassE;
+    var uemailE;
+    mysql.pool.query("SELECT salt FROM salts WHERE user_name=?", [uname], function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
             return;
         }
-        res.status(200);
-        res.end();
-    });
+        var salt = results[0].salt;
+        unameE = masksSalt.addMaskSalt([... uname],salt);
+        upassE = masksSalt.addMaskSalt([... upass],salt);
+        uemailE = masksSalt.addMaskSalt([... req.body.user_email],salt);
+
+        mysql.pool.query("UPDATE userE SET user_password=?, user_email=? WHERE user_name=?", [upassE, uemailE, unameE],
+        function(error, results, fields) {
+            if (error) {
+                console.log(JSON.stringify(error));
+                return;
+            }
+            res.status(200);
+            res.end();
+        })
+    })
 });
 
 //DELETE to the user page deletes a user profile
@@ -226,15 +270,25 @@ app.put('/editUser/:user_name&:password',function(req,res,next){
 app.delete('/editUser/:user_name&:password', function(req,res,next) {
     var uname = masks.removeMask([... req.body.user_name]);
     var upass = masks.removeMask([... req.body.user_password]);
-    mysql.pool.query(
-        'DELETE FROM user WHERE user_name=? AND user_password=?', [uname, upass], function(error, results, fields) {
+    var unameE;
+    var upassE;
+    mysql.pool.query("SELECT salt FROM salts WHERE user_name=?", [uname], function(error, results, fields) {
+        if (error) {
+            console.log(JSON.stringify(error));
+            return;
+        }
+        var salt = results[0].salt;
+        unameE = masksSalt.addMaskSalt([... uname],salt);
+        upassE = masksSalt.addMaskSalt([... upass],salt);
+
+        mysql.pool.query('DELETE FROM userE WHERE user_name=? AND user_password=?', [unameE, upassE], function(error, results, fields) {
             if (error) {
                 console.log(JSON.stringify(error));
                 return;
             }
             res.status(202).end();
-        }
-    )
+        })
+    })
 });
 
 //Error Pages
@@ -260,37 +314,67 @@ app.listen(app.get('port'), function(){
 
 function getRecords(res, mysql, context, id, pass, complete)
 {
-    mysql.pool.query("SELECT * FROM recordsE r INNER JOIN user u ON r.user = u.id WHERE u.user_name=? and u.user_password=?", [id, pass], function(error, results, fields) {
+    var unameE;
+    var upassE;
+    mysql.pool.query("SELECT salt FROM salts WHERE user_name=?", [id], function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
             return;
         }
-        var resultArray = JSON.parse(JSON.stringify(results));  //Convert results object to JSON
-        resultArray.forEach(function(v){ 
-            v.record_name = masks.removeMask([... v.record_name]);
-            v.record_data = masks.removeMask([... v.record_data]);
-            v.record_URL = masks.removeMask([... v.record_URL]);
-        });
-        context.records=resultArray;
-        complete();
-    });
+        var salt = results[0].salt;
+        unameE = masksSalt.addMaskSalt([... id],salt);
+        upassE = masksSalt.addMaskSalt([... pass],salt);
+    
+        mysql.pool.query("SELECT * FROM recordsE r INNER JOIN userE u ON r.user = u.id WHERE u.user_name=? and u.user_password=?", [unameE, upassE], function(error, results, fields) {
+            if (error) {
+                console.log(JSON.stringify(error));
+                return;
+            }
+            var resultArray = JSON.parse(JSON.stringify(results));  //Convert results object to JSON
+            resultArray.forEach(function(v){ 
+                v.record_name = masks.removeMask([... v.record_name]);
+                v.record_data = masks.removeMask([... v.record_data]);
+                v.record_URL = masks.removeMask([... v.record_URL]);
+            });
+            context.records=resultArray;
+            complete();
+        })
+    })
 }
 
 function getUser(res, mysql, context, id, pass,complete)
 {
-    mysql.pool.query("SELECT * FROM user WHERE user_name=? and user_password=?", [id, pass], function(error, results, fields) {
+    var unameE;
+    var upassE;
+    mysql.pool.query("SELECT salt FROM salts WHERE user_name=?", [id], function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
             return;
         }
-        context.user=results;
-        complete();
-    });
+        var salt = results[0].salt;
+        unameE = masksSalt.addMaskSalt([... id],salt);
+        upassE = masksSalt.addMaskSalt([... pass],salt);
+
+        mysql.pool.query("SELECT * FROM userE WHERE user_name=? and user_password=?", [unameE, upassE], function(error, results, fields) {
+            if (error) {
+                console.log(JSON.stringify(error));
+                return;
+            }
+            var resultArray = JSON.parse(JSON.stringify(results));  //Convert results object to JSON
+            resultArray.forEach(function(v){ 
+                v.user_name = masksSalt.removeMaskSalt([... v.user_name], salt);
+                v.user_password = masksSalt.removeMaskSalt([... v.user_password], salt);
+                v.user_email = masksSalt.removeMaskSalt([... v.user_email], salt);
+            });
+            context.user=resultArray;
+            complete();
+        })
+    })
 }
 
 function getAdmin(res, mysql, context, complete)
 {
-    mysql.pool.query("SELECT * FROM user WHERE NOT user_name=?", "Admin", function(error, results, fields) {
+    mysql.pool.query("SELECT * FROM userE WHERE NOT user_name=?", "MFhqmrhffffhllAAh", function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
             return;

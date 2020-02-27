@@ -1,7 +1,9 @@
 DROP TABLE IF EXISTS `questions`;
 DROP TABLE IF EXISTS `records`;
 DROP TABLE IF EXISTS `recordsE`;
+DROP TABLE IF EXISTS `salts`;
 DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `userE`;
 
 CREATE TABLE `user`(
 	`id` int NOT NULL AUTO_INCREMENT,
@@ -10,6 +12,22 @@ CREATE TABLE `user`(
     `user_email` varchar(50) NOT NULL,
     `user_super` int,
     PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `userE`(
+	`id` int NOT NULL AUTO_INCREMENT,
+    `user_name` varchar(50) NOT NULL unique,
+    `user_password` varchar(50) NOT NULL,
+    `user_email` varchar(50) NOT NULL,
+    `user_super` int,
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `salts`(
+	`id` int NOT NULL AUTO_INCREMENT,
+    `salt` int NOT NULL,
+    `user_name` varchar(50) NOT NULL unique,
+	PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `records`(
@@ -29,7 +47,7 @@ CREATE TABLE `recordsE`(
     `record_URL` varchar(100),
     `user` int,
     PRIMARY KEY (`record_id`),
-    FOREIGN KEY (`user`) REFERENCES `user`(`id`) ON DELETE SET NULL
+    FOREIGN KEY (`user`) REFERENCES `userE`(`id`) ON DELETE SET NULL
 );
 
 CREATE TABLE `questions`(
@@ -57,14 +75,26 @@ VALUES
 ('OSU', 'banana', 'oregonstate.edu',(SELECT id FROM user WHERE user_name='Katie')),
 ('Xfinity', 'secrets', 'xfinity.com',(SELECT id FROM user WHERE user_name='Katie'));
 
+INSERT INTO `userE`(`user_name`,`user_password`,`user_email`,`user_super`)
+VALUES
+('MFhqmrhffffhllAAh', 'MtewwasffffvllAAhhhh', 'Mehqmr>ffffjllAAeoi.gsqhhh', 1),
+('QQQQPclllAAttpiff', 'QQQQ45lllAAtt678ff', 'QQQQohlllAAttmbsr>jeoi.gsqff' , 0),
+('QPexmiGYYYGAAAAS', 'QwigviGYYYGAAAAxS', 'QocsyrGYYYGAAAAk>jeoi.gsqS', 0);
+
+INSERT INTO `salts`(`user_name`,`salt`)
+VALUES
+('Admin', 123456789),
+('Kyle', 784594587),
+('Katie', 325693248);
+
 INSERT INTO `recordsE`(`record_name`, `record_data`, `record_URL`,`user`)
 VALUES
-('DagjbKUFiZXKQbdATIGerodVss', 'Fajdgul45678XRDwnEI9012irjY', 'cdagjmlZXGeLqQYeroBwe.gsqik',(SELECT id FROM user WHERE user_name='Kyle')),
-('HDCIDMJYamxanYTzqxiXFvUB', 'CAjACWqsrxerTcJeTPpfoTiU', 'fJJiJBVYamxKAxkxicuv.gsqAq',(SELECT id FROM user WHERE user_name='Kyle')),
-('eGGfdrTUNWXncLOMNQBE', 'AiJEhVnwytiEqyWYvwXuyigvixNf', 'ICdCGyZXF.ksjfOqzHQuwCBb',(SELECT id FROM user WHERE user_name='Kyle')),
-('eecbGXLTjjXHqHclVpgGCzsviGeroxMUE', 'caaECgxm2109cXBZmuZPA87654N', 'hBAIcoNYTjjXsNfWiKrNSOlsviGero.gsqq',(SELECT id FROM user WHERE user_name='Katie')),
-('fBBaFJTXZLCKUBgGo', 'DHJAbNWqferBXWheqxhYremjR', 'eJIIjiYiisvgtpatYgiksrwxexi.ihyGmzI',(SELECT id FROM user WHERE user_name='Katie')),
-('bfACgRtLCjmrzbFJGPouWnmxct', 'ihGhhUqZwigeqzHcAvGbDixwJRD', 'ceBGjbVcabjTUeATxmnTmrmxc.gsqQqDK',(SELECT id FROM user WHERE user_name='Katie'));
+('DagjbKUFiZXKQbdATIGerodVss', 'Fajdgul45678XRDwnEI9012irjY', 'cdagjmlZXGeLqQYeroBwe.gsqik',(SELECT id FROM userE WHERE user_name='QQQQPclllAAttpiff')),
+('HDCIDMJYamxanYTzqxiXFvUB', 'CAjACWqsrxerTcJeTPpfoTiU', 'fJJiJBVYamxKAxkxicuv.gsqAq',(SELECT id FROM userE WHERE user_name='QQQQPclllAAttpiff')),
+('eGGfdrTUNWXncLOMNQBE', 'AiJEhVnwytiEqyWYvwXuyigvixNf', 'ICdCGyZXF.ksjfOqzHQuwCBb',(SELECT id FROM userE WHERE user_name='QQQQPclllAAttpiff')),
+('eecbGXLTjjXHqHclVpgGCzsviGeroxMUE', 'caaECgxm2109cXBZmuZPA87654N', 'hBAIcoNYTjjXsNfWiKrNSOlsviGero.gsqq',(SELECT id FROM userE WHERE user_name='QPexmiGYYYGAAAAS')),
+('fBBaFJTXZLCKUBgGo', 'DHJAbNWqferBXWheqxhYremjR', 'eJIIjiYiisvgtpatYgiksrwxexi.ihyGmzI',(SELECT id FROM userE WHERE user_name='QPexmiGYYYGAAAAS')),
+('bfACgRtLCjmrzbFJGPouWnmxct', 'ihGhhUqZwigeqzHcAvGbDixwJRD', 'ceBGjbVcabjTUeATxmnTmrmxc.gsqQqDK',(SELECT id FROM userE WHERE user_name='QPexmiGYYYGAAAAS'));
 
 INSERT INTO `questions`(`question_content`)
 VALUES

@@ -1,19 +1,22 @@
 <h1 class="no-nav-header">Kyle's Test Page</h1>
+<script src="/js/encryptServerSalt.js"></script>
 <div class="home">
     <form id="form1">
         <label for="password">Pre: </label>
-        <input type="text" name="password" id="pre">
+        <input type="text" name="passwordPre" id="pre" />
+        <input type="text" name="passwordSalt" id="preSalt" />
         <button type="submit">Encrypt</button>
     </form>
 </div>
 <div class="home">
     <form id="form2">
         <label for="password">Post: </label>
-        <input type="text" name="password" id="post">
+        <input type="text" name="passwordPost" id="post" />
+        <input type="text" name="passwordSalt" id="postSalt" />
         <button type="submit">Decrypt</button>
     </form>
 </div>
-
+<br><br>
 <h3>Output</h3>
   <div id='output'></div>
 
@@ -21,7 +24,8 @@
     function startEncrypt(event) {
         event.preventDefault();
         var str = [... document.getElementById('pre').value ];
-        var mask = aMask(str);
+        var saltPre = document.getElementById('preSalt').value;
+        var mask = addMaskSalt(str, saltPre);
         document.getElementById('output').innerHTML = mask;
     }
     document.getElementById('form1').addEventListener('submit',startEncrypt);
@@ -29,7 +33,8 @@
     function startDecrypt(event) {
         event.preventDefault();
         var str = [... document.getElementById('post').value ];
-        var demasked = rMask(str);
+        var saltPost = document.getElementById('postSalt').value;
+        var demasked = removeMaskSalt(str, saltPost);
         document.getElementById('output').innerHTML = demasked;
     }
     document.getElementById('form2').addEventListener('submit',startDecrypt);
