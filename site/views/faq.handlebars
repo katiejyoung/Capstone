@@ -1,12 +1,50 @@
 <h1 class="no-nav-header">Secret Keeper FAQs</h1>
 <script src="/js/faq.js"></script>
-<h3 class="no-nav-subheader">Don't see your question here? Leave us a note.</h3>
-<form class="no-nav-form" method="post">
-    <textarea class="faq-comments" name="content" id="question-content" rows="9" cols="50" maxlength="400" placeholder="Enter your question here"></textarea>
-    <br><br>
-    <button type="submit" value="Submit">Submit</button>
-</form><br>
-<div class="display-faqs">
+<script src="/js/helpers.js"></script>
+<div class="side-nav">
+    <div id="side-nav-header"><h1>FAQs</h1></div>
+    <div id="side-nav-elements-faq">
+        <button id="add-record-button" onclick="newQuestion()" type="button">Add a Question</button>
+        <div class="button-spacing"></div>
+    </div>
+    <div id="side-nav-table">
+        <table>
+            {{#each questions}}
+                <tr>
+                    <td class="faq-header" onclick="displayComment('{{question_id}}','{{question_content}}')";>{{question_content}}</td>
+                    {{!-- <td class="faq-header" onclick="displayComment('{{question_id}}','{{question_content}}')";>{{#bold}} {{question_content}} {{/bold}}</td> --}}
+                </tr>
+            {{/each}}
+        </table>
+    </div>
+</div>
+<div id="record-display" style="display: none;">
+    <div class="record-content" >
+        <table class="record-table">
+                <tr>
+                    <td id="question-id" style="display: none;">{{question_id}}</td>
+                </tr>
+                <tr>
+                    <td id="question-content">{{question-content}}</td>
+                </tr>
+                <tr>
+                    <td id="record-URL">{{question_response}}</td>
+                </tr>
+        </table>
+    </div>
+</div>
+
+
+<div id="new-question-display" style="display: none;">
+    <h3 class="no-nav-subheader">Don't see your question here? Leave us a note.</h3>
+    <form class="no-nav-form" method="post">
+        <textarea class="faq-comments" name="content" id="question-content" rows="9" cols="50" maxlength="400" placeholder="Enter your question here"></textarea>
+        <br><br>
+        <button type="submit" value="Submit">Submit</button>
+    </form><br>
+</div>
+
+{{!-- <div class="display-faqs">
     {{#each questions}}
         <tr>
             <td id="question-content" class="faq-header"><strong>{{question_content}}</strong></td><br>
@@ -15,7 +53,7 @@
             <td class="faq-header">{{question_response}}</td><br>
         </tr>
     {{/each}}
-</div>
+</div> --}}
 <div class="secret-logo">
     <img src="images/top-secret-white.png" width="350" height="350" alt="Top Secret">
 </div>

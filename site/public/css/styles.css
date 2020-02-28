@@ -103,6 +103,10 @@
     padding-top: 20%;
 }
 
+#side-nav-elements-faq {
+    padding-top: 10%;
+}
+
 #add-record-button, #update-user-button, #log-out-button {
     border-radius: 5px;
     padding: 5px;
@@ -121,7 +125,7 @@
     font-size: 15px;
 }
 
-#side-nav-header, #side-nav-table, #side-nav-elements {
+#side-nav-header, #side-nav-table, #side-nav-elements, #side-nav-elements-faq {
     padding-left: 20%;
     padding-right: 20%;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
