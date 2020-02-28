@@ -69,20 +69,29 @@ app.get('/faq',function(req,res,next){
 //Success renders the FAQ page to allow user to view the new comment
 app.post('/faq',function(req,res,next){
     req.content = req.body.content;
-    mysql.pool.query(
-        'INSERT INTO questions (question_content) VALUES (?)',[req.body.content],function(error, rows, fields) {
+    if ((req.body.content != undefined) && (req.body.content != ''))
+    {
+        mysql.pool.query(
+            "INSERT INTO questions (question_content) VALUES ('"+req.body.content+"')",function(error, rows, fields) {
             if (error) {
                 console.log(JSON.stringify(error));
                 next(error);
                 return;
-            }        
-            res.redirect('/faqSent/'+req.body.content);
+            }
+            res.redirect(req.get('referer'));
         })
+    }
+    else
+    {
+        return;
+    }
+    
 });
 
-app.get('/faqSent/:comment',function(req,res,next){
-    res.render('faqSent');
-});
+//Shouldn't need this page anymore
+// app.get('/faqSent/:comment',function(req,res,next){
+//     res.render('faqSent');
+// });
 
 //DELETE to the faq page deletes a question via the question_content
     //Success is ultimately a reload of the admin user page (via JS on the html file)

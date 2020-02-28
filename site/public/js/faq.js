@@ -11,3 +11,9 @@ function addQuestion(){
         }
     })
 }
+
+function displayComment(comment) {
+    $("#question-content").html(comment);
+}
+
+//<td id="question-content" class="faq-header" onload="displayComment('{{question_content}}')"><strong>{{question_content}}</strong></td><br>
