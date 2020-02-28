@@ -88,11 +88,6 @@ app.post('/faq',function(req,res,next){
     
 });
 
-//Shouldn't need this page anymore
-// app.get('/faqSent/:comment',function(req,res,next){
-//     res.render('faqSent');
-// });
-
 //DELETE to the faq page deletes a question via the question_content
     //Success is ultimately a reload of the admin user page (via JS on the html file)
 app.delete('/faq', function(req,res,next) {
