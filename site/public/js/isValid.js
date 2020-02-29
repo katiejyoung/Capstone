@@ -31,12 +31,10 @@ function isValidPassword(password) {
         }
         i++;
     }
-    //Password must have at least one special char
-    //COMMENTED OUT UNTIL CHAR CAUSING SQL ERRORS ARE FOUND
-    /*
+    //Password must have only alpha-numeric characters
     i = 0;
     while (i < password.length) {
-        if (password[i].match(specialCharacters)) {
+        if (!password[i].match(lowerCaseLetters) && !password[i].match(upperCaseLetters) && !!password[i].match(numbers)) {
             break;
         }
         else if (i == (password.length - 1)) {
@@ -44,7 +42,6 @@ function isValidPassword(password) {
         }
         i++;
     }
-    */
     //Password must have at least one number
     i = 0;
     while (i < password.length) {
