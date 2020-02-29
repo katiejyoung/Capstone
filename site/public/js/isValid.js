@@ -4,7 +4,6 @@
 function isValidPassword(password) {
     var lowerCaseLetters = /[a-z]/g;
     var upperCaseLetters = /[A-Z]/g;
-    var specialCharacters = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
     var numbers = /[0-9]/g;
     var i;
     var str;
@@ -34,10 +33,7 @@ function isValidPassword(password) {
     //Password must have only alpha-numeric characters
     i = 0;
     while (i < password.length) {
-        if (!password[i].match(lowerCaseLetters) && !password[i].match(upperCaseLetters) && !!password[i].match(numbers)) {
-            break;
-        }
-        else if (i == (password.length - 1)) {
+        if (!password[i].match(lowerCaseLetters) && !password[i].match(upperCaseLetters) && !password[i].match(numbers)) {
             return 3;
         }
         i++;
