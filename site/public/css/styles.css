@@ -37,7 +37,7 @@
 
 .side-nav {
     height: 100%;
-    width: 20%;
+    width: 22%;
     position: fixed;
     z-index: 1;
     top: 0;
@@ -99,6 +99,12 @@
     padding-top: 10%;
 }
 
+.faq-header {
+    overflow: hidden;
+    table-layout:fixed;
+    width: 60%;
+}
+
 #side-nav-elements {
     padding-top: 20%;
 }
@@ -135,6 +141,10 @@
     position: absolute;
     right: 0px;
     padding-bottom: 5%;
+}
+
+#secret-logo-faq {
+    padding-top: 15%;
 }
 
 .button-spacing {

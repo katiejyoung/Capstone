@@ -38,22 +38,12 @@
 <div id="new-question-display" style="display: none;">
     <h3 class="no-nav-subheader">Don't see your question here? Leave us a note.</h3>
     <form class="no-nav-form" method="post">
-        <textarea class="faq-comments" name="content" id="question-content" rows="9" cols="50" maxlength="400" placeholder="Enter your question here"></textarea>
+        <textarea class="faq-comments" name="content" id="question-content" rows="9" cols="50" maxlength="100" placeholder="Enter your question here"></textarea>
         <br><br>
         <button type="submit" value="Submit">Submit</button>
     </form><br>
 </div>
 
-{{!-- <div class="display-faqs">
-    {{#each questions}}
-        <tr>
-            <td id="question-content" class="faq-header"><strong>{{question_content}}</strong></td><br>
-        </tr>
-        <tr>
-            <td class="faq-header">{{question_response}}</td><br>
-        </tr>
-    {{/each}}
-</div> --}}
-<div class="secret-logo">
+<div class="secret-logo" id="secret-logo-faq">
     <img src="images/top-secret-white.png" width="350" height="350" alt="Top Secret">
 </div>
