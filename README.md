@@ -54,7 +54,7 @@ http://flip3.engr.oregonstate.edu:6061/user/*%20OR%20ALL&*%20OR%20ALL
 
 
 ### Denial of Service (DoS) Attack
-**Fork Bomb:**
+**Proof of Concept: Fork Bomb**
 1. Make sure that the active internet browser will not block popups
 2. Add a new record, using the following as the value for the record name:
 *  Change URL to link to user profile in use
@@ -70,3 +70,13 @@ fork(); </script>
 * **WARNING: This will slow down the user computer**
 * This does not bring down the school server (thankfully) rather it illustrates how to slow down a weak server
 * The Kyle account has this record already saved and ready to initiate 
+
+**Proof of Concept: dosExploit.sh**
+* dosExploit.sh opens multiple concurrent POST requests to the server to save new records
+* The limit rate for sending the record is set to a very slow rate which ties up server resources
+* A weak server will be slowed down while waiting for the requests to finish
+* The data for the Kyle profile has been hardcoded into the attack code (the attacker needs a profile and their profile ID)
+* **WARNING: This will slow down the user computer, if not crash it outright**
+* This does not bring down the school server (thankfully) rather it illustrates how to slow down a weak server
+
+**To use the script:** ./dosExploit.sh
