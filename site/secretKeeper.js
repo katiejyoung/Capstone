@@ -94,7 +94,7 @@ app.put('/2FA',function(req,res,next){
             return;
         }
         console.log(uname, uemail);
-        // sendValidationEmail(uname, uemail);
+        sendValidationEmail(uname, uemail);
         res.send(results);
     })
 });
@@ -455,4 +455,29 @@ function takeToken(key) {
         return new Promise(r => setTimeout(r, newToken.timestamp - now));
     }
     return new Promise(r => setTimeout(r, newToken.timestamp - now));
+}
+
+function sendValidationEmail(uname, uemail) {
+    console.log(uemail);
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'secretkeepercapstone@gmail.com',
+            pass: '$ecret*Keeper#Capstone2020'
+        }
+    });
+    var mailOptions = {
+        from: 'secretkeepercapstone@gmail.com',
+        to: uemail,
+        subject: 'Hello from the outside',
+        text: '12345'
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
 }
