@@ -25,9 +25,9 @@
 **HTML SQL Injection:**
 * SQL code can be inserted into the URL as placeholders are not used for MySQL credential checks
 * Use the following URL to access users' information without their credentials
-```
+
 flip3.engr.oregonstate.edu:6061/user/'\*'%20OR%20ALL&'\*'%20OR%20ALL
-```
+
 
 ### HTML Injection Attack
 **To inject a script:**
