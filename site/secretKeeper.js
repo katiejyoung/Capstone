@@ -80,17 +80,24 @@ app.get('/2FA/:user_name&:password', function(req,res,next) {
         callbackCount++;
         if (callbackCount >= 1)
         {
-            console.log("check 1");
             res.render('2FA',context);
         }
     }
 });
 
-// app.put('/2FA',function(req,res,next){
-//     var uname = masks.removeMask([... req.body.user_name]);
-//     //console.log(uname);
-//     res.render('/');
-// });
+app.put('/2FA',function(req,res,next){
+    var uname = masks.removeMask([... req.body.user_name]);
+    var uemail = req.body.user_email;
+    mysql.pool.query('SELECT COUNT(1) AS total FROM salts WHERE user_name=?', [uname], function(error, results, fields) {
+        if (error) {
+            console.log(JSON.stringify(error));
+            return;
+        }
+        console.log(uname, uemail);
+        // sendValidationEmail(uname, uemail);
+        res.send(results);
+    })
+});
 
 //Test page is set to mess with encryption 
 app.get('/test',function(req,res,next){

@@ -7,15 +7,15 @@
 
     <div class="home" id="two-factor">
         
-        <div class="center-button">
+        <div class="center-button" id="two-factor-button">
             <button id="two-FA" onclick='startAuthentication("{{user_name}}", "{{user_password}}", "{{user_email}}")'>Generate Code</button>
         </div>
-        {{!-- <form class="no-nav-form" id="validate-code" method="post" style="display: none;">
+        <form class="no-nav-form" id="validate-code" style="display: none;">
             <p>A code has been sent to your inbox at {{user_email}}.</p>
             <label for="username">Code: </label>
             <input type="text" name="username" id="username">
             <br><br>
-        </form> --}}
+        </form>
     </div>
 {{/each}}
 <div class="secret-logo">
