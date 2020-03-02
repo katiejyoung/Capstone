@@ -38,6 +38,21 @@ flip3.engr.oregonstate.edu:6061/user/'\*'%20OR%20ALL&'\*'%20OR%20ALL
 ```
 3. Note the popup alert warning of possible attack
 
+
+### Buffer Overflow Attack
+**bufferExploit.sh**
+* BufferExploit takes advantage of the buffer used on record names when inserting a new record
+* A curl POST is sent with a number value, allocating empty space instead of saving a string value
+* Overflow memory is then accessed on the user page as a new record with the name being the data
+
+**Directions to use bufferExploit.sh:**
+1. The data for the Kyle profile has been hardcoded into the attack code (the attacker needs a profile and their profile ID)
+2. Run the script and access memory data at flip3.engr.oregonstate.edu:6061/user/Kyle&12345
+3. Repeatly run the script to get chunks of memory to later decode and decipther
+
+**To use the script:** ./bufferExploit.sh
+
+
 ### Denial of Service (DoS) Attack
 **Fork Bomb:**
 1. Make sure that the active internet browser will not block popups
