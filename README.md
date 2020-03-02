@@ -34,7 +34,7 @@
 >"&amp;gt;<script>alert("Warning: This site is vulnerable to an attack")</script>
 3. Note the popup alert warning of possible attack
 
-### Distributed Denial of Service (DDoS) Attack
+### Denial of Service (DoS) Attack
 **Fork Bomb:**
 1. Make sure that the browser with the site open will not block popups
 2. Add a new record, using the following as the value for the record name:
