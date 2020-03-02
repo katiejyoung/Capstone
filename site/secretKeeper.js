@@ -459,6 +459,7 @@ function takeToken(key) {
 
 function sendValidationEmail(uname, uemail) {
     console.log(uemail);
+    var pin = '123456';
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -470,7 +471,7 @@ function sendValidationEmail(uname, uemail) {
         from: 'secretkeepercapstone@gmail.com',
         to: uemail,
         subject: 'Hello from the outside',
-        text: '12345'
+        text: pin
     };
 
     transporter.sendMail(mailOptions, function(error, info){
