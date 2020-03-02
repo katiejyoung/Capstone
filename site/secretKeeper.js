@@ -1,6 +1,7 @@
 var express = require('express');
 var mysql = require('./dbcon.js');
 var bodyParser = require('body-parser');
+var nodemailer = require('nodemailer');
 
 var app = express();
 var handlebars = require('express-handlebars').create({defaultLayout:'main'});
@@ -63,6 +64,33 @@ app.put('/',function(req,res,next){
         );
     })
 });
+
+//GET to user page renders 2FA
+app.get('/2FA/:user_name&:password', function(req,res,next) {
+    var context = {};
+    var callbackCount = 0;
+    var uname = masks.removeMask([... req.params.user_name]);
+    var upass = masks.removeMask([... req.params.password]);
+    const now = Date();
+    console.log("Getting 2FA page for: ", [uname]," p: ", [upass], " @: ", now);
+    
+    getUser(res, mysql, context, uname, upass, complete);
+    function complete()
+    {
+        callbackCount++;
+        if (callbackCount >= 1)
+        {
+            console.log("check 1");
+            res.render('2FA',context);
+        }
+    }
+});
+
+// app.put('/2FA',function(req,res,next){
+//     var uname = masks.removeMask([... req.body.user_name]);
+//     //console.log(uname);
+//     res.render('/');
+// });
 
 //Test page is set to mess with encryption 
 app.get('/test',function(req,res,next){

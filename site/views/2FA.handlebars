@@ -1,0 +1,23 @@
+<h1 class="no-nav-header">Secret Keeper</h1>
+<script src="/js/2FA.js"></script>
+{{#each user}}
+    <div id="banner" class="welcome"></div>
+    <div id="nav" class="welcome"></div>
+    <script>checkUser('{{user_name}}',{{user_super}});</script>  
+
+    <div class="home" id="two-factor">
+        
+        <div class="center-button">
+            <button id="two-FA" onclick='startAuthentication("{{user_name}}", "{{user_password}}", "{{user_email}}")'>Generate Code</button>
+        </div>
+        {{!-- <form class="no-nav-form" id="validate-code" method="post" style="display: none;">
+            <p>A code has been sent to your inbox at {{user_email}}.</p>
+            <label for="username">Code: </label>
+            <input type="text" name="username" id="username">
+            <br><br>
+        </form> --}}
+    </div>
+{{/each}}
+<div class="secret-logo">
+    <img src="../images/top-secret-white.png" width="350" height="350" alt="Top Secret">
+</div>

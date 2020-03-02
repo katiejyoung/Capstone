@@ -124,10 +124,24 @@
     position: absolute;
     right: 0px;
     padding-bottom: 5%;
+    padding-top: 10%;
 }
 
 .button-spacing {
     height: 10px;
+}
+
+.center-button {
+    text-align: center;
+}
+
+#two-FA {
+    text-align: center;
+    border-radius: 5px;
+    padding: .5%;
+    font-size: 15px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    cursor: pointer;
 }
 
 input {

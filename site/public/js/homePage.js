@@ -14,7 +14,10 @@ async function testAccount(user_name,user_pass){
 
             }
             else if (count==1){
-                window.location.href = '/user/'+user_name+'&'+user_pass;
+                // document.getElementById('home-page').style.display="none";
+                // document.getElementById('two-factor').style.display="inline";
+                // window.location.href = '/user/'+user_name+'&'+user_pass;
+                window.location.href = '/2FA/'+user_name+'&'+user_pass;
             }
             else {
             }
