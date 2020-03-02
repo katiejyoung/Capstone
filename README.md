@@ -52,6 +52,6 @@ function fork() {
 fork(); </script>
 ```
 3. Select the name of the record from the record table to intitate fork bomb
-**WARNING: This will slow down the user computer**
+* **WARNING: This will slow down the user computer**
 * This does not bring down the school server (thankfully) rather it illustrates how to slow down a weak server
 * The Kyle account has this record already saved and ready to initiate 
