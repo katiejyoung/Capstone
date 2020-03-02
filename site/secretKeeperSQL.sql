@@ -80,13 +80,15 @@ INSERT INTO `userE`(`user_name`,`user_password`,`user_email`,`user_super`)
 VALUES
 ('MFhqmrhffffhllAAh', 'MtewwasffffvllAAhhhh', 'Mehqmr>ffffjllAAeoi.gsqhhh', 1),
 ('QQQQPclllAAttpiff', 'QQQQ45lllAAtt678ff', 'QQQQohlllAAttmbsr>jeoi.gsqff' , 0),
-('QPexmiGYYYGAAAAS', 'QwigviGYYYGAAAAxS', 'QocsyrGYYYGAAAAk>jeoi.gsqS', 0);
+('QPexmiGYYYGAAAAS', 'QwigviGYYYGAAAAxS', 'QocsyrGYYYGAAAAk>jeoi.gsqS', 0),
+('WWPexmihhhhAffAA4pppp', 'WWFfghihhhhAffAAj456789pppp', 'WWcsyrkhhhhAffAAoex>sviksrwxexi.ihypppp', 0);
 
 INSERT INTO `salts`(`user_name`,`salt`)
 VALUES
 ('Admin', 123456789),
 ('Kyle', 784594587),
-('Katie', 325693248);
+('Katie', 325693248),
+('Katie1', 878699839);
 
 INSERT INTO `recordsE`(`record_name`, `record_data`, `record_URL`,`user`)
 VALUES
