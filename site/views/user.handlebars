@@ -129,15 +129,15 @@
             <br>
             {{/each}}
             <br><br>
-            <div><label>Questions </label></div><br>
+            <div><h2>Questions</h2></div>
             {{#each questions}}
             <div name="question_content" id="question_content">{{question_content}}</div>
-            <div><button class="button-default" onclick="deleteQuestion('{{question_content}}')" type="button">Delete Comment</button></div>
             <br>
             <div><label>Response: </label>
-            <input type="text" id='{{question_content}}' name="question_response" value='{{question_response}}'>
-            <button class="button-default" onclick="respondQuestion('{{question_content}}', document.getElementById('{{question_content}}').value)" type="button">Save Response</button></div>
-            <br>
+            <input type="text" id='{{question_content}}' name="question_response" value='{{question_response}}'><br><br></div>
+            <button class="button-default" onclick="respondQuestion('{{question_content}}', document.getElementById('{{question_content}}').value)" type="button">Save Response</button>
+            <button class="button-default" onclick="deleteQuestion('{{question_content}}')" type="button">Delete Comment</button>
+            <br><br>
             {{/each}}
         </form>
 </div>
