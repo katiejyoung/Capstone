@@ -23,5 +23,3 @@ function newQuestion() {
     document.getElementById('new-question-display').style.display="inline";
     document.getElementById('record-display').style.display="none";
 }
-
-//<td id="question-content" class="faq-header" onload="displayComment('{{question_content}}')"><strong>{{question_content}}</strong></td><br>
