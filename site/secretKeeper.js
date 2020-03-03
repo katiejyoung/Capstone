@@ -93,6 +93,82 @@ app.put('/2FA',function(req,res,next){
     res.send(pin);
 });
 
+//Basic page
+app.get('/faq',function(req,res,next){
+    var context = {};
+    var callbackCount = 0;
+    getComment(res, mysql, context, complete);
+    function complete()
+    {
+        callbackCount++;
+        if (callbackCount >= 1)
+        {
+            res.render('faq', context);
+        }
+    }
+});
+
+//POST to FAQ page creates a new question
+//Success renders the FAQ page to allow user to view the new comment
+app.post('/faq',function(req,res,next){
+    req.content = req.body.content;
+    if ((req.body.content != undefined) && (req.body.content != ''))
+    {
+        mysql.pool.query(
+            "INSERT INTO questions (question_content) VALUES ('"+req.body.content+"')",function(error, rows, fields) {
+            if (error) {
+                console.log(JSON.stringify(error));
+                next(error);
+                return;
+            }
+            res.redirect(req.get('referer'));
+        })
+    }
+    else
+    {
+        return;
+    }
+    
+});
+
+//DELETE to the faq page deletes a question via the question_content
+    //Success is ultimately a reload of the admin user page (via JS on the html file)
+app.delete('/faq', function(req,res,next) {
+    mysql.pool.query(
+        'DELETE FROM questions WHERE question_content=?', req.body.question_content, function(error, results, fields) {
+            if (error) {
+                console.log(JSON.stringify(error));
+                return;
+            }
+            res.status(202).end();
+        }
+    )
+});
+
+//PUT faq
+app.put('/faq',function(req,res,next){
+    var context = {};
+    mysql.pool.query("UPDATE questions SET question_response ='"+ req.body.question_response + "' WHERE question_content='"+ req.body.question_content + "'", function(error, results, fields) {
+        if (error) {
+            console.log(JSON.stringify(error));
+            return;
+        }
+        res.status(202).end();
+    })
+});
+
+function getComment(res, mysql, context, complete)
+{
+    mysql.pool.query("SELECT * FROM questions",function(error, results, fields) {
+        if (error) {
+            console.log(JSON.stringify(error));
+            return;
+        }
+        context.questions=results;
+        complete();
+    });
+}
+
 //Test page is set to mess with encryption 
 app.get('/test',function(req,res,next){
     res.render('test');
