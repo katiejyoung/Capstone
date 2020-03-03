@@ -15,7 +15,6 @@ function addQuestion(){
 function displayComment(id, comment, response) {
     $("#question-content").text(comment);
     $("#question-response").text(response);
-    //document.getElementById("question-content") = comment;
 
     document.getElementById('record-display').style.display="inline";
     document.getElementById('new-question-display').style.display="none";
