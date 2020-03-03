@@ -12,8 +12,11 @@ function addQuestion(){
     })
 }
 
-function displayComment(id, comment) {
+function displayComment(id, comment, response) {
     $("#question-content").html(comment);
+    $("#question-response").text(response);    
+
+    console.log(response);
 
     document.getElementById('record-display').style.display="inline";
     document.getElementById('new-question-display').style.display="none";

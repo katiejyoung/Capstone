@@ -11,7 +11,7 @@
         <table>
             {{#each questions}}
                 <tr>
-                    <td class="faq-header" onclick="displayComment('{{question_id}}','{{question_content}}')";>{{question_content}}</td>
+                    <td class="faq-header" onclick="displayComment('{{question_id}}','{{question_content}}', '{{question_response}}')";>{{question_content}}</td>
                 </tr>
             {{/each}}
         </table>
@@ -27,7 +27,7 @@
                     <td id="question-content">{{question-content}}</td>
                 </tr>
                 <tr>
-                    <td id="record-URL">{{question_response}}</td>
+                    <td id="question-response" style="font-size: 18px;">{{question-response}}</td>
                 </tr>
         </table>
     </div>

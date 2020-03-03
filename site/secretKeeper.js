@@ -348,7 +348,6 @@ function getComment(res, mysql, context, complete)
             return;
         }
         context.questions=results;
-        //console.log(context.questions);
         complete();
     });
 }
