@@ -7,15 +7,20 @@
 
     <div class="home" id="two-factor">
         
-        <div class="center-button" id="two-factor-button">
-            <button id="two-FA" onclick='startAuthentication("{{user_name}}", "{{user_password}}", "{{user_email}}")'>Generate Code</button>
+        <div class="center-button">
+            <div id="two-factor-button">
+                <button class="button-default" id="two-FA" onclick='startAuthentication("{{user_name}}", "{{user_password}}", "{{user_email}}")'>Generate Code</button>
+            </div>
+        </div>
+        <div class="no-nav-form" id="invalid-otp" style="display: none;">
+            <p>*Error: OTP must match most recent email. Please try again.</p>
         </div>
         <div class="no-nav-form" id="validate-code" style="display: none;">
             <p>A one-time passcode has been sent to your inbox at {{user_email}}. Please enter the value below.</p>
             <label for="OTP">OTP: </label>
             <input type="text" name="OTP" id="OTP"><br><br>
             <div class="center-button">
-                <button>Submit</button>
+                <button class="button-default" onclick='compareOTP("{{user_name}}", "{{user_password}}")'>Submit</button>
             </div>
             <br><br>
         </div>

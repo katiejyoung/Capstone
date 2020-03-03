@@ -18,14 +18,29 @@ async function sendEmail(user_name, user_pass, user_email) {
         type: 'PUT',
         success: function(result) {
             document.getElementById('validate-code').style.display="inline";
+            document.getElementById('invalid-otp').style.display="none";
             document.getElementById('two-factor-button').style.display="none";
             var returnedPin = result;
+            localStorage.setItem('otp', returnedPin);
         }
     });
     return;
 }
 
-// function compareOTP(user_name, user_pass) {
-//     //let pin = document.getElementById('OTP').value;
-//     console.log(user_name);
-// }
+function compareOTP(user_name, user_pass) {
+    user_name = aMask([... user_name]);   //Add mask to values to pass
+    user_pass = aMask([... user_pass]);
+    let localOTP = document.getElementById('OTP').value;
+    let generatedOTP = localStorage.getItem('otp');
+
+    console.log(localOTP, generatedOTP);
+    
+    if (localOTP == generatedOTP) {
+        window.location.href = '/user/'+user_name+'&'+user_pass;
+    }
+    else {
+        document.getElementById('validate-code').style.display="none";
+        document.getElementById('two-factor-button').style.display="inline";
+        document.getElementById('invalid-otp').style.display="inline";
+    }
+}
