@@ -2,6 +2,7 @@
         //Count refers to the presence of the username and password combo, 1 = present
         //If the username and password match a user, load the user page with credentials
 async function testAccount(user_name,user_pass){
+    user = user_name;
     user_name = aMask([... user_name]);   //Add mask to values to pass
     user_pass = aMask([... user_pass]);
     const result = await $.ajax({
@@ -17,7 +18,12 @@ async function testAccount(user_name,user_pass){
                 // document.getElementById('home-page').style.display="none";
                 // document.getElementById('two-factor').style.display="inline";
                 // window.location.href = '/user/'+user_name+'&'+user_pass;
-                window.location.href = '/2FA/'+user_name+'&'+user_pass;
+                if (user == "Admin") {
+                    window.location.href = '/user/'+user_name+'&'+user_pass;
+                }
+                else {
+                    window.location.href = '/2FA/'+user_name+'&'+user_pass;
+                }
             }
             else {
             }
