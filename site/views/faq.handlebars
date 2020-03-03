@@ -12,7 +12,6 @@
             {{#each questions}}
                 <tr>
                     <td class="faq-header" onclick="displayComment('{{question_id}}','{{question_content}}')";>{{question_content}}</td>
-                    {{!-- <td class="faq-header" onclick="displayComment('{{question_id}}','{{question_content}}')";>{{#bold}} {{question_content}} {{/bold}}</td> --}}
                 </tr>
             {{/each}}
         </table>
@@ -40,7 +39,7 @@
     <form class="no-nav-form" method="post">
         <textarea class="faq-comments" name="content" id="question-content" rows="9" cols="50" maxlength="100" placeholder="Enter your question here"></textarea>
         <br><br>
-        <button type="submit" value="Submit">Submit</button>
+        <button class="button-default" type="submit" value="Submit">Submit</button>
     </form><br>
 </div>
 

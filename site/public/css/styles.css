@@ -151,6 +151,11 @@
     height: 10px;
 }
 
+.button-default {
+    text-align: center;
+    cursor: pointer;
+}
+
 input {
     vertical-align: -2px;
     position: relative;

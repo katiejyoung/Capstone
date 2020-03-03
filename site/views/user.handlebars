@@ -43,7 +43,7 @@
                     <td id="record-pass">{{record-pass}}</td>
                 </tr>
                 <tr>
-                    <td><button id="edit-record-button" onclick="editRecord(document.getElementById('record-id').innerHTML,document.getElementById('record-name').innerHTML,document.getElementById('record-URL').innerHTML,document.getElementById('record-pass').innerHTML)" type="button">Edit Record</button></td>
+                    <td><button class="button-default" onclick="editRecord(document.getElementById('record-id').innerHTML,document.getElementById('record-name').innerHTML,document.getElementById('record-URL').innerHTML,document.getElementById('record-pass').innerHTML)" type="button">Edit Record</button></td>
                 </tr>
         </table>
     </div>
@@ -59,7 +59,7 @@
             <label for="user_email">Email: </label>
             <input type="text" name="edit_user_email" id="edit_user_email" value='{{user_email}}'>
             <br><br>
-            <button onClick="updateUser('{{user_name}}', document.getElementById('edit_user_password').value,document.getElementById('edit_user_email').value)" type="button">Save Change</button>
+            <button class="button-default" onClick="updateUser('{{user_name}}', document.getElementById('edit_user_password').value,document.getElementById('edit_user_email').value)" type="button">Save Change</button>
             </form>
         {{/each}}
     </div>
@@ -85,7 +85,7 @@
             <input type="text" name="add_record_URL" id="add_record_URL">
             <br><br>
             <div class="center-button">
-                <button type="submit" id="addRecord" value="Add record">Add Record</button>
+                <button class="button-default" type="submit" id="addRecord" value="Add record">Add Record</button>
             </div>  
         </form>
         <div id="required-field" style="display: none;">
@@ -112,8 +112,8 @@
             <br>
         </form>
         {{#each user}}
-        <div> <button onClick="updateRecord('{{user_name}}','{{user_password}}', document.getElementById('edit_record_name').value,document.getElementById('edit_record_password').value,document.getElementById('edit_record_URL').value,document.getElementById('edit_record_id').value)" type="button">Save Change</button></div><br>
-        <div> <button onclick="deleteRecord('{{user_name}}','{{user_password}}', document.getElementById('edit_record_id').value)" type="button">Delete Record</button></div>
+        <div> <button class="button-default" onClick="updateRecord('{{user_name}}','{{user_password}}', document.getElementById('edit_record_name').value,document.getElementById('edit_record_password').value,document.getElementById('edit_record_URL').value,document.getElementById('edit_record_id').value)" type="button">Save Change</button></div><br>
+        <div> <button class="button-default" onclick="deleteRecord('{{user_name}}','{{user_password}}', document.getElementById('edit_record_id').value)" type="button">Delete Record</button></div>
         {{/each}}
     </div>
 </div>
@@ -125,18 +125,18 @@
             {{#each admin}}
             <div name="admin_name" id="admin_name">{{user_name}}</div>
             <div name="admin_password" id="admin_password">{{user_password}}</div>
-            <div> <button onclick="deleteUser('{{user_name}}','{{user_password}}')" type="button">Delete Profile</button></div>
+            <div> <button class="button-default" onclick="deleteUser('{{user_name}}','{{user_password}}')" type="button">Delete Profile</button></div>
             <br>
             {{/each}}
             <br><br>
             <div><label>Questions </label></div><br>
             {{#each questions}}
             <div name="question_content" id="question_content">{{question_content}}</div>
-            <div><button onclick="deleteQuestion('{{question_content}}')" type="button">Delete Comment</button></div>
+            <div><button class="button-default" onclick="deleteQuestion('{{question_content}}')" type="button">Delete Comment</button></div>
             <br>
             <div><label>Response: </label>
             <input type="text" id='{{question_content}}' name="question_response" value='{{question_response}}'>
-            <button onclick="respondQuestion('{{question_content}}', document.getElementById('{{question_content}}').value)" type="button">Save Response</button></div>
+            <button class="button-default" onclick="respondQuestion('{{question_content}}', document.getElementById('{{question_content}}').value)" type="button">Save Response</button></div>
             <br>
             {{/each}}
         </form>
