@@ -44,7 +44,7 @@
                     <td id="record-pass">{{record-pass}}</td>
                 </tr>
                 <tr>
-                    <td><button id="edit-record-button" onclick="editRecord(document.getElementById('record-id').innerHTML,document.getElementById('record-name').innerHTML,document.getElementById('record-URL').innerHTML,document.getElementById('record-pass').innerHTML)" type="button">Edit Record</button></td>
+                    <td><button class="button-default" id="edit-record-button" onclick="editRecord(document.getElementById('record-id').innerHTML,document.getElementById('record-name').innerHTML,document.getElementById('record-URL').innerHTML,document.getElementById('record-pass').innerHTML)" type="button">Edit Record</button></td>
                 </tr>
         </table>
     </div>
@@ -61,9 +61,9 @@
             <input type="text" name="edit_user_email" id="edit_user_email" value='{{user_email}}'>
             <br><br>
             <div class="center-button">
-                <button onclick="validateUpdateAccount()" id="button" type="button">Check Form</button>
+                <button class="button-default" onclick="validateUpdateAccount()" id="button" type="button">Check Form</button>
             </div><br>
-            <button id="updateUser" onclick="updateUserFunc('{{user_name}}',document.getElementById('edit_user_password').value,document.getElementById('edit_user_email').value)" type="button" style="display: none;">Save Change</button>
+            <button class="button-default" id="updateUser" onclick="updateUserFunc('{{user_name}}',document.getElementById('edit_user_password').value,document.getElementById('edit_user_email').value)" type="button" style="display: none;">Save Change</button>
             <div id="invalid-email" style="display: none;">
                 <p>*Error: Incorrect email format</p>
             </div>
@@ -110,7 +110,7 @@
             <input type="text" name="add_record_URL" id="add_record_URL">
             <br><br>
             <div class="center-button">
-                <button type="submit" id="addRecord" value="Add record">Add Record</button>
+                <button class="button-default" type="submit" id="addRecord" value="Add record">Add Record</button>
             </div>  
         </form>
         <div id="required-field" style="display: none;">
