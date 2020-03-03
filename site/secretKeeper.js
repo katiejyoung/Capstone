@@ -88,16 +88,26 @@ app.get('/2FA/:user_name&:password', function(req,res,next) {
 app.put('/2FA',function(req,res,next){
     var uname = masks.removeMask([... req.body.user_name]);
     var uemail = req.body.user_email;
-    mysql.pool.query('SELECT COUNT(1) AS total FROM salts WHERE user_name=?', [uname], function(error, results, fields) {
-        if (error) {
-            console.log(JSON.stringify(error));
-            return;
-        }
-        console.log(uname, uemail);
-        sendValidationEmail(uname, uemail);
-        res.send(results);
-    })
+
+    var pin = sendValidationEmail(uname, uemail);
+    res.send(pin);
 });
+
+//POST to evaluate OTP
+// app.post('/2FA',function(req,res,next){
+//     var uname = masks.removeMask([... req.params.user_name]);
+//     var upass = masks.removeMask([... req.params.password]);
+//     var otp = req.params.OTP;
+
+//     if (otp == 123456) {
+//         console.log(otp);
+//         window.location.href = '/user/'+uname+'&'+upass;
+//     }
+//     else {
+//         console.log('Incorrect OTP');
+//         res.redirect('/');
+//     }
+// });
 
 //Test page is set to mess with encryption 
 app.get('/test',function(req,res,next){
@@ -459,7 +469,7 @@ function takeToken(key) {
 
 function sendValidationEmail(uname, uemail) {
     console.log(uemail);
-    var pin = '123456';
+    var pin = generateCode().toString();
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -481,4 +491,11 @@ function sendValidationEmail(uname, uemail) {
             console.log('Email sent: ' + info.response);
         }
     });
+
+    return pin;
+}
+
+function generateCode() {
+    var pin = Math.floor(0 + Math.random() * 999999);
+    return pin;
 }

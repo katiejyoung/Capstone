@@ -10,12 +10,15 @@
         <div class="center-button" id="two-factor-button">
             <button id="two-FA" onclick='startAuthentication("{{user_name}}", "{{user_password}}", "{{user_email}}")'>Generate Code</button>
         </div>
-        <form class="no-nav-form" id="validate-code" style="display: none;">
-            <p>A code has been sent to your inbox at {{user_email}}.</p>
-            <label for="username">Code: </label>
-            <input type="text" name="username" id="username">
+        <div class="no-nav-form" id="validate-code" style="display: none;">
+            <p>A one-time passcode has been sent to your inbox at {{user_email}}. Please enter the value below.</p>
+            <label for="OTP">OTP: </label>
+            <input type="text" name="OTP" id="OTP"><br><br>
+            <div class="center-button">
+                <button>Submit</button>
+            </div>
             <br><br>
-        </form>
+        </div>
     </div>
 {{/each}}
 <div class="secret-logo">
