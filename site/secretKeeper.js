@@ -540,7 +540,7 @@ function sendValidationEmail(uname, uemail) {
     var mailOptions = {
         from: 'secretkeepercapstone@gmail.com',
         to: uemail,
-        subject: 'Hello from the outside',
+        subject: 'Your One-Time Passcode',
         text: pin
     };
 
