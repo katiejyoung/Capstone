@@ -93,22 +93,6 @@ app.put('/2FA',function(req,res,next){
     res.send(pin);
 });
 
-//POST to evaluate OTP
-// app.post('/2FA',function(req,res,next){
-//     var uname = masks.removeMask([... req.params.user_name]);
-//     var upass = masks.removeMask([... req.params.password]);
-//     var otp = req.params.OTP;
-
-//     if (otp == 123456) {
-//         console.log(otp);
-//         window.location.href = '/user/'+uname+'&'+upass;
-//     }
-//     else {
-//         console.log('Incorrect OTP');
-//         res.redirect('/');
-//     }
-// });
-
 //Test page is set to mess with encryption 
 app.get('/test',function(req,res,next){
     res.render('test');
