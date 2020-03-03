@@ -137,8 +137,8 @@
             <br>
         </form>
         {{#each user}}
-        <div> <button onClick="updateRecord('{{user_name}}','{{user_password}}', document.getElementById('edit_record_name').value,document.getElementById('edit_record_password').value,document.getElementById('edit_record_URL').value,document.getElementById('edit_record_id').value)" type="button">Save Change</button></div><br>
-        <div> <button onclick="deleteRecord('{{user_name}}','{{user_password}}', document.getElementById('edit_record_id').value)" type="button">Delete Record</button></div>
+        <div> <button class="button-default" onClick="updateRecord('{{user_name}}','{{user_password}}', document.getElementById('edit_record_name').value,document.getElementById('edit_record_password').value,document.getElementById('edit_record_URL').value,document.getElementById('edit_record_id').value)" type="button">Save Change</button></div><br>
+        <div> <button class="button-default" onclick="deleteRecord('{{user_name}}','{{user_password}}', document.getElementById('edit_record_id').value)" type="button">Delete Record</button></div>
         {{/each}}
     </div>
 </div>
@@ -149,7 +149,7 @@
             {{#each admin}}
             <div name="admin_name" id="admin_name">{{user_name}}</div>
             <div name="admin_password" id="admin_password">{{user_password}}</div>
-            <div> <button onclick="deleteUser('{{user_name}}','{{user_password}}')" type="button">Delete Profile</button></div>
+            <div> <button class="button-default" onclick="deleteUser('{{user_name}}','{{user_password}}')" type="button">Delete Profile</button></div>
             <br>
             {{/each}}
         </form>
