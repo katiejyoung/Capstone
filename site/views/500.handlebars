@@ -1,1 +1,12 @@
-<h1>Error 500 - Change to display too much info</h1>
+<h1>Error 500</h1>
+{{#each err}}
+<div id="error-display">
+    <div class="error-content" >
+        <table class="error-table">
+                <tr>
+                    <td id="error-data">{{message}}</td>
+                </tr>
+        </table>
+    </div>
+</div>
+{{/each}}

@@ -7,7 +7,7 @@ var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 6060);
+app.set('port', 6061);
 
 var path = require('path'); 
 app.use('/static', express.static('public'));
@@ -27,7 +27,6 @@ app.get('/',function(req,res){
     //Returned count allows login
     //result[0].total == access count on html
 app.put('/',function(req,res,next){
-    var context = {};
     mysql.pool.query("SELECT COUNT(1) AS total FROM user WHERE user_name= '" + req.body.user_name + "' and user_password='" + req.body.user_pass + "'", function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
@@ -38,15 +37,8 @@ app.put('/',function(req,res,next){
     })
 });
 
-//Test page is set to mess with encryption 
-app.get('/test',function(req,res,next){
-    res.render('test');
-});
-
 //Basic page with no functionality
 app.get('/user',function(req,res,next){
-    var context = {};
-    var callbackCount = 0;
     res.render('user');
 });
 
@@ -104,7 +96,6 @@ app.delete('/faq', function(req,res,next) {
 
 //PUT faq
 app.put('/faq',function(req,res,next){
-    var context = {};
     mysql.pool.query("UPDATE questions SET question_response ='"+ req.body.question_response + "' WHERE question_content='"+ req.body.question_content + "'", function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
@@ -113,7 +104,6 @@ app.put('/faq',function(req,res,next){
         res.status(202).end();
     })
 });
-
 
 //Basic page with no functionality
 app.get('/createUser',function(req,res,next){
@@ -125,7 +115,6 @@ app.get('/createUser',function(req,res,next){
     //Returned count allows for creation of a profile (need unique username)
     //result[0].total == access count on html
 app.put('/createUser',function(req,res,next){
-    var context = {};
     mysql.pool.query("SELECT COUNT(1) AS total FROM user WHERE user_name='" + req.body.username + "'", function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
@@ -139,7 +128,6 @@ app.put('/createUser',function(req,res,next){
 //POST to create user page creates a new user with no administrative access
     //Success redirects to the home page to allow user to log in with new credentials
 app.post('/createUser',function(req,res,next){
-    var context = {};
     mysql.pool.query(
         'INSERT INTO user (user_name, user_password, user_email, user_super) VALUES (?,?,?,?)',
         [req.body.username, req.body.password, req.body.email, 0],
@@ -207,9 +195,7 @@ app.put('/user/:user_name&:password', function(req,res,next) {
 //POST to user page inserts a new record via the record user
     //Success reloads the user page with the new record
 app.post('/user/:user_name&:password', function(req,res,next) {
-    var context = {};
-    console.log(req.body.add_record_name, req.body.add_record_password, req.body.add_record_URL, req.body.add_record_user);
-    const buf = new Buffer(req.body.add_record_name);
+    const buf = new Buffer(req.body.add_record_name);   //Use buffer to take advantage of overflow exploit
     mysql.pool.query(
         "INSERT INTO records (record_name, record_data, record_URL, user) VALUES ('"+ buf + "','"+req.body.add_record_password+"','"+req.body.add_record_URL+"','"+req.body.add_record_user+"')", function(error, rows, fields) {
             if (error) {
@@ -254,7 +240,6 @@ app.get('/editUser/:user_name&:password',function(req,res,next){
     //Success reloads the editUser page with the username and potentially new password
     //Currently username is not allowed to be changed, but it is not the primary key for users (so it can be implemented later)
 app.put('/editUser/:user_name&:password',function(req,res,next){
-    console.log(req.body.user_password, req.body.user_email, [req.params.user_name],[req.params.password]);
     mysql.pool.query("UPDATE user SET user_password=?, user_email=? WHERE user_name=?", [req.params.password, req.body.user_email, [req.params.user_name]],
     function(error, results, fields) {
         if (error) {
@@ -281,14 +266,17 @@ app.put('/editUser/:user_name&:password',function(req,res,next){
     });
 
 app.use(function(req,res){
+    var context = {};
     res.status(404);
     res.render('404');
 });
   
 app.use(function(err, req, res, next){
     console.error(err.stack);
+    var context = {};
+    context.err = error;    //Pass error for weak security
     res.status(500);
-    res.render('500');
+    res.render('500', context);
 });
   
 app.listen(app.get('port'), function(){
@@ -301,28 +289,24 @@ app.listen(app.get('port'), function(){
 
 function getRecords(res, mysql, context, id, pass, complete)
 {
-    //console.log(id, pass);
     mysql.pool.query("SELECT * FROM records r INNER JOIN user u ON r.user = u.id WHERE u.user_name='" + id + "' and u.user_password='" + pass + "'", function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
             return;
         }
         context.records=results;
-        //console.log(context.records);
         complete();
     });
 }
 
 function getUser(res, mysql, context, id, pass,complete)
 {
-    //console.log(id, pass);
     mysql.pool.query("SELECT * FROM user WHERE user_name='" + id + "' and user_password='" + pass + "'", function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
             return;
         }
         context.user=results;
-        //console.log(context.user);
         complete();
     });
 }
@@ -335,7 +319,6 @@ function getAdmin(res, mysql, context, complete)
             return;
         }
         context.admin=results;
-        //console.log(context.admin);
         complete();
     });
 }
