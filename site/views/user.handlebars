@@ -159,7 +159,7 @@
             <br>
             <div><label>Response: </label>
             <input type="text" id='{{question_content}}' name="question_response" value='{{question_response}}'><br><br></div>
-            <button class="button-default" onclick="respondQuestion('{{question_content}}', document.getElementById('{{user_name}}','{{user_password}}', '{{question_content}}').value)" type="button">Save Response</button>
+            <button class="button-default" onclick="respondQuestion('{{user_name}}','{{user_password}}', '{{question_content}}', document.getElementById('{{question_content}}').value)" type="button">Save Response</button>
             <button class="button-default" onclick="deleteQuestion('{{user_name}}','{{user_password}}', '{{question_content}}')" type="button">Delete Comment</button>
             <br><br>
             {{/each}}
