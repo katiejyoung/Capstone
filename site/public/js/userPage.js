@@ -114,3 +114,25 @@ function displayAdmin(user_name, user_password) {
         document.getElementById('admin_password').style.display="inline";
     }
 }
+
+function deleteQuestion(question_content){
+    $.ajax({
+        url: '/faq',
+        data: {question_content: question_content},
+        type: 'DELETE',
+        success: function(result) {
+            location.href = "/user/Admin&password";
+        }
+    })
+}
+
+function respondQuestion(question_content, response){
+    $.ajax({
+        url: '/faq',
+        data: {question_content: question_content, question_response: response},
+        type: 'PUT',
+        success: function(result) {
+            location.href = "/user/Admin&password";
+        }
+    })
+}

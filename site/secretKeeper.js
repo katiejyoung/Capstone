@@ -240,10 +240,11 @@ app.get('/user/:user_name&:password', function(req,res,next) {
     if (uname == 'Admin' && upass == 'password'){
         getAdmin(res, mysql, context, complete);
         getUser(res, mysql, context, uname, upass, complete);
+        getComment(res, mysql, context, complete);
         function complete()
         {
             callbackCount++;
-            if (callbackCount >= 2)
+            if (callbackCount >= 3)
             {
                 res.render('user',context);
             }
@@ -489,6 +490,17 @@ function getAdmin(res, mysql, context, complete)
     });
 }
 
+function getComment(res, mysql, context, complete)
+{
+    mysql.pool.query("SELECT * FROM questions",function(error, results, fields) {
+        if (error) {
+            console.log(JSON.stringify(error));
+            return;
+        }
+        context.questions=results;
+        complete();
+    });
+}
 
 //Token Functions
     //Source: https://levelup.gitconnected.com/rate-limiting-a0783293026a
