@@ -480,12 +480,28 @@ function getUser(res, mysql, context, id, pass,complete)
 
 function getAdmin(res, mysql, context, complete)
 {
-    mysql.pool.query("SELECT * FROM userE WHERE NOT user_name=?", "MFhqmrhffffhllAAh", function(error, results, fields) {
+    mysql.pool.query("SELECT * FROM salts WHERE NOT user_name=?", "Admin", function(error, results, fields) {
         if (error) {
             console.log(JSON.stringify(error));
             return;
         }
-        context.admin=results;
+        var resultArray = JSON.parse(JSON.stringify(results));  //Convert results object to JSON
+        resultArray.forEach(function(v){ 
+            unameE = masksSalt.addMaskSalt([... v.user_name],v.salt);
+
+            mysql.pool.query("SELECT * FROM userE WHERE user_name=?", unameE, function(error, resu, fields) {
+                if (error) {
+                    console.log(JSON.stringify(error));
+                    return;
+                }
+                var resultPass = JSON.parse(JSON.stringify(resu));  //Convert results object to JSON
+                resultPass.forEach(function(p){ 
+                    v.user_name = masksSalt.removeMaskSalt([... p.user_name], v.salt);
+                    v.user_password = masksSalt.removeMaskSalt([... p.user_password], v.salt);
+                });
+            })
+        });
+        context.admin=resultArray;
         complete();
     });
 }
