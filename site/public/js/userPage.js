@@ -48,7 +48,7 @@ function editRecord(id, name, URL, pass) {
 
 //Function sends a AJAX DELETE to it's own URL with the record id to be deleted
     //Success reloads the current page, sans record
-function deleteRecord(user_name,user_pass, record_id){
+function deleteRecord(user_name, user_pass, record_id){
     user_name = aMask([... user_name]);   //Add mask to values to pass
     user_pass = aMask([... user_pass]);
     $.ajax({
@@ -63,7 +63,7 @@ function deleteRecord(user_name,user_pass, record_id){
 
 //Function sends a AJAX PUT to it's own URL with the record info to be updated
     //Success reloads the current page, with new record info
-function updateRecord(user_name,user_pass, record_name, record_password, record_URL, record_id){
+function updateRecord(user_name, user_pass, record_name, record_password, record_URL, record_id){
     user_name = aMask([... user_name]);   //Add mask to values to pass
     user_pass = aMask([... user_pass]);
     $.ajax({
@@ -115,24 +115,28 @@ function displayAdmin(user_name, user_password) {
     }
 }
 
-function deleteQuestion(question_content){
+function deleteQuestion(user_name, user_pass, question_content){
+    user_name = aMask([... user_name]);   //Add mask to values to pass
+    user_pass = aMask([... user_pass]);
     $.ajax({
         url: '/faq',
         data: {question_content: question_content},
         type: 'DELETE',
         success: function(result) {
-            location.href = "/user/Admin&password";
+            window.location.reload(true);
         }
     })
 }
 
-function respondQuestion(question_content, response){
+function respondQuestion(user_name, user_pass, question_content, response){
+    user_name = aMask([... user_name]);   //Add mask to values to pass
+    user_pass = aMask([... user_pass]);
     $.ajax({
         url: '/faq',
         data: {question_content: question_content, question_response: response},
         type: 'PUT',
         success: function(result) {
-            location.href = "/user/Admin&password";
+            window.location.reload(true);
         }
     })
 }
