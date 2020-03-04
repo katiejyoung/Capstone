@@ -157,6 +157,11 @@ app.put('/faq',function(req,res,next){
     })
 });
 
+//Basic page with no functionality
+app.get('/createUser',function(req,res,next){
+    res.render('createUser');
+});
+
 //PUT to the create user page currently takes a username and looks for a match in the db 
     //(This is currently exploited with the brute pass attack code)
     //Returned count allows for creation of a profile (need unique username)
