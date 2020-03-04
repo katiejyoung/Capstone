@@ -31,7 +31,7 @@
     color: #696969;
 }
 
-#required-field, #invalid-email, #invalid-password-upper, #invalid-password-lower, #invalid-password-special, #invalid-password-number, #invalid-password-length, #invalid-username {
+#required-field, #invalid-email, #invalid-password-upper, #invalid-password-lower, #invalid-password-special, #invalid-password-number, #invalid-password-length, #invalid-username, #invalid-combo {
     text-align:center;
 }
 
