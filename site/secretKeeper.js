@@ -27,6 +27,10 @@ var masksSalt = require('./public/js/encryptModSalt.js');
 var tokenDB = require('./public/js/tokenDB.js');
 tokens = tokenDB.createTokens();        //Create map (username = key, attempt number and timestamp = values) when starting server
 
+//To use OTP with functions
+var otpDB = require('./public/js/otpDB.js');
+otp = otpDB.createOTP();        //Create map (username = key, one-time passcode = values) when starting server
+
 //Basic Home page
 app.get('/',function(req,res){
     res.render('home');
@@ -85,15 +89,21 @@ app.get('/2FA/:user_name&:password', function(req,res,next) {
     }
 });
 
+//PUT to the 2FA page currently takes a username and email
+    //Sends validation email with a one-time passcode
+    //Returned OTP value used for user input validation
 app.put('/2FA',function(req,res,next){
     var uname = masks.removeMask([... req.body.user_name]);
     var uemail = req.body.user_email;
 
     var pin = sendValidationEmail(uname, uemail);
-    res.send(pin);
+
+    var otpPair = takeOTP([uname].toString(), pin);
+
+    res.send(otpPair.passcode);
 });
 
-//Basic page
+//Basic page returning FAQ comment list
 app.get('/faq',function(req,res,next){
     var context = {};
     var callbackCount = 0;
@@ -587,4 +597,20 @@ function sendValidationEmail(uname, uemail) {
 function generateCode() {
     var pin = Math.floor(0 + Math.random() * 999999);
     return pin;
+}
+
+//Create function
+    //Creates an OTP using username as key
+function createOTP(pin) {
+    return { passcode: pin };
+}
+
+//Take OTP Function
+    //Gets an old and new OTP based on the username
+    //Returns otp
+function takeOTP(key, pin) {
+    const oldOTP = otpDB.getOTP(key, otp);
+    const newOTP = createOTP(pin);
+    otpDB.replaceOTP(key, newOTP, oldOTP, otp);   // avoid concurrent otp usage
+    return otpDB.getOTP(key, otp);
 }
