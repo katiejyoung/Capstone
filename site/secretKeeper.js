@@ -558,7 +558,6 @@ function sendValidationEmail(uname, uemail) {
             console.log(error);
         } else {
             console.log('Email sent: ' + info.response);
-            console.log('Pin: ', mailOptions.text);
         }
     });
 
