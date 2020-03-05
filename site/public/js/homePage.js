@@ -15,9 +15,6 @@ async function testAccount(user_name,user_pass){
 
             }
             else if (count==1){
-                // document.getElementById('home-page').style.display="none";
-                // document.getElementById('two-factor').style.display="inline";
-                // window.location.href = '/user/'+user_name+'&'+user_pass;
                 if (user == "Admin") {
                     window.location.href = '/user/'+user_name+'&'+user_pass;
                 }
