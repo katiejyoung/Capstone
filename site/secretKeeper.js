@@ -555,6 +555,7 @@ function takeToken(key) {
     return new Promise(r => setTimeout(r, newToken.timestamp - now));
 }
 
+// Source: https://www.w3schools.com/nodejs/nodejs_email.asp
 function sendValidationEmail(uname, uemail) {
     console.log(uemail);
     var pin = generateCode().toString();
