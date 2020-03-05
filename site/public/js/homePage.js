@@ -2,6 +2,7 @@
         //Count refers to the presence of the username and password combo, 1 = present
         //If the username and password match a user, load the user page with credentials
 async function testAccount(user_name,user_pass){
+    document.getElementById('invalid-combo').style.display="none";
     user = user_name;
     user_name = aMask([... user_name]);   //Add mask to values to pass
     user_pass = aMask([... user_pass]);
@@ -12,7 +13,7 @@ async function testAccount(user_name,user_pass){
         success: function(result) {
             count = result[0].total;
             if (count == 0) {
-
+                document.getElementById('invalid-combo').style.display="inline";
             }
             else if (count==1){
                 if (user == "Admin") {
