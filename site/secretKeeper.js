@@ -274,7 +274,7 @@ app.use(function(req,res){
 app.use(function(err, req, res, next){
     console.error(err.stack);
     var context = {};
-    context.err = error;    //Pass error for weak security
+    context.err = err;    //Pass error for weak security
     res.status(500);
     res.render('500', context);
 });
