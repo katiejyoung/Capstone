@@ -137,7 +137,7 @@
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
-#password {
+#password, #edit_user_password {
     -webkit-text-security: disc;
 }
 
