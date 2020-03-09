@@ -11,13 +11,19 @@ async function createAccount() {
     var nameCheck = document.getElementById('invalid-username').value;
 
     //Check for data presence
-    if ((uName != '' && email != '' && pword != '') && (nameCheck != 1)) {
-        document.getElementById('required-field').style.display="none";
+    if (uName == '' || email == '' || pword == '') {
+        document.getElementById('required-field').style.display="inline";
+        document.getElementById('button').style.display="inline";
+    }
+    else if (nameCheck != 1) {
         document.getElementById('createUser').style.display="inline";
+        document.getElementById('button').style.display="none";
     }
     else {
-        document.getElementById('required-field').style.display="inline";
+        document.getElementById('required-field').style.display="none";
         document.getElementById('createUser').style.display="none";
+        document.getElementById('button').style.display="inline";
+        document.getElementById('invalid-username').style.display="inline";
     }
 
 };
