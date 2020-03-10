@@ -31,12 +31,17 @@ http://flip3.engr.oregonstate.edu:6061/user/*%20OR%20ALL&*%20OR%20ALL
 
 ### HTML Injection Attack
 **To inject a script:**
-1. Sign into any existing user account
-2. Add a new record, using the following as the value for one field in the form: 
+1. Navigate to the frequently-asked-questions page
+2. Add a new question, using the following as the value: 
 ```
 >"&amp;gt;<script>alert("Warning: This site is vulnerable to an attack")</script>
 ```
-3. Note the popup alert warning of possible attack
+3. Click on the question in the lefthand nav menu. Note the pop-up alert warning of a possible attack.
+4. Similarly, a link may be injected using the following format:
+```
+<a href="https://owasp.org/www-community/attacks/xss//" target="_blank">Learn more about XSS</a>
+```
+5. To view the vulnerability, click the question in the lefthand nav menu then click the link. Note redirection to the website included in the href field.
 
 
 ### Buffer Overflow Attack
