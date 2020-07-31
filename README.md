@@ -1,3 +1,45 @@
+# Secret Keeper
+### A security-based research project
+
+## The Sign-In Process
+The Secret Keeper home page appears identical to users of the weak and strong sites.  Central on the page is a place to enter one’s username and password.  If the user is new to the site, there is a link under the login which links to the user creation page.  Additionally, there is a link to a frequently asked questions (FAQ) page. 
+
+![Alt Image SecretKeeper](/images/secret-keeper.png?raw=true)
+
+Successfully adding a correct username/password combination leads to different scenarios for each site.  The weak site directly opens the user page, while the strong site includes a second two-factor authentication (2FA) step, which must be passed to open the user page.  The 2FA feature includes a button that, on click, sends a randomly-generated, six-digit passcode to the corresponding user’s email.  Correctly entering the passcode into the displayed text box opens the user page.  Note that, for ease of grading, we have chosen to display the emailed PIN on the 2FA page after the button is clicked. In real-word scenarios, this line would be removed.  Users of the strong site may also notice that incorrect combinations of username and passwords will result in login button disablement depending on the rate of incorrect submissions and the username used.
+
+![Alt Image SecretKeeper](/images/otp.png?raw=true)
+![Alt Image SecretKeeper](/images/authentication.png?raw=true)
+
+
+## Creating an Account
+The user creation page has a form for username, password, and email in both site versions.  To successfully create a new account in the weak site, only the username must be unique to all saved usernames.  To test if the username is unique, the user clicks on the “Check Form” button, which then searches profiles for the entered username and, if not found, displays a “Sign Up” button.  If the user clicks this new button, a profile is created and the user is redirected to the home page.  
+
+![Alt Image SecretKeeper](/images/username.png?raw=true)
+
+The strong site features more form checks than simply checking for a unique username.  The entered password must include at least one upper-case letter and one lower-case letter.  The password must also contain a number and be at least 12 characters in length.  Finally, no special characters are allowed in the password.  As with the weak site, the user must click on the check form button and pass the checks before they are able to click on the signup button and create a profile.
+
+![Alt Image SecretKeeper](/images/email.png?raw=true)
+![Alt Image SecretKeeper](/images/password.png?raw=true)
+
+In the secure site, the password is also hidden from view on the new-user and home pages, as well as the update-account form on the user profile.
+
+## Using the Site
+The user page is the location for users to add, edit, and delete their records.  Records are composed of a name, password, and URL.  Saved records are displayed by name in the left table of the page.  Below the list of saved records are three buttons used to enter new records, edit the user profile, and return to the home page.  Selecting to enter a new record opens a form on the center screen with text boxes for each record criteria.  Saving the record reloads the user page with the new record now displayed by name in the left table.
+
+Selecting a saved record name opens the record data on the center screen, with a button at the bottom to edit the record.  Choosing to edit the record turns the displayed record into a form which can be manipulated and saved.  An option to delete the record outright is also displayed when editing the record.  Editing or deleting a record reloads the user page with changes applied.
+
+![Alt Image SecretKeeper](/images/record.png?raw=true)
+
+Selecting the "update account" button opens a form on the center screen with options to change the user's password or email.  Users of the strong site have to pass profile credential checks similar to creating a profile in order to save their changes.  Successfully saving a change reloads the user page.  Users of the weak site will be able to see their password change displayed directly in the URL.  
+
+## Frequently-Asked Questions
+The FAQ page serves as a way for users to get in touch with the administrators of Secret Keeper.  Sample questions are listed on the page with sample responses.  Users can enter a question of their own, which is immediately displayed on the page.  Responses to the question will be displayed when saved by the Admin account at a later time.  This feature was a late addition intended to demonstrate a likely HTML injection scenario.
+
+![Alt Image SecretKeeper](/images/faq.png?raw=true)
+
+
+
 ## Vulnerability Outline
 **To exploit the vulnerabilities outlined below, utilize the secret-keeper-not-secure branch**
 
@@ -15,7 +57,6 @@
 
 **To use the script:** ./brutePass.sh -g username URL
 
-Testing
 **Examples:**
 * ./brutePass.sh -g Kyle flip3.engr.oregonstate.edu:6061
 * ./brutePass.sh -g Katie flip3.engr.oregonstate.edu:6061
@@ -38,6 +79,8 @@ http://flip3.engr.oregonstate.edu:6061/user/*%20OR%20ALL&*%20OR%20ALL
 >"&amp;gt;<script>alert("Warning: This site is vulnerable to an attack")</script>
 ```
 3. Note the popup alert warning of possible attack
+
+![Alt Image SecretKeeper](/images/xss.png?raw=true)
 
 
 ### Buffer Overflow Attack
