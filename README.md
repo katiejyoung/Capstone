@@ -15,6 +15,7 @@
 
 **To use the script:** ./brutePass.sh -g username URL
 
+Testing
 **Examples:**
 * ./brutePass.sh -g Kyle flip3.engr.oregonstate.edu:6061
 * ./brutePass.sh -g Katie flip3.engr.oregonstate.edu:6061
