@@ -2,7 +2,7 @@
 ### A security-based research project
 
 ## The Sign-In Process
-The Secret Keeper home page appears identical to users of the weak and strong sites.  Central on the page is a place to enter one’s username and password.  If the user is new to the site, there is a link under the login which links to the user creation page.  Additionally, there is a link to a frequently asked questions (FAQ) page. 
+The Secret Keeper home page appears identical to users of the weak and strong sites.  Central on the page is a place to enter a username and password.  If the user is new to the site, there is a link under the login which links to the user creation page.  Additionally, there is a link to a frequently asked questions (FAQ) page. 
 
 ![Alt Image SecretKeeper](/images/secret-keeper.png?raw=true)
 
