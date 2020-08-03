@@ -1,5 +1,8 @@
 # Secret Keeper - Security Research Project
 
+## The Assignment
+The goal of the Secret Keeper project was to create two versions of the same website: one "not secure" site, with known security vulnerabilities, and one "secure" site, with fixes to the vulnerabilities found in the "not secure" site.
+
 ## The Sign-In Process
 The Secret Keeper home page appears identical to users of the weak and strong sites.  Central on the page is a place to enter a username and password.  If the user is new to the site, there is a link under the login which links to the user creation page.  Additionally, there is a link to a frequently asked questions (FAQ) page. 
 
